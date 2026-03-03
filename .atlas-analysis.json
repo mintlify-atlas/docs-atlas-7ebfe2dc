@@ -1,0 +1,361 @@
+{
+  "projectType": "frontend",
+  "projectName": "Material UI",
+  "projectDescription": "Comprehensive React component library implementing Google's Material Design with production-ready components and extensive customization options.",
+  "theme": "willow",
+  "primaryColor": "#007FFF",
+  "lightColor": "#66B2FF",
+  "darkColor": "#0059B2",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Documentation",
+        "groups": [
+          {
+            "group": "Getting Started",
+            "pages": [
+              "introduction",
+              "installation",
+              "quickstart",
+              "usage",
+              "templates"
+            ]
+          },
+          {
+            "group": "Customization",
+            "pages": [
+              "customization/theming",
+              "customization/palette",
+              "customization/typography",
+              "customization/spacing",
+              "customization/breakpoints",
+              "customization/dark-mode",
+              "customization/css-theme-variables"
+            ]
+          },
+          {
+            "group": "Guides",
+            "pages": [
+              "guides/styled-components",
+              "guides/server-rendering",
+              "guides/typescript",
+              "guides/right-to-left",
+              "guides/minimizing-bundle-size"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Components",
+        "groups": [
+          {
+            "group": "Inputs",
+            "pages": [
+              "components/button",
+              "components/button-group",
+              "components/checkbox",
+              "components/floating-action-button",
+              "components/radio-button",
+              "components/rating",
+              "components/select",
+              "components/slider",
+              "components/switch",
+              "components/text-field",
+              "components/transfer-list",
+              "components/toggle-button",
+              "components/autocomplete"
+            ]
+          },
+          {
+            "group": "Data Display",
+            "pages": [
+              "components/avatar",
+              "components/badge",
+              "components/chip",
+              "components/divider",
+              "components/icons",
+              "components/list",
+              "components/table",
+              "components/tooltip",
+              "components/typography"
+            ]
+          },
+          {
+            "group": "Feedback",
+            "pages": [
+              "components/alert",
+              "components/backdrop",
+              "components/dialog",
+              "components/progress",
+              "components/skeleton",
+              "components/snackbar"
+            ]
+          },
+          {
+            "group": "Surfaces",
+            "pages": [
+              "components/accordion",
+              "components/app-bar",
+              "components/card",
+              "components/paper"
+            ]
+          },
+          {
+            "group": "Navigation",
+            "pages": [
+              "components/bottom-navigation",
+              "components/breadcrumbs",
+              "components/drawer",
+              "components/link",
+              "components/menu",
+              "components/pagination",
+              "components/speed-dial",
+              "components/stepper",
+              "components/tabs"
+            ]
+          },
+          {
+            "group": "Layout",
+            "pages": [
+              "components/box",
+              "components/container",
+              "components/grid",
+              "components/stack",
+              "components/image-list",
+              "components/hidden"
+            ]
+          },
+          {
+            "group": "Utils",
+            "pages": [
+              "components/click-away-listener",
+              "components/css-baseline",
+              "components/modal",
+              "components/no-ssr",
+              "components/popover",
+              "components/popper",
+              "components/portal",
+              "components/textarea-autosize",
+              "components/transitions"
+            ]
+          },
+          {
+            "group": "Lab",
+            "pages": [
+              "components/about-the-lab",
+              "components/timeline",
+              "components/loading-button",
+              "components/masonry"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "System",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "system/introduction",
+              "system/getting-started"
+            ]
+          },
+          {
+            "group": "Core Utilities",
+            "pages": [
+              "system/styled",
+              "system/sx-prop",
+              "system/the-sx-prop",
+              "system/box"
+            ]
+          },
+          {
+            "group": "Style Functions",
+            "pages": [
+              "system/borders",
+              "system/display",
+              "system/flexbox",
+              "system/grid",
+              "system/palette",
+              "system/positions",
+              "system/shadows",
+              "system/sizing",
+              "system/spacing",
+              "system/typography"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Resources",
+        "groups": [
+          {
+            "group": "Community",
+            "pages": [
+              "resources/support",
+              "resources/showcase",
+              "resources/design-resources",
+              "resources/roadmap"
+            ]
+          },
+          {
+            "group": "Migration",
+            "pages": [
+              "migration/upgrade-to-v6",
+              "migration/migration-v5",
+              "migration/migration-v4"
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "keyFeatures": [
+    "60+ production-ready React components implementing Material Design",
+    "Comprehensive theming system with CSS-in-JS styling",
+    "Responsive layout system with Grid, Stack, and Container components",
+    "Dark mode support with CSS theme variables",
+    "TypeScript support with full type definitions",
+    "Extensive customization options through styled components and sx prop",
+    "Server-side rendering support",
+    "Integration with popular frameworks (Next.js, Gatsby, etc.)",
+    "5000+ Material Design icons available via @mui/icons-material",
+    "MUI System for rapid custom design development",
+    "Rich documentation with live code examples",
+    "Active community with 97,000+ GitHub stars"
+  ],
+  "publicApiSurface": [
+    "Accordion",
+    "AccordionActions",
+    "AccordionDetails",
+    "AccordionSummary",
+    "Alert",
+    "AlertTitle",
+    "AppBar",
+    "Autocomplete",
+    "Avatar",
+    "AvatarGroup",
+    "Backdrop",
+    "Badge",
+    "BottomNavigation",
+    "BottomNavigationAction",
+    "Box",
+    "Breadcrumbs",
+    "Button",
+    "ButtonBase",
+    "ButtonGroup",
+    "Card",
+    "CardActionArea",
+    "CardActions",
+    "CardContent",
+    "CardHeader",
+    "CardMedia",
+    "Checkbox",
+    "Chip",
+    "CircularProgress",
+    "ClickAwayListener",
+    "Collapse",
+    "Container",
+    "CssBaseline",
+    "Dialog",
+    "DialogActions",
+    "DialogContent",
+    "DialogContentText",
+    "DialogTitle",
+    "Divider",
+    "Drawer",
+    "Fab",
+    "Fade",
+    "FormControl",
+    "FormControlLabel",
+    "FormGroup",
+    "FormHelperText",
+    "FormLabel",
+    "Grid",
+    "Grow",
+    "Icon",
+    "IconButton",
+    "ImageList",
+    "ImageListItem",
+    "ImageListItemBar",
+    "Input",
+    "InputAdornment",
+    "InputBase",
+    "InputLabel",
+    "LinearProgress",
+    "Link",
+    "List",
+    "ListItem",
+    "ListItemAvatar",
+    "ListItemButton",
+    "ListItemIcon",
+    "ListItemSecondaryAction",
+    "ListItemText",
+    "ListSubheader",
+    "Menu",
+    "MenuItem",
+    "MenuList",
+    "MobileStepper",
+    "Modal",
+    "NativeSelect",
+    "OutlinedInput",
+    "Pagination",
+    "PaginationItem",
+    "Paper",
+    "Popover",
+    "Popper",
+    "Portal",
+    "Radio",
+    "RadioGroup",
+    "Rating",
+    "Select",
+    "Skeleton",
+    "Slide",
+    "Slider",
+    "Snackbar",
+    "SnackbarContent",
+    "SpeedDial",
+    "SpeedDialAction",
+    "SpeedDialIcon",
+    "Stack",
+    "Step",
+    "StepButton",
+    "StepConnector",
+    "StepContent",
+    "StepIcon",
+    "StepLabel",
+    "Stepper",
+    "SvgIcon",
+    "SwipeableDrawer",
+    "Switch",
+    "Tab",
+    "Table",
+    "TableBody",
+    "TableCell",
+    "TableContainer",
+    "TableFooter",
+    "TableHead",
+    "TablePagination",
+    "TableRow",
+    "TableSortLabel",
+    "Tabs",
+    "TabScrollButton",
+    "TextField",
+    "TextareaAutosize",
+    "ToggleButton",
+    "ToggleButtonGroup",
+    "Toolbar",
+    "Tooltip",
+    "Typography",
+    "Zoom",
+    "createTheme()",
+    "ThemeProvider",
+    "styled()",
+    "useTheme()",
+    "useMediaQuery()",
+    "colors",
+    "@mui/system",
+    "@mui/icons-material",
+    "@mui/lab"
+  ]
+}
