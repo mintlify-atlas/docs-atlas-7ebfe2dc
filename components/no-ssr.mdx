@@ -1,0 +1,328 @@
+---
+title: NoSsr
+description: NoSsr purposely removes components from server-side rendering (SSR).
+---
+
+## Introduction
+
+NoSsr purposely removes components from the subject of Server Side Rendering (SSR). This component can be useful in various situations where you want content to render only on the client side.
+
+```jsx
+import NoSsr from '@mui/material/NoSsr';
+```
+
+## Basic Usage
+
+```jsx
+import * as React from 'react';
+import NoSsr from '@mui/material/NoSsr';
+import Box from '@mui/material/Box';
+
+export default function BasicNoSsr() {
+  return (
+    <div>
+      <Box sx={{ p: 2, bgcolor: 'primary.main', color: 'white' }}
+        Server and Client
+      </Box>
+      <NoSsr>
+        <Box sx={{ p: 2, bgcolor: 'secondary.main', color: 'white' }}>
+          Client only
+        </Box>
+      </NoSsr>
+    </div>
+  );
+}
+```
+
+## Props
+
+### children
+
+- Type: `React.ReactNode`
+- Default: `undefined`
+
+You can wrap a node.
+
+### defer
+
+- Type: `boolean`
+- Default: `false`
+
+If `true`, the component will not only prevent server-side rendering. It will also defer the rendering of the children into a different screen frame.
+
+```jsx
+<NoSsr defer>
+  <ExpensiveComponent />
+</NoSsr>
+```
+
+### fallback
+
+- Type: `React.ReactNode`
+- Default: `null`
+
+The fallback content to display during server-side rendering or before client hydration.
+
+```jsx
+<NoSsr fallback={<CircularProgress />}>
+  <ClientOnlyWidget />
+</NoSsr>
+```
+
+## Use Cases
+
+### 1. Escape Hatch for Broken Dependencies
+
+Some third-party libraries don't support SSR. You can wrap them with NoSsr:
+
+```jsx
+import NoSsr from '@mui/material/NoSsr';
+import BrokenSSRComponent from 'broken-library';
+
+function MyComponent() {
+  return (
+    <NoSsr>
+      <BrokenSSRComponent />
+    </NoSsr>
+  );
+}
+```
+
+### 2. Improve Time-to-First Paint
+
+Render only above-the-fold content on the server:
+
+```jsx
+function Page() {
+  return (
+    <div>
+      {/* Critical above-the-fold content */}
+      <Header />
+      <Hero />
+      
+      {/* Below-the-fold content */}
+      <NoSsr>
+        <BelowTheFoldContent />
+      </NoSsr>
+    </div>
+  );
+}
+```
+
+### 3. Reduce Server Load
+
+Skip expensive components during SSR:
+
+```jsx
+function Dashboard() {
+  return (
+    <div>
+      <StaticHeader />
+      <NoSsr fallback={<Skeleton variant="rectangular" height={400} />}>
+        <ExpensiveChart />
+      </NoSsr>
+    </div>
+  );
+}
+```
+
+### 4. Service Degradation
+
+Under heavy server load, you can turn on service degradation:
+
+```jsx
+function AdaptiveRendering() {
+  const isServerOverloaded = checkServerLoad();
+
+  return (
+    <NoSsr defer={isServerOverloaded}>
+      <HeavyComponent />
+    </NoSsr>
+  );
+}
+```
+
+## Deferred Rendering
+
+The `defer` prop delays rendering until the next frame, which can help with perceived performance:
+
+```jsx
+import * as React from 'react';
+import NoSsr from '@mui/material/NoSsr';
+
+function DeferredExample() {
+  return (
+    <div>
+      {/* Renders immediately on client */}
+      <CriticalContent />
+      
+      {/* Deferred to next frame */}
+      <NoSsr defer>
+        <NonCriticalContent />
+      </NoSsr>
+    </div>
+  );
+}
+```
+
+## Fallback Content
+
+Provide fallback content that shows during SSR and before client hydration:
+
+```jsx
+import NoSsr from '@mui/material/NoSsr';
+import Skeleton from '@mui/material/Skeleton';
+
+function WithFallback() {
+  return (
+    <NoSsr
+      fallback={
+        <Skeleton
+          variant="rectangular"
+          width={210}
+          height={118}
+        />
+      }
+    >
+      <ClientOnlyImage src="/image.jpg" />
+    </NoSsr>
+  );
+}
+```
+
+## Client-Only Features
+
+Use NoSsr for features that only make sense on the client:
+
+```jsx
+function ClientFeatures() {
+  return (
+    <div>
+      <NoSsr>
+        <div>
+          Current time: {new Date().toLocaleTimeString()}
+          <br />
+          Screen width: {window.innerWidth}px
+          <br />
+          User agent: {navigator.userAgent}
+        </div>
+      </NoSsr>
+    </div>
+  );
+}
+```
+
+## Browser-Specific APIs
+
+Wrap components that use browser-only APIs:
+
+```jsx
+import NoSsr from '@mui/material/NoSsr';
+
+function LocalStorageComponent() {
+  const [value, setValue] = React.useState('');
+
+  React.useEffect(() => {
+    setValue(localStorage.getItem('key') || '');
+  }, []);
+
+  return (
+    <NoSsr fallback={<div>Loading...</div>}>
+      <div>Value from localStorage: {value}</div>
+    </NoSsr>
+  );
+}
+```
+
+## Working with Next.js
+
+NoSsr works seamlessly with Next.js:
+
+```jsx
+import NoSsr from '@mui/material/NoSsr';
+
+export default function NextPage() {
+  return (
+    <div>
+      <h1>My Next.js Page</h1>
+      <NoSsr>
+        <ClientOnlyComponent />
+      </NoSsr>
+    </div>
+  );
+}
+```
+
+Alternatively, Next.js provides its own dynamic import with SSR disabled:
+
+```jsx
+import dynamic from 'next/dynamic';
+
+const DynamicComponent = dynamic(
+  () => import('../components/ClientOnly'),
+  { ssr: false }
+);
+```
+
+## Performance Considerations
+
+### When to Use NoSsr
+
+- Third-party components that break SSR
+- Components using browser-only APIs
+- Below-the-fold content
+- Heavy components that slow down SSR
+
+### When NOT to Use NoSsr
+
+- Critical above-the-fold content
+- SEO-important content
+- Content needed for initial page load
+- Components that work fine with SSR
+
+## Comparison with useEffect
+
+NoSsr is similar to using `useEffect` with an empty dependency array, but provides better fallback support:
+
+```jsx
+// Using NoSsr (recommended)
+<NoSsr fallback={<Skeleton />}>
+  <ClientComponent />
+</NoSsr>
+
+// Using useEffect
+function ComponentWithEffect() {
+  const [mounted, setMounted] = React.useState(false);
+
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  if (!mounted) return <Skeleton />;
+  return <ClientComponent />;
+}
+```
+
+## Best Practices
+
+1. **Always provide fallback**: Use the `fallback` prop for better UX
+2. **Avoid overuse**: Only use NoSsr when necessary
+3. **Consider SEO**: Don't wrap SEO-critical content
+4. **Progressive enhancement**: Ensure core functionality works without JavaScript
+5. **Monitor performance**: Use defer for heavy components
+
+## Accessibility
+
+When using NoSsr, ensure your fallback content is accessible:
+
+```jsx
+<NoSsr
+  fallback={
+    <div role="status" aria-live="polite">
+      Loading content...
+    </div>
+  }
+>
+  <ClientContent />
+</NoSsr>
+```

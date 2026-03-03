@@ -1,0 +1,206 @@
+---
+title: Avatar
+description: Avatars are found throughout Material Design with uses in everything from tables to dialog menus.
+---
+
+## Introduction
+
+The Avatar component displays user profile pictures, initials, or fallback icons. It supports images, text, and icons with customizable shapes and sizes.
+
+## Basic Usage
+
+```tsx
+import Avatar from '@mui/material/Avatar';
+
+function Demo() {
+  return (
+    <Avatar alt="John Doe" src="/static/images/avatar/1.jpg" />
+  );
+}
+```
+
+## Image Avatars
+
+Image avatars can be created by passing standard `img` props via `src` and `srcSet`.
+
+```tsx
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
+
+function ImageAvatars() {
+  return (
+    <Stack direction="row" spacing={2}>
+      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+      <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
+      <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
+    </Stack>
+  );
+}
+```
+
+## Letter Avatars
+
+Avatars containing simple characters can be created by passing a string as `children`.
+
+```tsx
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
+import { deepOrange, deepPurple } from '@mui/material/colors';
+
+function LetterAvatars() {
+  return (
+    <Stack direction="row" spacing={2}>
+      <Avatar>H</Avatar>
+      <Avatar sx={{ bgcolor: deepOrange[500] }}>N</Avatar>
+      <Avatar sx={{ bgcolor: deepPurple[500] }}>OP</Avatar>
+    </Stack>
+  );
+}
+```
+
+## Icon Avatars
+
+Icon avatars are created by passing an icon as `children`.
+
+```tsx
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
+import FolderIcon from '@mui/icons-material/Folder';
+import PageviewIcon from '@mui/icons-material/Pageview';
+import AssignmentIcon from '@mui/icons-material/Assignment';
+import { green, pink } from '@mui/material/colors';
+
+function IconAvatars() {
+  return (
+    <Stack direction="row" spacing={2}>
+      <Avatar>
+        <FolderIcon />
+      </Avatar>
+      <Avatar sx={{ bgcolor: pink[500] }}>
+        <PageviewIcon />
+      </Avatar>
+      <Avatar sx={{ bgcolor: green[500] }}>
+        <AssignmentIcon />
+      </Avatar>
+    </Stack>
+  );
+}
+```
+
+## Variants
+
+The Avatar component supports three shape variants: `circular` (default), `rounded`, and `square`.
+
+```tsx
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
+
+function VariantAvatars() {
+  return (
+    <Stack direction="row" spacing={2}>
+      <Avatar variant="circular" alt="Circular" src="/static/images/avatar/1.jpg" />
+      <Avatar variant="rounded" alt="Rounded" src="/static/images/avatar/1.jpg" />
+      <Avatar variant="square" alt="Square" src="/static/images/avatar/1.jpg" />
+    </Stack>
+  );
+}
+```
+
+## Fallback
+
+If there is an error loading the avatar image, the component falls back to an alternative in the following order:
+
+1. The provided children
+2. The first letter of the alt text
+3. A generic person icon
+
+```tsx
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
+
+function FallbackAvatars() {
+  return (
+    <Stack direction="row" spacing={2}>
+      {/* Uses image */}
+      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+      
+      {/* Uses first letter of alt */}
+      <Avatar alt="Remy Sharp" src="/broken-image.jpg" />
+      
+      {/* Uses default person icon */}
+      <Avatar src="/broken-image.jpg" />
+    </Stack>
+  );
+}
+```
+
+## Grouped Avatars
+
+Use `AvatarGroup` to display multiple avatars as a stack.
+
+```tsx
+import Avatar from '@mui/material/Avatar';
+import AvatarGroup from '@mui/material/AvatarGroup';
+
+function GroupAvatars() {
+  return (
+    <AvatarGroup max={4}>
+      <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
+      <Avatar alt="Travis Howard" src="/static/images/avatar/2.jpg" />
+      <Avatar alt="Cindy Baker" src="/static/images/avatar/3.jpg" />
+      <Avatar alt="Agnes Walker" src="/static/images/avatar/4.jpg" />
+      <Avatar alt="Trevor Henderson" src="/static/images/avatar/5.jpg" />
+    </AvatarGroup>
+  );
+}
+```
+
+## Props
+
+### Avatar Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `alt` | `string` | - | Used in combination with `src` or `srcSet` to provide an alt attribute for the rendered img element. |
+| `children` | `node` | - | Used to render icon or text elements inside the Avatar if `src` is not set. |
+| `classes` | `object` | - | Override or extend the styles applied to the component. |
+| `imgProps` | `object` | - | Attributes applied to the img element if the component is used to display an image. Deprecated: Use `slotProps.img` instead. |
+| `sizes` | `string` | - | The sizes attribute for the img element. |
+| `src` | `string` | - | The src attribute for the img element. |
+| `srcSet` | `string` | - | The srcSet attribute for the img element. Use this for responsive image display. |
+| `sx` | `SxProps<Theme>` | - | The system prop for defining CSS overrides and additional styles. |
+| `variant` | `'circular'` \| `'rounded'` \| `'square'` | `'circular'` | The shape of the avatar. |
+
+### Slots
+
+| Slot | Type | Default | Description |
+|------|------|---------|-------------|
+| `root` | `ElementType` | `'div'` | The component that renders the root slot. |
+| `img` | `ElementType` | `'img'` | The component that renders the img slot. |
+| `fallback` | `ElementType` | Person icon | The component that renders the fallback slot. |
+
+## CSS Classes
+
+The following CSS classes are available for customization:
+
+- `.MuiAvatar-root` - Styles applied to the root element.
+- `.MuiAvatar-colorDefault` - Styles applied to the root element if no src or children are provided.
+- `.MuiAvatar-circular` - Styles applied to the root element if `variant="circular"`.
+- `.MuiAvatar-rounded` - Styles applied to the root element if `variant="rounded"`.
+- `.MuiAvatar-square` - Styles applied to the root element if `variant="square"`.
+- `.MuiAvatar-img` - Styles applied to the img element.
+- `.MuiAvatar-fallback` - Styles applied to the fallback icon.
+
+## Accessibility
+
+Always provide meaningful `alt` text for image avatars to ensure screen reader users can understand the content:
+
+```tsx
+<Avatar alt="John Doe, Software Engineer" src="/images/john.jpg" />
+```
+
+For decorative avatars that don't convey meaningful information, use an empty alt attribute:
+
+```tsx
+<Avatar alt="" src="/images/decorative.jpg" />
+```

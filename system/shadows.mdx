@@ -1,0 +1,422 @@
+---
+title: Shadows
+description: Box shadow utilities in MUI System
+---
+
+# Shadows
+
+Utilities for controlling box shadows with theme integration.
+
+## Import
+
+```javascript
+import { shadows } from '@mui/system';
+```
+
+## API
+
+From `shadows/shadows.js:3-8`:
+
+```javascript
+const boxShadow = style({
+  prop: 'boxShadow',
+  themeKey: 'shadows',
+});
+
+export default boxShadow;
+```
+
+## Basic Usage
+
+Use numeric values to reference theme shadows:
+
+```jsx
+<Box boxShadow={0}>No shadow</Box>
+<Box boxShadow={1}>Elevation 1</Box>
+<Box boxShadow={2}>Elevation 2</Box>
+<Box boxShadow={3}>Elevation 3</Box>
+<Box boxShadow={6}>Elevation 6</Box>
+<Box boxShadow={12}>Elevation 12</Box>
+<Box boxShadow={24}>Elevation 24</Box>
+```
+
+## Theme Shadows
+
+The default theme provides 25 shadow levels (0-24):
+
+```javascript
+import { createTheme } from '@mui/system';
+
+const theme = createTheme({
+  shadows: [
+    'none',
+    '0px 2px 1px -1px rgba(0,0,0,0.2),0px 1px 1px 0px rgba(0,0,0,0.14),0px 1px 3px 0px rgba(0,0,0,0.12)',
+    '0px 3px 1px -2px rgba(0,0,0,0.2),0px 2px 2px 0px rgba(0,0,0,0.14),0px 1px 5px 0px rgba(0,0,0,0.12)',
+    '0px 3px 3px -2px rgba(0,0,0,0.2),0px 3px 4px 0px rgba(0,0,0,0.14),0px 1px 8px 0px rgba(0,0,0,0.12)',
+    '0px 2px 4px -1px rgba(0,0,0,0.2),0px 4px 5px 0px rgba(0,0,0,0.14),0px 1px 10px 0px rgba(0,0,0,0.12)',
+    // ... up to 24
+  ],
+});
+```
+
+## Shadow Levels
+
+```jsx
+<Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={3}>
+  <Box boxShadow={1} p={2} bgcolor="background.paper">Shadow 1</Box>
+  <Box boxShadow={2} p={2} bgcolor="background.paper">Shadow 2</Box>
+  <Box boxShadow={3} p={2} bgcolor="background.paper">Shadow 3</Box>
+  <Box boxShadow={4} p={2} bgcolor="background.paper">Shadow 4</Box>
+  <Box boxShadow={6} p={2} bgcolor="background.paper">Shadow 6</Box>
+  <Box boxShadow={8} p={2} bgcolor="background.paper">Shadow 8</Box>
+</Box>
+```
+
+## Custom Shadow Values
+
+You can also pass custom shadow values:
+
+```jsx
+<Box boxShadow="0 4px 6px rgba(0, 0, 0, 0.1)">
+  Custom shadow
+</Box>
+
+<Box boxShadow="rgba(0, 0, 0, 0.24) 0px 3px 8px">
+  Another custom shadow
+</Box>
+```
+
+## Common Patterns
+
+### Card with Shadow
+
+```jsx
+<Box
+  boxShadow={2}
+  borderRadius={2}
+  p={3}
+  bgcolor="background.paper"
+>
+  <Box component="h2" m={0} mb={2}>
+    Card Title
+  </Box>
+  <Box color="text.secondary">
+    Card content with elevation
+  </Box>
+</Box>
+```
+
+### Elevated Paper
+
+```jsx
+<Box
+  boxShadow={4}
+  p={3}
+  bgcolor="background.paper"
+  borderRadius={1}
+>
+  Elevated content
+</Box>
+```
+
+### Hover Elevation
+
+```jsx
+<Box
+  boxShadow={2}
+  p={2}
+  borderRadius={1}
+  sx={{
+    transition: 'box-shadow 0.3s',
+    '&:hover': {
+      boxShadow: 8,
+    },
+  }}
+>
+  Hover to elevate
+</Box>
+```
+
+### Floating Action Button
+
+```jsx
+<Box
+  component="button"
+  width={56}
+  height={56}
+  borderRadius="50%"
+  bgcolor="primary.main"
+  color="primary.contrastText"
+  border="none"
+  boxShadow={6}
+  sx={{
+    cursor: 'pointer',
+    '&:hover': {
+      boxShadow: 12,
+    },
+  }}
+>
+  +
+</Box>
+```
+
+### Modal Dialog
+
+```jsx
+<Box
+  boxShadow={24}
+  borderRadius={2}
+  p={4}
+  bgcolor="background.paper"
+  maxWidth={500}
+>
+  <Box component="h2" m={0} mb={2}>
+    Dialog Title
+  </Box>
+  <Box>
+    Dialog content with high elevation
+  </Box>
+</Box>
+```
+
+### Tooltip
+
+```jsx
+<Box
+  boxShadow={4}
+  bgcolor="grey.800"
+  color="white"
+  p={1}
+  px={2}
+  borderRadius={1}
+  fontSize={14}
+>
+  Tooltip text
+</Box>
+```
+
+### App Bar
+
+```jsx
+<Box
+  boxShadow={4}
+  bgcolor="primary.main"
+  color="primary.contrastText"
+  p={2}
+>
+  App Bar
+</Box>
+```
+
+### Card Grid
+
+```jsx
+<Box display="grid" gridTemplateColumns="repeat(auto-fill, minmax(250px, 1fr))" gap={3}>
+  {items.map((item) => (
+    <Box
+      key={item.id}
+      boxShadow={2}
+      borderRadius={2}
+      overflow="hidden"
+      sx={{
+        transition: 'all 0.3s',
+        '&:hover': {
+          boxShadow: 8,
+          transform: 'translateY(-4px)',
+        },
+      }}
+    >
+      <Box p={2}>{item.content}</Box>
+    </Box>
+  ))}
+</Box>
+```
+
+## Responsive Shadows
+
+```jsx
+<Box
+  boxShadow={{
+    xs: 1,
+    sm: 2,
+    md: 4,
+  }}
+  p={2}
+>
+  Responsive shadow elevation
+</Box>
+```
+
+## Inner Shadow
+
+Create inset shadows with custom values:
+
+```jsx
+<Box
+  sx={{
+    boxShadow: 'inset 0 2px 4px rgba(0, 0, 0, 0.1)',
+    p: 2,
+  }}
+>
+  Inner shadow
+</Box>
+```
+
+## Multiple Shadows
+
+```jsx
+<Box
+  sx={{
+    boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1), 0 1px 3px rgba(0, 0, 0, 0.08)',
+    p: 2,
+  }}
+>
+  Multiple shadows
+</Box>
+```
+
+## Colored Shadows
+
+```jsx
+<Box
+  bgcolor="primary.main"
+  color="white"
+  p={2}
+  borderRadius={1}
+  sx={{
+    boxShadow: (theme) => `0 4px 20px ${theme.palette.primary.main}40`,
+  }}
+>
+  Colored shadow
+</Box>
+
+<Box
+  bgcolor="error.main"
+  color="white"
+  p={2}
+  borderRadius={1}
+  sx={{
+    boxShadow: '0 8px 16px rgba(211, 47, 47, 0.3)',
+  }}
+>
+  Red glow
+</Box>
+```
+
+## Conditional Shadows
+
+```jsx
+function Card({ elevated }) {
+  return (
+    <Box
+      boxShadow={elevated ? 8 : 2}
+      p={2}
+      borderRadius={1}
+    >
+      Conditional elevation
+    </Box>
+  );
+}
+```
+
+## Custom Theme Shadows
+
+Customize the shadow scale:
+
+```javascript
+import { createTheme } from '@mui/system';
+
+const theme = createTheme({
+  shadows: [
+    'none',
+    '0 1px 3px rgba(0, 0, 0, 0.12)',
+    '0 4px 6px rgba(0, 0, 0, 0.12)',
+    '0 10px 20px rgba(0, 0, 0, 0.12)',
+    '0 15px 30px rgba(0, 0, 0, 0.12)',
+    // ... custom shadows
+  ],
+});
+```
+
+## TypeScript
+
+```tsx
+import { Box } from '@mui/system';
+
+interface ShadowBoxProps {
+  elevation?: 0 | 1 | 2 | 3 | 4 | 6 | 8 | 12 | 16 | 24;
+  children: React.ReactNode;
+}
+
+function ShadowBox({ elevation = 1, children }: ShadowBoxProps) {
+  return (
+    <Box boxShadow={elevation} p={2} borderRadius={1}>
+      {children}
+    </Box>
+  );
+}
+```
+
+## Dark Mode Shadows
+
+```javascript
+import { createTheme } from '@mui/system';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+  shadows: [
+    'none',
+    '0px 2px 1px -1px rgba(0,0,0,0.4),0px 1px 1px 0px rgba(0,0,0,0.28),0px 1px 3px 0px rgba(0,0,0,0.24)',
+    // Stronger shadows for dark mode
+  ],
+});
+```
+
+## Performance
+
+Shadows can impact performance. For better performance:
+
+```jsx
+{/* Static shadow */}
+const cardShadow = 2;
+
+<Box boxShadow={cardShadow} />
+
+{/* Avoid animating box-shadow, use transform instead */}
+<Box
+  boxShadow={2}
+  sx={{
+    transition: 'transform 0.3s',
+    '&:hover': {
+      transform: 'translateY(-2px)',
+    },
+  }}
+/>
+```
+
+## Available Properties
+
+| Prop | CSS Property | Theme Key | Values |
+|------|--------------|-----------|--------|
+| `boxShadow` | `box-shadow` | `shadows` | 0-24 or custom shadow value |
+
+## Shadow Elevation Guide
+
+- **0** - No elevation
+- **1** - Subtle, for resting state of cards
+- **2** - Low elevation, for cards
+- **3** - Slightly raised cards
+- **4** - App bar elevation
+- **6** - Floating action button (resting)
+- **8** - Floating action button (raised)
+- **12** - Dialogs
+- **16** - Navigation drawer
+- **24** - Modal overlays
+
+## Related
+
+- [Box Component](/system/box) - Using shadows with Box
+- [Borders](/system/borders) - Border utilities
+- [sx Prop](/system/the-sx-prop) - Advanced shadow styling

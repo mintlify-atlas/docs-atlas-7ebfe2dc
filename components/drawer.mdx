@@ -1,0 +1,244 @@
+---
+title: Drawer
+description: Navigation drawers provide access to destinations in your app. Side sheets are surfaces containing supplementary content.
+---
+
+# Drawer
+
+Navigation drawers provide ergonomic access to destinations in an app. They can either be permanently on-screen or controlled by a navigation menu icon.
+
+## Temporary Drawer
+
+Temporary navigation drawers can toggle open or closed. They are elevated above other content and overlay the page.
+
+```tsx
+import * as React from 'react';
+import Drawer from '@mui/material/Drawer';
+import Button from '@mui/material/Button';
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemText from '@mui/material/ListItemText';
+
+export default function TemporaryDrawer() {
+  const [open, setOpen] = React.useState(false);
+
+  const toggleDrawer = (newOpen: boolean) => () => {
+    setOpen(newOpen);
+  };
+
+  return (
+    <div>
+      <Button onClick={toggleDrawer(true)}>Open drawer</Button>
+      <Drawer open={open} onClose={toggleDrawer(false)}>
+        <List sx={{ width: 250 }}>
+          {['Inbox', 'Starred', 'Send email', 'Drafts'].map((text) => (
+            <ListItem key={text} disablePadding>
+              <ListItemButton>
+                <ListItemText primary={text} />
+              </ListItemButton>
+            </ListItem>
+          ))}
+        </List>
+      </Drawer>
+    </div>
+  );
+}
+```
+
+## Drawer Anchors
+
+The drawer can appear from any side of the screen.
+
+```tsx
+import Drawer from '@mui/material/Drawer';
+
+// Left (default)
+<Drawer anchor="left" open={open} onClose={handleClose}>
+  {/* Content */}
+</Drawer>
+
+// Right
+<Drawer anchor="right" open={open} onClose={handleClose}>
+  {/* Content */}
+</Drawer>
+
+// Top
+<Drawer anchor="top" open={open} onClose={handleClose}>
+  {/* Content */}
+</Drawer>
+
+// Bottom
+<Drawer anchor="bottom" open={open} onClose={handleClose}>
+  {/* Content */}
+</Drawer>
+```
+
+## Persistent Drawer
+
+Persistent navigation drawers can toggle open or closed. The drawer sits on the same surface elevation as the content and shares the same layout.
+
+```tsx
+<Drawer
+  variant="persistent"
+  anchor="left"
+  open={open}
+>
+  {/* Drawer content */}
+</Drawer>
+```
+
+## Permanent Drawer
+
+Permanent navigation drawers are always visible and pinned to the left edge.
+
+```tsx
+<Drawer
+  variant="permanent"
+  anchor="left"
+>
+  {/* Drawer content */}
+</Drawer>
+```
+
+## Responsive Drawer
+
+Combine variants for responsive behavior.
+
+```tsx
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
+function ResponsiveDrawer() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  return (
+    <>
+      {/* Mobile: Temporary drawer */}
+      {isMobile ? (
+        <Drawer
+          variant="temporary"
+          open={mobileOpen}
+          onClose={() => setMobileOpen(false)}
+        >
+          {/* Content */}
+        </Drawer>
+      ) : (
+        /* Desktop: Permanent drawer */
+        <Drawer variant="permanent">
+          {/* Content */}
+        </Drawer>
+      )}
+    </>
+  );
+}
+```
+
+## Clipped Under App Bar
+
+Position the drawer below the app bar.
+
+```tsx
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+
+<>
+  <AppBar position="fixed" sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}>
+    <Toolbar>
+      {/* App bar content */}
+    </Toolbar>
+  </AppBar>
+  <Drawer
+    variant="permanent"
+    sx={{
+      width: 240,
+      flexShrink: 0,
+      [`& .MuiDrawer-paper`]: { width: 240, boxSizing: 'border-box' },
+    }}
+  >
+    <Toolbar /> {/* Spacer for app bar */}
+    {/* Drawer content */}
+  </Drawer>
+</>
+```
+
+## Props
+
+### anchor
+
+- **Type:** `'left' | 'top' | 'right' | 'bottom'`
+- **Default:** `'left'`
+- **Description:** Side from which the drawer will appear
+
+### open
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** If `true`, the component is shown
+
+### onClose
+
+- **Type:** `(event: object, reason: string) => void`
+- **Description:** Callback fired when the component requests to be closed. The `reason` parameter can be: `"escapeKeyDown"`, `"backdropClick"`
+
+### variant
+
+- **Type:** `'permanent' | 'persistent' | 'temporary'`
+- **Default:** `'temporary'`
+- **Description:** The variant to use
+  - **temporary:** Modal drawer that overlays content
+  - **persistent:** Drawer that can be toggled and pushes content
+  - **permanent:** Always visible drawer
+
+### elevation
+
+- **Type:** `number`
+- **Default:** `16`
+- **Description:** The elevation of the drawer
+
+### hideBackdrop
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** If `true`, the backdrop is not rendered
+
+### ModalProps
+
+- **Type:** `Partial<ModalProps>`
+- **Default:** `{}`
+- **Description:** Props applied to the Modal element (when `variant="temporary"`)
+
+### transitionDuration
+
+- **Type:** `TransitionProps['timeout']`
+- **Default:** `{ enter: theme.transitions.duration.enteringScreen, exit: theme.transitions.duration.leavingScreen }`
+- **Description:** The duration for the transition, in milliseconds
+
+### slots
+
+- **Type:** `{ root?: React.ElementType, backdrop?: React.ElementType, docked?: React.ElementType, paper?: React.ElementType, transition?: React.ElementType }`
+- **Description:** The components used for each slot inside the drawer
+
+### slotProps
+
+- **Type:** `{ root?: object, backdrop?: object, docked?: object, paper?: object, transition?: object }`
+- **Description:** The props used for each slot inside the drawer
+
+### sx
+
+- **Type:** `SxProps<Theme>`
+- **Description:** System prop for defining CSS styles
+
+## Accessibility
+
+- Temporary drawers are rendered as modal dialogs with `role="dialog"` and `aria-modal="true"`
+- The drawer content should be keyboard navigable
+- Pressing Escape closes temporary and persistent drawers
+- Clicking the backdrop closes temporary drawers
+
+## API Reference
+
+- [Drawer API](https://mui.com/material-ui/api/drawer/)
+- [Modal API](https://mui.com/material-ui/api/modal/)

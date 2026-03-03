@@ -1,0 +1,312 @@
+---
+title: Hidden (Removed)
+description: The Hidden component has been removed in Material UI v7. Use responsive display utilities instead.
+---
+
+# Hidden (Removed)
+
+The `Hidden` component was removed in Material UI v7. This page documents migration paths to replace it.
+
+## Migration
+
+The Hidden component provided two implementation modes: CSS-based and JavaScript-based. Each has a different replacement strategy.
+
+### CSS implementation
+
+Replace `implementation="css"` with the `sx` prop and responsive display values:
+
+#### Hide on larger screens (xlUp)
+
+```tsx
+// Before
+<Hidden implementation="css" xlUp>
+  <Paper />
+</Hidden>
+
+// After
+<Paper sx={{ display: { xl: 'none', xs: 'block' } }} />
+```
+
+#### Hide on smaller screens (mdDown)
+
+```tsx
+// Before
+<Hidden implementation="css" mdDown>
+  <Paper />
+</Hidden>
+
+// After  
+<Paper sx={{ display: { xs: 'none', md: 'block' } }} />
+```
+
+#### Hide on specific breakpoint (only)
+
+```tsx
+// Before
+<Hidden only="md">
+  <Paper />
+</Hidden>
+
+// After
+<Paper sx={{ display: { md: 'none' } }} />
+```
+
+#### Hide on multiple breakpoints
+
+```tsx
+// Before
+<Hidden only={['sm', 'md']}>
+  <Paper />
+</Hidden>
+
+// After
+<Paper sx={{ display: { xs: 'block', sm: 'none', md: 'none', lg: 'block' } }} />
+```
+
+### JavaScript implementation
+
+Replace `implementation="js"` with the `useMediaQuery` hook:
+
+#### Basic usage
+
+```tsx
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
+// Before
+<Hidden implementation="js" xlUp>
+  <Paper />
+</Hidden>
+
+// After
+function MyComponent() {
+  const theme = useTheme();
+  const isXlUp = useMediaQuery(theme.breakpoints.up('xl'));
+  
+  return !isXlUp ? <Paper /> : null;
+}
+```
+
+#### Hide below breakpoint
+
+```tsx
+// Before
+<Hidden implementation="js" mdDown>
+  <Paper />
+</Hidden>
+
+// After
+function MyComponent() {
+  const theme = useTheme();
+  const isMdUp = useMediaQuery(theme.breakpoints.up('md'));
+  
+  return isMdUp ? <Paper /> : null;
+}
+```
+
+#### Hide specific breakpoint
+
+```tsx
+// Before
+<Hidden implementation="js" only="md">
+  <Paper />
+</Hidden>
+
+// After
+function MyComponent() {
+  const theme = useTheme();
+  const isMd = useMediaQuery(theme.breakpoints.only('md'));
+  
+  return !isMd ? <Paper /> : null;
+}
+```
+
+## Common patterns
+
+### Mobile vs Desktop content
+
+```tsx
+// Using sx prop (CSS-based)
+<>
+  <Box sx={{ display: { xs: 'block', md: 'none' } }}>
+    <MobileNavigation />
+  </Box>
+  <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+    <DesktopNavigation />
+  </Box>
+</>
+
+// Using useMediaQuery (JS-based)
+function Navigation() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('md'));
+  
+  return isMobile ? <MobileNavigation /> : <DesktopNavigation />;
+}
+```
+
+### Responsive sidebar
+
+```tsx
+// CSS-based
+<Box
+  component="aside"
+  sx={{
+    display: { xs: 'none', lg: 'block' },
+    width: 240,
+  }}
+>
+  <Sidebar />
+</Box>
+
+// JS-based with conditional rendering
+function Layout() {
+  const theme = useTheme();
+  const showSidebar = useMediaQuery(theme.breakpoints.up('lg'));
+  
+  return (
+    <Box sx={{ display: 'flex' }}>
+      {showSidebar && (
+        <Box component="aside" sx={{ width: 240 }}>
+          <Sidebar />
+        </Box>
+      )}
+      <Box component="main" sx={{ flexGrow: 1 }}>
+        <Content />
+      </Box>
+    </Box>
+  );
+}
+```
+
+### Responsive table vs cards
+
+```tsx
+function DataDisplay({ data }) {
+  const theme = useTheme();
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+  
+  return isDesktop ? (
+    <Table>
+      {data.map((row) => (
+        <TableRow key={row.id}>
+          <TableCell>{row.name}</TableCell>
+          <TableCell>{row.value}</TableCell>
+        </TableRow>
+      ))}
+    </Table>
+  ) : (
+    <Stack spacing={2}>
+      {data.map((item) => (
+        <Card key={item.id}>
+          <CardContent>
+            <Typography>{item.name}</Typography>
+            <Typography>{item.value}</Typography>
+          </CardContent>
+        </Card>
+      ))}
+    </Stack>
+  );
+}
+```
+
+### Hide AppBar title on mobile
+
+```tsx
+<AppBar position="static">
+  <Toolbar>
+    <IconButton edge="start" color="inherit">
+      <MenuIcon />
+    </IconButton>
+    <Typography
+      variant="h6"
+      sx={{ display: { xs: 'none', sm: 'block' } }}
+    >
+      Application Title
+    </Typography>
+    <Box sx={{ flexGrow: 1 }} />
+    <IconButton color="inherit">
+      <AccountCircle />
+    </IconButton>
+  </Toolbar>
+</AppBar>
+```
+
+## Breakpoint reference
+
+Material UI breakpoint values:
+
+| Breakpoint | Size | Range |
+|------------|------|-------|
+| `xs` | Extra small | 0px - 600px |
+| `sm` | Small | 600px - 900px |
+| `md` | Medium | 900px - 1200px |
+| `lg` | Large | 1200px - 1536px |
+| `xl` | Extra large | 1536px+ |
+
+### Breakpoint helpers
+
+- `up(key)`: `@media (min-width: key)`
+- `down(key)`: `@media (max-width: key - 0.05px)`
+- `between(start, end)`: `@media (min-width: start) and (max-width: end - 0.05px)`
+- `only(key)`: `@media (min-width: key) and (max-width: next - 0.05px)`
+- `not(key)`: Opposite of `only`
+
+## CSS vs JavaScript approaches
+
+### CSS approach (sx prop)
+
+**Pros:**
+- Better performance (no JavaScript execution)
+- Works with SSR immediately
+- Simpler for basic show/hide
+- No hydration issues
+
+**Cons:**
+- Element still exists in DOM
+- Takes up accessibility tree space
+- Can't prevent component mounting
+
+```tsx
+<Drawer sx={{ display: { xs: 'none', md: 'block' } }}>
+  <ExpensiveComponent />  {/* Still mounts on mobile */}
+</Drawer>
+```
+
+### JavaScript approach (useMediaQuery)
+
+**Pros:**
+- Component doesn't mount if hidden
+- Better for expensive components
+- Enables complex logic
+
+**Cons:**
+- Requires JavaScript execution
+- Can cause hydration issues
+- Slight delay on initial render
+
+```tsx
+function MyComponent() {
+  const isDesktop = useMediaQuery(theme.breakpoints.up('md'));
+  
+  return isDesktop ? (
+    <Drawer>
+      <ExpensiveComponent />  {/* Only mounts on desktop */}
+    </Drawer>
+  ) : null;
+}
+```
+
+## Best practices
+
+1. **Prefer CSS approach** for simple visibility toggling
+2. **Use JavaScript approach** when preventing component mounting is important
+3. **Consider performance** - hidden elements still affect layout and accessibility
+4. **Test on actual devices** - breakpoints may not match real-world usage
+5. **Use semantic HTML** - ensure hidden content is still accessible when appropriate
+
+## Additional resources
+
+- [Box component](/components/box) - For responsive display utilities
+- [Breakpoints](/customization/breakpoints) - Customizing breakpoint values
+- [The sx Prop](/system/the-sx-prop) - Using responsive values in sx prop

@@ -1,0 +1,150 @@
+---
+title: Introduction to MUI System
+description: Overview of MUI System - a powerful styling solution for Material UI
+---
+
+# MUI System
+
+MUI System is a collection of CSS utilities to help you rapidly build custom designs with Material UI components. It provides low-level styling utilities as an alternative to writing CSS directly.
+
+## What is MUI System?
+
+MUI System is a set of CSS functions that gives you access to the theme values and provides shortcuts for common CSS properties. It includes:
+
+- **Style functions** - Utility functions for borders, display, flexbox, grid, palette, positions, shadows, sizing, spacing, and typography
+- **`sx` prop** - A shortcut for defining custom styles with access to the theme
+- **`styled()` API** - A utility for creating styled components
+- **`Box` component** - A wrapper component for quickly prototyping layouts
+
+## Key Features
+
+### Theme-aware Styling
+
+All style functions are connected to the theme, allowing you to reference theme values directly:
+
+```jsx
+<Box color="primary.main" bgcolor="background.paper">
+  Themed colors
+</Box>
+```
+
+### Responsive Values
+
+Easily create responsive designs by passing arrays or objects:
+
+```jsx
+<Box
+  width={{ xs: '100%', sm: '50%', md: '33%' }}
+  fontSize={['12px', '14px', '16px']}
+>
+  Responsive sizing
+</Box>
+```
+
+### Type-safe
+
+Full TypeScript support with type inference and autocomplete for all style properties.
+
+## Installation
+
+```bash
+npm install @mui/system
+```
+
+or
+
+```bash
+yarn add @mui/system
+```
+
+## Core Concepts
+
+### Style Functions
+
+MUI System exports individual style functions for different CSS categories:
+
+```javascript
+import {
+  borders,
+  display,
+  flexbox,
+  grid,
+  palette,
+  positions,
+  shadows,
+  sizing,
+  spacing,
+  typography
+} from '@mui/system';
+```
+
+Each function maps props to CSS properties and can access theme values.
+
+### The `sx` Prop
+
+The `sx` prop is a shorthand for defining custom styles with access to the theme:
+
+```jsx
+<Box
+  sx={{
+    width: 300,
+    height: 300,
+    backgroundColor: 'primary.main',
+    '&:hover': {
+      backgroundColor: 'primary.dark',
+    },
+  }}
+/>
+```
+
+### Composition
+
+Style functions can be composed together using the `compose` utility:
+
+```javascript
+import { compose, spacing, palette } from '@mui/system';
+
+const styleFn = compose(spacing, palette);
+```
+
+## Architecture
+
+MUI System is built on top of `@mui/styled-engine` (Emotion by default) and provides:
+
+1. **Style functions** - Individual utilities for specific CSS categories
+2. **`sx` prop implementation** - Through `styleFunctionSx`
+3. **Theme integration** - Via `handleBreakpoints` and theme path resolution
+4. **Component factories** - `createStyled`, `createBox` for building components
+
+## Source Structure
+
+The main exports from `@mui/system`:
+
+```javascript
+// Style functions
+export { default as borders } from './borders';
+export { default as display } from './display';
+export { default as flexbox } from './flexbox';
+export { default as grid } from './cssGrid';
+export { default as palette } from './palette';
+export { default as positions } from './positions';
+export { default as shadows } from './shadows';
+export { default as sizing } from './sizing';
+export { default as spacing } from './spacing';
+export { default as typography } from './typography';
+
+// Core APIs
+export { default as styled } from './styled';
+export { default as Box } from './Box';
+
+// Theme utilities
+export { default as createTheme } from './createTheme';
+export { default as ThemeProvider } from './ThemeProvider';
+```
+
+## Next Steps
+
+- [Getting Started](/system/getting-started) - Installation and setup guide
+- [The `sx` Prop](/system/the-sx-prop) - Detailed guide on using the `sx` prop
+- [styled() API](/system/styled) - Creating styled components
+- [Box Component](/system/box) - Using the Box wrapper component

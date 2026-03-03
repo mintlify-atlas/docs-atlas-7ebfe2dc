@@ -1,0 +1,456 @@
+---
+title: Box Component
+description: MUI System's Box component for rapid prototyping and layout
+---
+
+# Box Component
+
+The Box component is a wrapper component for most CSS utility needs. It serves as a generic container with access to all style functions from the system.
+
+## Import
+
+```javascript
+import { Box } from '@mui/system';
+```
+
+## Implementation
+
+From `Box/Box.js:7-10`:
+
+```javascript
+const Box = createBox({
+  defaultClassName: boxClasses.root,
+  generateClassName: ClassNameGenerator.generate,
+});
+```
+
+## Type Definition
+
+From `Box/Box.d.ts:53-60`:
+
+```typescript
+export interface BoxOwnProps<Theme extends object = SystemTheme> extends SystemProps<Theme> {
+  children?: React.ReactNode;
+  ref?: React.Ref<unknown> | undefined;
+  /**
+   * The system prop that allows defining system overrides as well as additional CSS styles.
+   */
+  sx?: SxProps<Theme> | undefined;
+}
+```
+
+## Basic Usage
+
+```jsx
+import { Box } from '@mui/system';
+
+function App() {
+  return (
+    <Box
+      sx={{
+        width: 300,
+        height: 300,
+        backgroundColor: 'primary.main',
+      }}
+    >
+      Content
+    </Box>
+  );
+}
+```
+
+## Component Prop
+
+Render as any HTML element or React component:
+
+```jsx
+// Render as a span
+<Box component="span">Span content</Box>
+
+// Render as a custom component
+import Link from 'next/link';
+<Box component={Link} href="/about">About</Box>
+```
+
+From the test file `Box.test.js:49-58`:
+
+```javascript
+it('renders children and box content', () => {
+  render(
+    <Box data-testid="box" component="span" sx={{ m: 1 }}>
+      {testChildren}
+    </Box>,
+  );
+  const box = screen.getByTestId('box');
+  expect(box).contain(screen.getByTestId('child'));
+  expect(box.tagName).to.equal('SPAN');
+});
+```
+
+## System Props
+
+Box accepts all system style props directly:
+
+```jsx
+<Box
+  m={2}           // margin: theme.spacing(2)
+  p={1}           // padding: theme.spacing(1)
+  color="text.primary"
+  bgcolor="background.paper"
+  border={1}
+  borderRadius={2}
+  boxShadow={3}
+  width="100%"
+  maxWidth={500}
+>
+  Content with system props
+</Box>
+```
+
+### Available System Props
+
+From `Box.d.ts:26-40`, Box supports all these style function groups:
+
+```typescript
+import borders from '../borders';
+import display from '../display';
+import flexbox from '../flexbox';
+import grid from '../cssGrid';
+import palette from '../palette';
+import positions from '../positions';
+import shadows from '../shadows';
+import sizing from '../sizing';
+import spacing from '../spacing';
+import typography from '../typography';
+```
+
+## The sx Prop
+
+Use the `sx` prop for more complex styles:
+
+```jsx
+<Box
+  sx={{
+    display: 'flex',
+    alignItems: 'center',
+    gap: 2,
+    p: 2,
+    '&:hover': {
+      backgroundColor: 'action.hover',
+    },
+  }}
+>
+  Hover me
+</Box>
+```
+
+## Responsive Values
+
+### Array Syntax
+
+```jsx
+<Box
+  width={['100%', '50%', '33.33%']}
+  p={[1, 2, 3]}
+>
+  Responsive box
+</Box>
+```
+
+### Object Syntax
+
+```jsx
+<Box
+  sx={{
+    width: {
+      xs: '100%',
+      sm: '50%',
+      md: '33.33%',
+    },
+    p: {
+      xs: 1,
+      sm: 2,
+      md: 3,
+    },
+  }}
+>
+  Responsive box
+</Box>
+```
+
+## Combining Props and sx
+
+System props and the `sx` prop can be combined. From `Box.test.js:264-272`:
+
+```javascript
+it('combines system properties with the sx prop', () => {
+  const { container } = render(<Box mt={2} mr={1} sx={{ marginRight: 5, mb: 2 }} />);
+
+  expect(container.firstChild).toHaveComputedStyle({
+    marginTop: '16px',
+    marginRight: '40px',
+    marginBottom: '16px',
+  });
+});
+```
+
+The `sx` prop takes precedence:
+
+```jsx
+<Box
+  mt={2}    // marginTop: 16px
+  mr={1}    // marginRight: 8px (overridden by sx)
+  sx={{
+    marginRight: 5,  // marginRight: 40px (wins)
+    mb: 2,           // marginBottom: 16px
+  }}
+/>
+```
+
+## Layout Examples
+
+### Flexbox Container
+
+```jsx
+<Box
+  display="flex"
+  justifyContent="space-between"
+  alignItems="center"
+  p={2}
+>
+  <Box>Item 1</Box>
+  <Box>Item 2</Box>
+  <Box>Item 3</Box>
+</Box>
+```
+
+### Grid Layout
+
+```jsx
+<Box
+  display="grid"
+  gridTemplateColumns="repeat(3, 1fr)"
+  gap={2}
+>
+  <Box>Cell 1</Box>
+  <Box>Cell 2</Box>
+  <Box>Cell 3</Box>
+</Box>
+```
+
+### Centered Content
+
+```jsx
+<Box
+  display="flex"
+  justifyContent="center"
+  alignItems="center"
+  minHeight="100vh"
+>
+  Centered content
+</Box>
+```
+
+### Card Layout
+
+```jsx
+<Box
+  sx={{
+    maxWidth: 400,
+    p: 3,
+    border: '1px solid',
+    borderColor: 'divider',
+    borderRadius: 2,
+    boxShadow: 2,
+  }}
+>
+  <Box component="h2" m={0} mb={2}>
+    Card Title
+  </Box>
+  <Box color="text.secondary">
+    Card content goes here
+  </Box>
+</Box>
+```
+
+## Border Styling
+
+From `Box.test.js:60-98`, borders can be styled with proper precedence:
+
+```jsx
+// Border with color
+<Box border={1} borderColor="primary.main" />
+
+// Individual borders
+<Box
+  borderTop={1}
+  borderTopColor="primary.main"
+  borderRight={2}
+  borderRightColor="secondary.main"
+/>
+
+// Border radius
+<Box border={1} borderRadius={2} />
+```
+
+## Prop Forwarding
+
+Box does not forward style props to the DOM. From `Box.test.js:32-47`:
+
+```javascript
+it('does not forward style props as DOM attributes', () => {
+  const elementRef = React.createRef();
+  render(
+    <Box
+      color="primary.main"
+      fontFamily="Comic Sans"
+      fontSize={{ xs: 'h6.fontSize', sm: 'h4.fontSize', md: 'h3.fontSize' }}
+      ref={elementRef}
+    />,
+  );
+
+  const { current: element } = elementRef;
+  expect(element).not.to.have.attribute('color');
+  expect(element).not.to.have.attribute('font-family');
+  expect(element).not.to.have.attribute('font-size');
+});
+```
+
+## CSS Class
+
+Box adds a utility class for styling. From `Box.test.js:274-278`:
+
+```javascript
+it('adds the utility mui class', () => {
+  render(<Box data-testid="regular-box" />);
+  expect(screen.getByTestId('regular-box')).to.have.class('MuiBox-root');
+});
+```
+
+## TypeScript
+
+### Basic Usage
+
+```tsx
+import { Box } from '@mui/system';
+
+function MyComponent() {
+  return (
+    <Box<'div'>
+      component="div"
+      sx={{ p: 2 }}
+    >
+      Content
+    </Box>
+  );
+}
+```
+
+### With Custom Component
+
+```tsx
+import { Box, BoxProps } from '@mui/system';
+import Link from 'next/link';
+
+type LinkBoxProps = BoxProps<typeof Link, { href: string }>;
+
+function LinkBox(props: LinkBoxProps) {
+  return <Box component={Link} {...props} />;
+}
+```
+
+### With System Props
+
+```tsx
+import { Box, SystemProps } from '@mui/system';
+
+interface CardProps extends SystemProps {
+  title: string;
+}
+
+function Card({ title, ...systemProps }: CardProps) {
+  return (
+    <Box p={2} border={1} {...systemProps}>
+      {title}
+    </Box>
+  );
+}
+```
+
+## Common Patterns
+
+### Section Container
+
+```jsx
+<Box
+  component="section"
+  py={8}
+  px={2}
+  bgcolor="background.default"
+>
+  Section content
+</Box>
+```
+
+### Absolute Positioning
+
+```jsx
+<Box
+  position="absolute"
+  top={0}
+  right={0}
+  m={2}
+>
+  Positioned element
+</Box>
+```
+
+### Full Height Sidebar
+
+```jsx
+<Box
+  component="aside"
+  width={250}
+  height="100vh"
+  position="fixed"
+  bgcolor="background.paper"
+  borderRight={1}
+  borderColor="divider"
+>
+  Sidebar content
+</Box>
+```
+
+### Responsive Padding
+
+```jsx
+<Box
+  p={{ xs: 2, sm: 3, md: 4 }}
+  maxWidth="lg"
+  mx="auto"
+>
+  Responsive container
+</Box>
+```
+
+## Performance
+
+Box is optimized for performance:
+
+- Props are not rendered as DOM attributes
+- Styles are computed once and memoized
+- CSS is generated efficiently with the styled engine
+
+## Best Practices
+
+1. **Use for layout** - Box is ideal for layout and spacing
+2. **Combine props** - Mix system props and sx for flexibility
+3. **Semantic HTML** - Use the `component` prop for semantic elements
+4. **Avoid overuse** - For repeated components, use `styled()`
+5. **Type your components** - Use TypeScript for better DX
+
+## Related
+
+- [sx Prop](/system/the-sx-prop) - Detailed guide on the sx prop
+- [Spacing](/system/spacing) - Spacing system documentation
+- [styled()](/system/styled) - For creating reusable styled components

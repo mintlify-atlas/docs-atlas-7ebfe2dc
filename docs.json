@@ -1,122 +1,225 @@
 {
   "$schema": "https://mintlify.com/docs.json",
-  "theme": "mint",
-  "name": "Mint Starter Kit",
+  "name": "Material UI",
+  "theme": "willow",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#007FFF",
+    "light": "#66B2FF",
+    "dark": "#0059B2"
   },
-  "favicon": "/favicon.svg",
+  "navbar": {
+    "primary": {
+      "type": "github",
+      "href": "https://github.com/mui/material-ui"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/mui/material-ui"
+    }
+  },
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
+        "tab": "Documentation",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Getting Started",
             "pages": [
-              "index",
+              "introduction",
+              "installation",
               "quickstart",
-              "development"
+              "usage",
+              "templates"
             ]
           },
           {
             "group": "Customization",
             "pages": [
-              "essentials/settings",
-              "essentials/navigation"
+              "customization/theming",
+              "customization/palette",
+              "customization/typography",
+              "customization/spacing",
+              "customization/breakpoints",
+              "customization/dark-mode",
+              "customization/css-theme-variables"
             ]
           },
           {
-            "group": "Writing content",
+            "group": "Guides",
             "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
+              "guides/styled-components",
+              "guides/server-rendering",
+              "guides/typescript",
+              "guides/right-to-left",
+              "guides/minimizing-bundle-size"
             ]
           }
         ]
       },
       {
-        "tab": "API reference",
+        "tab": "Components",
         "groups": [
           {
-            "group": "API documentation",
+            "group": "Inputs",
             "pages": [
-              "api-reference/introduction"
+              "components/button",
+              "components/button-group",
+              "components/checkbox",
+              "components/floating-action-button",
+              "components/radio-button",
+              "components/rating",
+              "components/select",
+              "components/slider",
+              "components/switch",
+              "components/text-field",
+              "components/transfer-list",
+              "components/toggle-button",
+              "components/autocomplete"
             ]
           },
           {
-            "group": "Endpoint examples",
+            "group": "Data Display",
             "pages": [
-              "api-reference/endpoint/get",
-              "api-reference/endpoint/create",
-              "api-reference/endpoint/delete",
-              "api-reference/endpoint/webhook"
+              "components/avatar",
+              "components/badge",
+              "components/chip",
+              "components/divider",
+              "components/icons",
+              "components/list",
+              "components/table",
+              "components/tooltip",
+              "components/typography"
+            ]
+          },
+          {
+            "group": "Feedback",
+            "pages": [
+              "components/alert",
+              "components/backdrop",
+              "components/dialog",
+              "components/progress",
+              "components/skeleton",
+              "components/snackbar"
+            ]
+          },
+          {
+            "group": "Surfaces",
+            "pages": [
+              "components/accordion",
+              "components/app-bar",
+              "components/card",
+              "components/paper"
+            ]
+          },
+          {
+            "group": "Navigation",
+            "pages": [
+              "components/bottom-navigation",
+              "components/breadcrumbs",
+              "components/drawer",
+              "components/link",
+              "components/menu",
+              "components/pagination",
+              "components/speed-dial",
+              "components/stepper",
+              "components/tabs"
+            ]
+          },
+          {
+            "group": "Layout",
+            "pages": [
+              "components/box",
+              "components/container",
+              "components/grid",
+              "components/stack",
+              "components/image-list",
+              "components/hidden"
+            ]
+          },
+          {
+            "group": "Utils",
+            "pages": [
+              "components/click-away-listener",
+              "components/css-baseline",
+              "components/modal",
+              "components/no-ssr",
+              "components/popover",
+              "components/popper",
+              "components/portal",
+              "components/textarea-autosize",
+              "components/transitions"
+            ]
+          },
+          {
+            "group": "Lab",
+            "pages": [
+              "components/about-the-lab",
+              "components/timeline",
+              "components/loading-button",
+              "components/masonry"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "System",
+        "groups": [
+          {
+            "group": "Overview",
+            "pages": [
+              "system/introduction",
+              "system/getting-started"
+            ]
+          },
+          {
+            "group": "Core Utilities",
+            "pages": [
+              "system/styled",
+              "system/sx-prop",
+              "system/the-sx-prop",
+              "system/box"
+            ]
+          },
+          {
+            "group": "Style Functions",
+            "pages": [
+              "system/borders",
+              "system/display",
+              "system/flexbox",
+              "system/grid",
+              "system/palette",
+              "system/positions",
+              "system/shadows",
+              "system/sizing",
+              "system/spacing",
+              "system/typography"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "Resources",
+        "groups": [
+          {
+            "group": "Community",
+            "pages": [
+              "resources/support",
+              "resources/showcase",
+              "resources/design-resources",
+              "resources/roadmap"
+            ]
+          },
+          {
+            "group": "Migration",
+            "pages": [
+              "migration/upgrade-to-v6",
+              "migration/migration-v5",
+              "migration/migration-v4"
             ]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        },
-        {
-          "anchor": "Blog",
-          "href": "https://mintlify.com/blog",
-          "icon": "newspaper"
-        }
-      ]
-    }
-  },
-  "logo": {
-    "light": "/logo/light.svg",
-    "dark": "/logo/dark.svg"
-  },
-  "navbar": {
-    "links": [
-      {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
-      }
-    ],
-    "primary": {
-      "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
-    }
-  },
-  "contextual": {
-    "options": [
-     "copy",
-     "view",
-     "chatgpt",
-     "claude",
-     "perplexity",
-     "mcp",
-     "cursor",
-     "vscode"
-   ]
-  },
-  "footer": {
-    "socials": {
-      "x": "https://x.com/mintlify",
-      "github": "https://github.com/mintlify",
-      "linkedin": "https://linkedin.com/company/mintlify"
-    }
+    ]
   }
 }

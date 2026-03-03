@@ -1,0 +1,385 @@
+---
+title: Icons
+description: Guidance and suggestions for using icons with Material UI.
+---
+
+## Introduction
+
+Material UI provides icon support through three components and packages:
+
+- **SvgIcon** - A wrapper for custom SVG icons
+- **Icon** - A component for displaying icon fonts (Material Icons, Font Awesome, etc.)
+- **@mui/icons-material** - Over 2,100+ ready-to-use React components for Material Icons
+
+## SvgIcon
+
+The SvgIcon component wraps SVG icons as React components. It extends the native `<svg>` element.
+
+### Basic Usage
+
+```tsx
+import SvgIcon from '@mui/material/SvgIcon';
+
+function HomeIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+    </SvgIcon>
+  );
+}
+
+function Demo() {
+  return <HomeIcon />;
+}
+```
+
+### Color
+
+The `color` prop supports theme palette colors.
+
+```tsx
+import SvgIcon from '@mui/material/SvgIcon';
+import Stack from '@mui/material/Stack';
+
+function HomeIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+    </SvgIcon>
+  );
+}
+
+function ColorIcons() {
+  return (
+    <Stack direction="row" spacing={2}>
+      <HomeIcon />
+      <HomeIcon color="primary" />
+      <HomeIcon color="secondary" />
+      <HomeIcon color="success" />
+      <HomeIcon color="action" />
+      <HomeIcon color="disabled" />
+      <HomeIcon sx={{ color: 'pink' }} />
+    </Stack>
+  );
+}
+```
+
+### Size
+
+The `fontSize` prop controls the size of the icon.
+
+```tsx
+import SvgIcon from '@mui/material/SvgIcon';
+import Stack from '@mui/material/Stack';
+
+function HomeIcon(props) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z" />
+    </SvgIcon>
+  );
+}
+
+function SizeIcons() {
+  return (
+    <Stack direction="row" spacing={2} alignItems="center">
+      <HomeIcon fontSize="small" />
+      <HomeIcon />
+      <HomeIcon fontSize="large" />
+      <HomeIcon sx={{ fontSize: 40 }} />
+    </Stack>
+  );
+}
+```
+
+### SvgIcon Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `node` | - | Node passed into the SVG element. |
+| `classes` | `object` | - | Override or extend the styles applied to the component. |
+| `color` | `'inherit'` \| `'action'` \| `'disabled'` \| `'primary'` \| `'secondary'` \| `'error'` \| `'info'` \| `'success'` \| `'warning'` | `'inherit'` | The color of the component. |
+| `fontSize` | `'inherit'` \| `'large'` \| `'medium'` \| `'small'` | `'medium'` | The fontSize applied to the icon. Defaults to 24px. |
+| `htmlColor` | `string` | - | Applies a color attribute to the SVG element. |
+| `inheritViewBox` | `boolean` | `false` | If true, the root node will inherit the custom component's viewBox. |
+| `shapeRendering` | `string` | - | The shape-rendering attribute for SVG element. |
+| `sx` | `SxProps<Theme>` | - | The system prop for defining CSS overrides and additional styles. |
+| `titleAccess` | `string` | - | Provides a human-readable title for the element. |
+| `viewBox` | `string` | `'0 0 24 24'` | Allows you to redefine the coordinates inside an SVG element. |
+
+## Icon (Icon Fonts)
+
+The Icon component displays an icon from any icon font that supports ligatures. Use this for icon fonts like Material Icons or Font Awesome.
+
+### Basic Usage
+
+First, you need to load the icon font in your project. For Material Icons, add this to your HTML:
+
+```html
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/icon?family=Material+Icons"
+/>
+```
+
+Then use the Icon component:
+
+```tsx
+import Icon from '@mui/material/Icon';
+
+function Demo() {
+  return <Icon>star</Icon>;
+}
+```
+
+### Color
+
+```tsx
+import Icon from '@mui/material/Icon';
+import Stack from '@mui/material/Stack';
+
+function ColorIcons() {
+  return (
+    <Stack direction="row" spacing={2}>
+      <Icon>home</Icon>
+      <Icon color="primary">home</Icon>
+      <Icon color="secondary">home</Icon>
+      <Icon color="success">home</Icon>
+      <Icon color="action">home</Icon>
+      <Icon color="disabled">home</Icon>
+    </Stack>
+  );
+}
+```
+
+### Size
+
+```tsx
+import Icon from '@mui/material/Icon';
+import Stack from '@mui/material/Stack';
+
+function SizeIcons() {
+  return (
+    <Stack direction="row" spacing={2} alignItems="center">
+      <Icon fontSize="small">home</Icon>
+      <Icon>home</Icon>
+      <Icon fontSize="large">home</Icon>
+      <Icon sx={{ fontSize: 40 }}>home</Icon>
+    </Stack>
+  );
+}
+```
+
+### Font Awesome
+
+You can use Icon with Font Awesome:
+
+```tsx
+import Icon from '@mui/material/Icon';
+
+function FontAwesomeIcon() {
+  return (
+    <Icon baseClassName="fas" className="fa-plus-circle" />
+  );
+}
+```
+
+### Icon Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `baseClassName` | `string` | `'material-icons'` | The base class applied to the icon. |
+| `children` | `node` | - | The name of the icon font ligature. |
+| `classes` | `object` | - | Override or extend the styles applied to the component. |
+| `color` | `'inherit'` \| `'action'` \| `'disabled'` \| `'primary'` \| `'secondary'` \| `'error'` \| `'info'` \| `'success'` \| `'warning'` | `'inherit'` | The color of the component. |
+| `fontSize` | `'inherit'` \| `'large'` \| `'medium'` \| `'small'` | `'medium'` | The fontSize applied to the icon. Defaults to 24px. |
+| `sx` | `SxProps<Theme>` | - | The system prop for defining CSS overrides and additional styles. |
+
+## Material Icons
+
+The `@mui/icons-material` package includes over 2,100 official Material Icons converted to SvgIcon components.
+
+### Installation
+
+```bash
+pnpm add @mui/icons-material
+```
+
+### Usage
+
+Browse the icons at [mui.com/material-ui/material-icons/](https://mui.com/material-ui/material-icons/). Search for an icon and copy the import statement.
+
+```tsx
+import DeleteIcon from '@mui/icons-material/Delete';
+import SendIcon from '@mui/icons-material/Send';
+import AlarmIcon from '@mui/icons-material/Alarm';
+import AddShoppingCartIcon from '@mui/icons-material/AddShoppingCart';
+
+function MaterialIcons() {
+  return (
+    <>
+      <DeleteIcon />
+      <SendIcon />
+      <AlarmIcon />
+      <AddShoppingCartIcon />
+    </>
+  );
+}
+```
+
+### Icon Variants
+
+Material Icons are available in five variants:
+
+- **Filled** (default) - `@mui/icons-material/Home`
+- **Outlined** - `@mui/icons-material/HomeOutlined`
+- **Rounded** - `@mui/icons-material/HomeRounded`
+- **Two-tone** - `@mui/icons-material/HomeTwoTone`
+- **Sharp** - `@mui/icons-material/HomeSharp`
+
+```tsx
+import HomeIcon from '@mui/icons-material/Home';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import HomeRoundedIcon from '@mui/icons-material/HomeRounded';
+import HomeTwoToneIcon from '@mui/icons-material/HomeTwoTone';
+import HomeSharpIcon from '@mui/icons-material/HomeSharp';
+import Stack from '@mui/material/Stack';
+
+function IconVariants() {
+  return (
+    <Stack direction="row" spacing={2}>
+      <HomeIcon />
+      <HomeOutlinedIcon />
+      <HomeRoundedIcon />
+      <HomeTwoToneIcon />
+      <HomeSharpIcon />
+    </Stack>
+  );
+}
+```
+
+### Color and Size
+
+Material Icon components inherit all SvgIcon props:
+
+```tsx
+import DeleteIcon from '@mui/icons-material/Delete';
+import Stack from '@mui/material/Stack';
+
+function StyledIcons() {
+  return (
+    <Stack direction="row" spacing={2} alignItems="center">
+      <DeleteIcon fontSize="small" />
+      <DeleteIcon />
+      <DeleteIcon fontSize="large" />
+      <DeleteIcon color="primary" />
+      <DeleteIcon color="secondary" />
+      <DeleteIcon color="error" />
+      <DeleteIcon sx={{ fontSize: 40, color: 'pink' }} />
+    </Stack>
+  );
+}
+```
+
+## Creating Custom SVG Icons
+
+If you need a custom SVG icon that isn't available in Material Icons:
+
+```tsx
+import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
+
+function CustomIcon(props: SvgIconProps) {
+  return (
+    <SvgIcon {...props}>
+      {/* SVG path data */}
+      <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z" />
+    </SvgIcon>
+  );
+}
+
+function Demo() {
+  return <CustomIcon color="primary" fontSize="large" />;
+}
+```
+
+## SVG Icon from Image File
+
+You can import SVG files and use them as React components:
+
+```tsx
+import { ReactComponent as CustomSvg } from './custom-icon.svg';
+import SvgIcon from '@mui/material/SvgIcon';
+
+function Demo() {
+  return (
+    <SvgIcon component={CustomSvg} inheritViewBox />
+  );
+}
+```
+
+**Note:** This requires configuring your build tool (Webpack, Vite, etc.) to handle SVG imports.
+
+## CSS Classes
+
+### SvgIcon Classes
+
+- `.MuiSvgIcon-root` - Styles applied to the root element.
+- `.MuiSvgIcon-colorPrimary` - Styles applied if `color="primary"`.
+- `.MuiSvgIcon-colorSecondary` - Styles applied if `color="secondary"`.
+- `.MuiSvgIcon-colorAction` - Styles applied if `color="action"`.
+- `.MuiSvgIcon-colorError` - Styles applied if `color="error"`.
+- `.MuiSvgIcon-colorDisabled` - Styles applied if `color="disabled"`.
+- `.MuiSvgIcon-fontSizeInherit` - Styles applied if `fontSize="inherit"`.
+- `.MuiSvgIcon-fontSizeSmall` - Styles applied if `fontSize="small"`.
+- `.MuiSvgIcon-fontSizeMedium` - Styles applied if `fontSize="medium"`.
+- `.MuiSvgIcon-fontSizeLarge` - Styles applied if `fontSize="large"`.
+
+### Icon Classes
+
+- `.MuiIcon-root` - Styles applied to the root element.
+- `.MuiIcon-colorPrimary` - Styles applied if `color="primary"`.
+- `.MuiIcon-colorSecondary` - Styles applied if `color="secondary"`.
+- `.MuiIcon-colorAction` - Styles applied if `color="action"`.
+- `.MuiIcon-colorError` - Styles applied if `color="error"`.
+- `.MuiIcon-colorDisabled` - Styles applied if `color="disabled"`.
+- `.MuiIcon-fontSizeInherit` - Styles applied if `fontSize="inherit"`.
+- `.MuiIcon-fontSizeSmall` - Styles applied if `fontSize="small"`.
+- `.MuiIcon-fontSizeMedium` - Styles applied if `fontSize="medium"`.
+- `.MuiIcon-fontSizeLarge` - Styles applied if `fontSize="large"`.
+
+## Accessibility
+
+### Decorative Icons
+
+If the icon is purely decorative and doesn't convey meaning, use `aria-hidden="true"`:
+
+```tsx
+<HomeIcon aria-hidden="true" />
+```
+
+### Semantic Icons
+
+If the icon has semantic meaning, provide a text alternative using `titleAccess`:
+
+```tsx
+<HomeIcon titleAccess="Home" />
+```
+
+This renders a `<title>` element inside the SVG that can be accessed by assistive technologies.
+
+### Focusable Icons
+
+For interactive icons (buttons), wrap them in an IconButton:
+
+```tsx
+import IconButton from '@mui/material/IconButton';
+import DeleteIcon from '@mui/icons-material/Delete';
+
+function Demo() {
+  return (
+    <IconButton aria-label="delete">
+      <DeleteIcon />
+    </IconButton>
+  );
+}
+```

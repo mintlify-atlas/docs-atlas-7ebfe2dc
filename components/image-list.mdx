@@ -1,0 +1,392 @@
+---
+title: Image List
+description: The ImageList component displays a collection of images in an organized grid.
+---
+
+# Image List
+
+ImageList displays a collection of images in an organized grid with support for different layout patterns.
+
+## Basic usage
+
+```tsx
+import ImageList from '@mui/material/ImageList';
+import ImageListItem from '@mui/material/ImageListItem';
+
+function Demo() {
+  return (
+    <ImageList sx={{ width: 500, height: 450 }} cols={3} rowHeight={164}>
+      {itemData.map((item) => (
+        <ImageListItem key={item.img}>
+          <img
+            srcSet={`${item.img}?w=164&h=164&fit=crop&auto=format&dpr=2 2x`}
+            src={`${item.img}?w=164&h=164&fit=crop&auto=format`}
+            alt={item.title}
+            loading="lazy"
+          />
+        </ImageListItem>
+      ))}
+    </ImageList>
+  );
+}
+
+const itemData = [
+  {
+    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
+    title: 'Breakfast',
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
+    title: 'Burger',
+  },
+  // ... more items
+];
+```
+
+## Standard image list
+
+The default variant with equal-sized images in a grid:
+
+```tsx
+<ImageList cols={4} rowHeight={200}>
+  {itemData.map((item) => (
+    <ImageListItem key={item.img}>
+      <img src={item.img} alt={item.title} loading="lazy" />
+    </ImageListItem>
+  ))}
+</ImageList>
+```
+
+## Quilted image list
+
+Highlight certain items over others with featured tiles:
+
+```tsx
+<ImageList
+  sx={{ width: 500, height: 450 }}
+  variant="quilted"
+  cols={4}
+  rowHeight={121}
+>
+  {itemData.map((item) => (
+    <ImageListItem
+      key={item.img}
+      cols={item.cols || 1}
+      rows={item.rows || 1}
+    >
+      <img
+        src={`${item.img}?w=248&fit=crop&auto=format`}
+        srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+        alt={item.title}
+        loading="lazy"
+      />
+    </ImageListItem>
+  ))}
+</ImageList>
+
+const itemData = [
+  {
+    img: 'https://images.unsplash.com/photo-1551963831-b3b1ca40c98e',
+    title: 'Breakfast',
+    rows: 2,
+    cols: 2,
+  },
+  {
+    img: 'https://images.unsplash.com/photo-1551782450-a2132b4ba21d',
+    title: 'Burger',
+  },
+  // ...
+];
+```
+
+## Woven image list
+
+Use alternate rows with offset positioning:
+
+```tsx
+<ImageList
+  sx={{ width: 500, height: 450 }}
+  variant="woven"
+  cols={3}
+  gap={8}
+>
+  {itemData.map((item) => (
+    <ImageListItem key={item.img}>
+      <img
+        src={`${item.img}?w=161&fit=crop&auto=format`}
+        srcSet={`${item.img}?w=161&fit=crop&auto=format&dpr=2 2x`}
+        alt={item.title}
+        loading="lazy"
+      />
+    </ImageListItem>
+  ))}
+</ImageList>
+```
+
+## Masonry image list
+
+Use variable-height images in a Pinterest-style layout:
+
+```tsx
+<ImageList
+  sx={{ width: 500, height: 450 }}
+  variant="masonry"
+  cols={3}
+  gap={8}
+>
+  {itemData.map((item) => (
+    <ImageListItem key={item.img}>
+      <img
+        srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+        src={`${item.img}?w=248&fit=crop&auto=format`}
+        alt={item.title}
+        loading="lazy"
+      />
+    </ImageListItem>
+  ))}
+</ImageList>
+```
+
+## Image list with title bars
+
+Add overlays with titles and additional actions:
+
+```tsx
+import ImageListItemBar from '@mui/material/ImageListItemBar';
+import IconButton from '@mui/material/IconButton';
+import InfoIcon from '@mui/icons-material/Info';
+
+<ImageList sx={{ width: 500, height: 450 }}>
+  {itemData.map((item) => (
+    <ImageListItem key={item.img}>
+      <img
+        src={`${item.img}?w=248&fit=crop&auto=format`}
+        srcSet={`${item.img}?w=248&fit=crop&auto=format&dpr=2 2x`}
+        alt={item.title}
+        loading="lazy"
+      />
+      <ImageListItemBar
+        title={item.title}
+        subtitle={item.author}
+        actionIcon={
+          <IconButton
+            sx={{ color: 'rgba(255, 255, 255, 0.54)' }}
+            aria-label={`info about ${item.title}`}
+          >
+            <InfoIcon />
+          </IconButton>
+        }
+      />
+    </ImageListItem>
+  ))}
+</ImageList>
+```
+
+## Custom gap
+
+Adjust spacing between images:
+
+```tsx
+// Small gap
+<ImageList cols={3} gap={4}>
+  {itemData.map((item) => (
+    <ImageListItem key={item.img}>
+      <img src={item.img} alt={item.title} loading="lazy" />
+    </ImageListItem>
+  ))}
+</ImageList>
+
+// Large gap
+<ImageList cols={3} gap={16}>
+  {itemData.map((item) => (
+    <ImageListItem key={item.img}>
+      <img src={item.img} alt={item.title} loading="lazy" />
+    </ImageListItem>
+  ))}
+</ImageList>
+```
+
+## Props
+
+### ImageListProps
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `React.ReactNode` | **Required** | Normally `ImageListItem`s |
+| `classes` | `Partial<ImageListClasses>` | - | Override or extend styles |
+| `cols` | `number` | `2` | Number of columns |
+| `component` | `React.ElementType` | `'ul'` | The component used for the root node |
+| `gap` | `number` | `4` | Gap between items in px |
+| `rowHeight` | `number \| 'auto'` | `'auto'` | Height of one row in px |
+| `sx` | `SxProps<Theme>` | - | System prop for defining custom styles |
+| `variant` | `'masonry' \| 'quilted' \| 'standard' \| 'woven'` | `'standard'` | The layout variant |
+
+### ImageListItemProps
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `React.ReactNode` | **Required** | The content, normally an `<img>` |
+| `cols` | `number` | `1` | Width in number of grid columns (quilted variant) |
+| `rows` | `number` | `1` | Height in number of grid rows (quilted variant) |
+| `component` | `React.ElementType` | `'li'` | The component used for the root node |
+| `sx` | `SxProps<Theme>` | - | System prop for defining custom styles |
+
+## Common patterns
+
+### Photo gallery with lightbox
+
+```tsx
+function PhotoGallery() {
+  const [selectedImage, setSelectedImage] = useState(null);
+
+  return (
+    <>
+      <ImageList cols={4} gap={8}>
+        {photos.map((photo) => (
+          <ImageListItem
+            key={photo.id}
+            onClick={() => setSelectedImage(photo)}
+            sx={{ cursor: 'pointer' }}
+          >
+            <img
+              src={photo.thumbnail}
+              alt={photo.title}
+              loading="lazy"
+            />
+            <ImageListItemBar
+              title={photo.title}
+              subtitle={`by ${photo.author}`}
+            />
+          </ImageListItem>
+        ))}
+      </ImageList>
+      
+      <Dialog open={!!selectedImage} onClose={() => setSelectedImage(null)}>
+        {selectedImage && (
+          <img src={selectedImage.full} alt={selectedImage.title} />
+        )}
+      </Dialog>
+    </>
+  );
+}
+```
+
+### Product showcase
+
+```tsx
+<ImageList
+  sx={{ width: '100%', height: 500 }}
+  variant="quilted"
+  cols={3}
+  rowHeight={200}
+>
+  {products.map((product, index) => (
+    <ImageListItem
+      key={product.id}
+      cols={index === 0 ? 2 : 1}
+      rows={index === 0 ? 2 : 1}
+    >
+      <img
+        src={product.image}
+        alt={product.name}
+        loading="lazy"
+      />
+      <ImageListItemBar
+        title={product.name}
+        subtitle={`$${product.price}`}
+        actionIcon={
+          <IconButton sx={{ color: 'white' }}>
+            <ShoppingCartIcon />
+          </IconButton>
+        }
+      />
+    </ImageListItem>
+  ))}
+</ImageList>
+```
+
+### Responsive image grid
+
+```tsx
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
+function ResponsiveImageList() {
+  const theme = useTheme();
+  const isSmallScreen = useMediaQuery(theme.breakpoints.down('sm'));
+  const isMediumScreen = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  
+  const cols = isSmallScreen ? 2 : isMediumScreen ? 3 : 4;
+  
+  return (
+    <ImageList cols={cols} gap={8}>
+      {items.map((item) => (
+        <ImageListItem key={item.img}>
+          <img src={item.img} alt={item.title} loading="lazy" />
+        </ImageListItem>
+      ))}
+    </ImageList>
+  );
+}
+```
+
+### Image list with selection
+
+```tsx
+function SelectableImageList() {
+  const [selected, setSelected] = useState<string[]>([]);
+
+  const toggleSelection = (id: string) => {
+    setSelected((prev) =>
+      prev.includes(id)
+        ? prev.filter((item) => item !== id)
+        : [...prev, id]
+    );
+  };
+
+  return (
+    <ImageList cols={3} gap={8}>
+      {items.map((item) => (
+        <ImageListItem
+          key={item.id}
+          sx={{
+            cursor: 'pointer',
+            opacity: selected.includes(item.id) ? 0.6 : 1,
+            border: selected.includes(item.id) ? '3px solid' : 'none',
+            borderColor: 'primary.main',
+          }}
+          onClick={() => toggleSelection(item.id)}
+        >
+          <img src={item.img} alt={item.title} loading="lazy" />
+          {selected.includes(item.id) && (
+            <ImageListItemBar
+              title="Selected"
+              actionIcon={
+                <CheckCircleIcon sx={{ color: 'primary.main' }} />
+              }
+            />
+          )}
+        </ImageListItem>
+      ))}
+    </ImageList>
+  );
+}
+```
+
+## Accessibility
+
+Ensure proper accessibility:
+
+```tsx
+<ImageList cols={3} aria-label="Photo gallery">
+  {items.map((item) => (
+    <ImageListItem key={item.img}>
+      <img
+        src={item.img}
+        alt={item.title}  // Always provide meaningful alt text
+        loading="lazy"
+      />
+    </ImageListItem>
+  ))}
+</ImageList>
+```

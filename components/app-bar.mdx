@@ -1,0 +1,303 @@
+---
+title: App Bar
+description: The App Bar component displays information and actions relating to the current screen.
+---
+
+## Overview
+
+The App Bar (also known as a header or top app bar) is positioned at the top of the screen and displays navigation, branding, screen titles, and actions. It provides a consistent location for navigation and important actions.
+
+App Bars are commonly used for:
+- Primary navigation with menu buttons and links
+- Branding with logos and application names
+- Search functionality
+- User account actions and notifications
+- Context-specific actions for the current view
+
+## Import
+
+```tsx
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+```
+
+## Basic Usage
+
+A simple app bar with a title and login button.
+
+```tsx
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+
+export default function BasicAppBar() {
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static">
+        <Toolbar>
+          <IconButton
+            size="large"
+            edge="start"
+            color="inherit"
+            aria-label="menu"
+            sx={{ mr: 2 }}
+          >
+            <MenuIcon />
+          </IconButton>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            News
+          </Typography>
+          <Button color="inherit">Login</Button>
+        </Toolbar>
+      </AppBar>
+    </Box>
+  );
+}
+```
+
+## With Navigation Drawer
+
+App bar integrated with a responsive navigation drawer for mobile and desktop.
+
+```tsx
+import * as React from 'react';
+import AppBar from '@mui/material/AppBar';
+import Box from '@mui/material/Box';
+import Toolbar from '@mui/material/Toolbar';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import MenuIcon from '@mui/icons-material/Menu';
+import Button from '@mui/material/Button';
+
+const navItems = ['Home', 'About', 'Contact'];
+
+export default function AppBarWithDrawer() {
+  const [mobileOpen, setMobileOpen] = React.useState(false);
+
+  const handleDrawerToggle = () => {
+    setMobileOpen(!mobileOpen);
+  };
+
+  return (
+    <AppBar component="nav">
+      <Toolbar>
+        <IconButton
+          color="inherit"
+          aria-label="open drawer"
+          edge="start"
+          onClick={handleDrawerToggle}
+          sx={{ mr: 2, display: { sm: 'none' } }}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography
+          variant="h6"
+          component="div"
+          sx={{ flexGrow: 1, display: { xs: 'none', sm: 'block' } }}
+        >
+          MUI
+        </Typography>
+        <Box sx={{ display: { xs: 'none', sm: 'block' } }}>
+          {navItems.map((item) => (
+            <Button key={item} sx={{ color: '#fff' }}>
+              {item}
+            </Button>
+          ))}
+        </Box>
+      </Toolbar>
+    </AppBar>
+  );
+}
+```
+
+## Color Variants
+
+The AppBar supports all theme colors plus additional options.
+
+```tsx
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+
+export default function ColorAppBar() {
+  return (
+    <>
+      <AppBar position="static" color="primary">
+        <Toolbar>
+          <Typography variant="h6">Primary App Bar</Typography>
+        </Toolbar>
+      </AppBar>
+      
+      <AppBar position="static" color="secondary">
+        <Toolbar>
+          <Typography variant="h6">Secondary App Bar</Typography>
+        </Toolbar>
+      </AppBar>
+      
+      <AppBar position="static" color="transparent">
+        <Toolbar>
+          <Typography variant="h6">Transparent App Bar</Typography>
+        </Toolbar>
+      </AppBar>
+      
+      <AppBar position="static" color="inherit">
+        <Toolbar>
+          <Typography variant="h6">Inherit App Bar</Typography>
+        </Toolbar>
+      </AppBar>
+    </>
+  );
+}
+```
+
+## Positioning
+
+Control how the app bar is positioned on the page.
+
+```tsx
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+
+export default function PositionedAppBar() {
+  return (
+    <>
+      {/* Fixed to top of viewport */}
+      <AppBar position="fixed">
+        <Toolbar>
+          <Typography variant="h6">Fixed Position</Typography>
+        </Toolbar>
+      </AppBar>
+
+      {/* Positioned absolutely */}
+      <AppBar position="absolute">
+        <Toolbar>
+          <Typography variant="h6">Absolute Position</Typography>
+        </Toolbar>
+      </AppBar>
+
+      {/* Sticky positioning */}
+      <AppBar position="sticky">
+        <Toolbar>
+          <Typography variant="h6">Sticky Position</Typography>
+        </Toolbar>
+      </AppBar>
+
+      {/* Static (normal flow) */}
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6">Static Position</Typography>
+        </Toolbar>
+      </AppBar>
+    </>
+  );
+}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | The content of the app bar, typically a Toolbar |
+| `color` | `'default' \| 'inherit' \| 'primary' \| 'secondary' \| 'transparent' \| 'error' \| 'info' \| 'success' \| 'warning'` | `'primary'` | The color of the component from the theme palette |
+| `position` | `'fixed' \| 'absolute' \| 'sticky' \| 'static' \| 'relative'` | `'fixed'` | The positioning type |
+| `elevation` | `number` | `4` | Shadow depth, accepts values between 0 and 24 |
+| `enableColorOnDark` | `boolean` | `false` | If `true`, the color prop is applied in dark mode |
+| `square` | `boolean` | `true` | If `false`, rounded corners are enabled |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS styles |
+| `component` | `ElementType` | `'header'` | The component used for the root node |
+
+### Inherited Props
+
+AppBar inherits all props from the [Paper component](https://next.mui.com/material-ui/api/paper/), including:
+
+- `variant` - The variant to use (`'elevation'` or `'outlined'`)
+- All standard HTML attributes for the header element
+
+## Positioning Behavior
+
+The `position` prop determines how the AppBar behaves:
+
+- **`fixed`** (default): Positioned relative to the viewport, stays in place when scrolling. Useful for persistent navigation.
+- **`absolute`**: Positioned relative to the nearest positioned ancestor. Useful for overlaying content.
+- **`sticky`**: Switches between relative and fixed based on scroll position. Note: Not universally supported, falls back to static.
+- **`static`**: Normal document flow positioning. Does not stay visible when scrolling.
+- **`relative`**: Positioned relative to its normal position.
+
+## Color Options
+
+The AppBar supports extended color options:
+
+- Theme colors: `primary`, `secondary`, `default`, `inherit`
+- Status colors: `error`, `info`, `success`, `warning`
+- Special: `transparent` - removes background color
+
+## Elevation
+
+By default, AppBar has an elevation of 4. You can customize this:
+
+```tsx
+<AppBar elevation={0}>  {/* No shadow */}
+<AppBar elevation={8}>  {/* Higher shadow */}
+<AppBar elevation={24}> {/* Maximum shadow */}
+```
+
+## Toolbar Component
+
+The AppBar is typically used with the Toolbar component, which provides proper padding and flex layout:
+
+```tsx
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+
+<AppBar>
+  <Toolbar>
+    {/* Your content here */}
+  </Toolbar>
+</AppBar>
+```
+
+## Responsive Considerations
+
+When using `position="fixed"`, remember to add spacing to your content so it doesn't hide behind the AppBar:
+
+```tsx
+<Box sx={{ marginTop: '64px' }}> {/* Height of typical AppBar */}
+  {/* Your main content */}
+</Box>
+```
+
+Or use the Toolbar component as a spacer:
+
+```tsx
+<AppBar position="fixed">
+  <Toolbar>{/* App bar content */}</Toolbar>
+</AppBar>
+<Toolbar /> {/* Spacer */}
+<main>{/* Your content */}</main>
+```
+
+## Accessibility
+
+- Use semantic `<nav>` element by setting `component="nav"` when AppBar contains navigation
+- Ensure sufficient color contrast for text and icons
+- Provide `aria-label` for icon buttons
+- Make sure interactive elements are keyboard accessible
+
+## Best Practices
+
+1. **Keep it simple** - Don't overcrowd the app bar with too many actions
+2. **Prioritize actions** - Put the most important actions on the right (in LTR layouts)
+3. **Use consistent positioning** - Stick with one position type throughout your app
+4. **Mobile first** - Design for mobile screens first, then enhance for desktop
+5. **Consider z-index** - AppBar has a high z-index; ensure other positioned elements don't conflict
+
+## API Reference
+
+- [AppBar API](https://next.mui.com/material-ui/api/app-bar/) - Full API documentation
+- Inherits [Paper API](https://next.mui.com/material-ui/api/paper/)
+- Source: `packages/mui-material/src/AppBar/AppBar.d.ts:1`

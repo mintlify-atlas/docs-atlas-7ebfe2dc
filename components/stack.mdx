@@ -1,0 +1,308 @@
+---
+title: Stack
+description: The Stack component manages layout of immediate children along the vertical or horizontal axis with optional spacing.
+---
+
+# Stack
+
+Stack is a one-dimensional container component for arranging elements vertically or horizontally with consistent spacing.
+
+## Basic usage
+
+```tsx
+import Stack from '@mui/material/Stack';
+
+function Demo() {
+  return (
+    <Stack spacing={2}>
+      <Item>Item 1</Item>
+      <Item>Item 2</Item>
+      <Item>Item 3</Item>
+    </Stack>
+  );
+}
+```
+
+## Direction
+
+By default, Stack arranges items vertically. Use the `direction` prop to change this:
+
+```tsx
+// Vertical (default)
+<Stack spacing={2}>
+  <Item>Item 1</Item>
+  <Item>Item 2</Item>
+  <Item>Item 3</Item>
+</Stack>
+
+// Horizontal
+<Stack direction="row" spacing={2}>
+  <Item>Item 1</Item>
+  <Item>Item 2</Item>
+  <Item>Item 3</Item>
+</Stack>
+
+// Reverse directions
+<Stack direction="column-reverse" spacing={2}>
+  <Item>Item 1</Item>
+  <Item>Item 2</Item>
+  <Item>Item 3</Item>
+</Stack>
+
+<Stack direction="row-reverse" spacing={2}>
+  <Item>Item 1</Item>
+  <Item>Item 2</Item>
+  <Item>Item 3</Item>
+</Stack>
+```
+
+## Spacing
+
+Control spacing between children:
+
+```tsx
+// Number values use theme.spacing()
+<Stack spacing={2}>
+  <Item>spacing = 2</Item>
+  <Item>spacing = 2</Item>
+</Stack>
+
+<Stack spacing={4}>
+  <Item>spacing = 4</Item>
+  <Item>spacing = 4</Item>
+</Stack>
+
+// String values for custom spacing
+<Stack spacing="16px">
+  <Item>16px spacing</Item>
+  <Item>16px spacing</Item>
+</Stack>
+
+// Responsive spacing
+<Stack spacing={{ xs: 1, sm: 2, md: 4 }}>
+  <Item>Responsive spacing</Item>
+  <Item>Responsive spacing</Item>
+  <Item>Responsive spacing</Item>
+</Stack>
+```
+
+## Dividers
+
+Add dividers between children:
+
+```tsx
+import Divider from '@mui/material/Divider';
+
+<Stack
+  divider={<Divider orientation="horizontal" flexItem />}
+  spacing={2}
+>
+  <Item>Item 1</Item>
+  <Item>Item 2</Item>
+  <Item>Item 3</Item>
+</Stack>
+
+// Horizontal stack with vertical dividers
+<Stack
+  direction="row"
+  divider={<Divider orientation="vertical" flexItem />}
+  spacing={2}
+>
+  <Item>Item 1</Item>
+  <Item>Item 2</Item>
+  <Item>Item 3</Item>
+</Stack>
+```
+
+## Responsive direction
+
+Change direction based on breakpoint:
+
+```tsx
+<Stack
+  direction={{ xs: 'column', sm: 'row' }}
+  spacing={{ xs: 1, sm: 2, md: 4 }}
+>
+  <Item>Item 1</Item>
+  <Item>Item 2</Item>
+  <Item>Item 3</Item>
+</Stack>
+```
+
+## Flexbox properties
+
+Stack supports all flexbox properties via the sx prop or SystemProps:
+
+```tsx
+<Stack
+  direction="row"
+  justifyContent="center"
+  alignItems="center"
+  spacing={2}
+>
+  <Item>Centered</Item>
+  <Item>Content</Item>
+</Stack>
+
+<Stack
+  direction="row"
+  justifyContent="space-between"
+  alignItems="flex-start"
+  spacing={2}
+>
+  <Item>Start</Item>
+  <Item>End</Item>
+</Stack>
+```
+
+## Using flexGap
+
+By default, Stack uses margin for spacing. Enable CSS flexbox gap with `useFlexGap`:
+
+```tsx
+<Stack spacing={2} useFlexGap>
+  <Item>Item 1</Item>
+  <Item>Item 2</Item>
+  <Item>Item 3</Item>
+</Stack>
+```
+
+Note: While CSS gap removes known limitations, check browser support at [caniuse.com](https://caniuse.com/?search=flex%20gap) before using.
+
+## Props
+
+### StackProps
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `React.ReactNode` | - | The content of the component |
+| `direction` | `ResponsiveStyleValue<'row' \| 'row-reverse' \| 'column' \| 'column-reverse'>` | `'column'` | Defines the flex-direction |
+| `spacing` | `ResponsiveStyleValue<number \| string>` | `0` | Defines space between children |
+| `divider` | `React.ReactNode` | - | Element inserted between each child |
+| `useFlexGap` | `boolean` | `false` | If true, uses CSS flexbox gap instead of margin |
+| `component` | `React.ElementType` | `'div'` | The component used for the root node |
+| `sx` | `SxProps<Theme>` | - | System prop for defining custom styles |
+
+Stack also accepts all system props (spacing, display, flexbox, etc.) via the [sx prop](/system/the-sx-prop) for additional styling capabilities.
+
+## Common patterns
+
+### Form actions
+
+```tsx
+<Stack direction="row" spacing={2} justifyContent="flex-end">
+  <Button variant="outlined">Cancel</Button>
+  <Button variant="contained">Submit</Button>
+</Stack>
+```
+
+### Navigation breadcrumbs
+
+```tsx
+<Stack direction="row" spacing={1} alignItems="center">
+  <Link href="/">Home</Link>
+  <NavigateNextIcon fontSize="small" />
+  <Link href="/products">Products</Link>
+  <NavigateNextIcon fontSize="small" />
+  <Typography color="text.primary">Current Page</Typography>
+</Stack>
+```
+
+### Card layout
+
+```tsx
+<Card>
+  <Stack spacing={2} sx={{ p: 2 }}>
+    <Typography variant="h5">Card Title</Typography>
+    <Typography variant="body2" color="text.secondary">
+      This is the card description with some details.
+    </Typography>
+    <Stack direction="row" spacing={1} justifyContent="flex-end">
+      <Button size="small">Learn More</Button>
+      <Button size="small" variant="contained">Action</Button>
+    </Stack>
+  </Stack>
+</Card>
+```
+
+### Sidebar navigation
+
+```tsx
+<Stack spacing={1}>
+  <Button variant="text" fullWidth startIcon={<DashboardIcon />}>
+    Dashboard
+  </Button>
+  <Button variant="text" fullWidth startIcon={<PeopleIcon />}>
+    Users
+  </Button>
+  <Button variant="text" fullWidth startIcon={<SettingsIcon />}>
+    Settings
+  </Button>
+</Stack>
+```
+
+### Alert with actions
+
+```tsx
+<Alert severity="info">
+  <Stack spacing={2}>
+    <Typography variant="body2">
+      This is an important message.
+    </Typography>
+    <Stack direction="row" spacing={1}>
+      <Button size="small" variant="outlined">
+        Dismiss
+      </Button>
+      <Button size="small" variant="contained">
+        Take Action
+      </Button>
+    </Stack>
+  </Stack>
+</Alert>
+```
+
+### Image gallery
+
+```tsx
+<Stack spacing={3}>
+  <Typography variant="h4">Gallery</Typography>
+  <Stack direction="row" spacing={2} flexWrap="wrap">
+    {images.map((image) => (
+      <Box
+        key={image.id}
+        component="img"
+        src={image.url}
+        alt={image.alt}
+        sx={{
+          width: 150,
+          height: 150,
+          objectFit: 'cover',
+          borderRadius: 1,
+        }}
+      />
+    ))}
+  </Stack>
+</Stack>
+```
+
+## Limitations
+
+When using the default margin-based spacing (without `useFlexGap`):
+
+1. Negative margin is applied to the Stack container to offset child margins
+2. This can cause issues if you need the container to respect box model boundaries
+3. Absolute positioned children may not respect spacing
+
+To avoid these limitations, set `useFlexGap` to true, or configure it globally in your theme:
+
+```tsx
+const theme = createTheme({
+  components: {
+    MuiStack: {
+      defaultProps: {
+        useFlexGap: true,
+      },
+    },
+  },
+});
+```

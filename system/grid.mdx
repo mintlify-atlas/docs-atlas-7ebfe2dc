@@ -1,0 +1,610 @@
+---
+title: Grid
+description: CSS Grid layout utilities in MUI System
+---
+
+# Grid
+
+Utilities for controlling CSS Grid layouts.
+
+## Import
+
+```javascript
+import { grid } from '@mui/system';
+```
+
+## API
+
+From `cssGrid/cssGrid.js:98-113`:
+
+```javascript
+const grid = compose(
+  gap,
+  columnGap,
+  rowGap,
+  gridColumn,
+  gridRow,
+  gridAutoFlow,
+  gridAutoColumns,
+  gridAutoRows,
+  gridTemplateColumns,
+  gridTemplateRows,
+  gridTemplateAreas,
+  gridArea,
+);
+```
+
+## Gap Properties
+
+### gap
+
+Set gap between grid items (with spacing scale):
+
+```jsx
+<Box display="grid" gap={2}>
+  <Box>Item 1</Box>
+  <Box>Item 2</Box>
+  <Box>Item 3</Box>
+</Box>
+```
+
+From `cssGrid.js:9-19`:
+
+```javascript
+export const gap = (props) => {
+  if (props.gap !== undefined && props.gap !== null) {
+    const transformer = createUnaryUnit(props.theme, 'spacing', 8, 'gap');
+    const styleFromPropValue = (propValue) => ({
+      gap: getValue(transformer, propValue),
+    });
+    return handleBreakpoints(props, props.gap, styleFromPropValue);
+  }
+  return null;
+};
+```
+
+### columnGap
+
+Set horizontal gap between columns:
+
+```jsx
+<Box display="grid" columnGap={2}>
+  Grid with column gap
+</Box>
+```
+
+From `cssGrid.js:27-37`:
+
+```javascript
+export const columnGap = (props) => {
+  if (props.columnGap !== undefined && props.columnGap !== null) {
+    const transformer = createUnaryUnit(props.theme, 'spacing', 8, 'columnGap');
+    const styleFromPropValue = (propValue) => ({
+      columnGap: getValue(transformer, propValue),
+    });
+    return handleBreakpoints(props, props.columnGap, styleFromPropValue);
+  }
+  return null;
+};
+```
+
+### rowGap
+
+Set vertical gap between rows:
+
+```jsx
+<Box display="grid" rowGap={2}>
+  Grid with row gap
+</Box>
+```
+
+From `cssGrid.js:46-56`:
+
+```javascript
+export const rowGap = (props) => {
+  if (props.rowGap !== undefined && props.rowGap !== null) {
+    const transformer = createUnaryUnit(props.theme, 'spacing', 8, 'rowGap');
+    const styleFromPropValue = (propValue) => ({
+      rowGap: getValue(transformer, propValue),
+    });
+    return handleBreakpoints(props, props.rowGap, styleFromPropValue);
+  }
+  return null;
+};
+```
+
+## Template Properties
+
+### gridTemplateColumns
+
+Define column structure:
+
+```jsx
+{/* Three equal columns */}
+<Box display="grid" gridTemplateColumns="1fr 1fr 1fr">
+  <Box>Column 1</Box>
+  <Box>Column 2</Box>
+  <Box>Column 3</Box>
+</Box>
+
+{/* Using repeat */}
+<Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
+  <Box>1</Box>
+  <Box>2</Box>
+  <Box>3</Box>
+</Box>
+
+{/* Fixed and flexible columns */}
+<Box display="grid" gridTemplateColumns="200px 1fr 200px">
+  <Box>Sidebar</Box>
+  <Box>Main</Box>
+  <Box>Sidebar</Box>
+</Box>
+
+{/* Auto-fit responsive columns */}
+<Box display="grid" gridTemplateColumns="repeat(auto-fit, minmax(250px, 1fr))" gap={2}>
+  <Box>Auto-sized column</Box>
+  <Box>Auto-sized column</Box>
+  <Box>Auto-sized column</Box>
+</Box>
+```
+
+From `cssGrid.js:82-84`:
+
+```javascript
+export const gridTemplateColumns = style({
+  prop: 'gridTemplateColumns',
+});
+```
+
+### gridTemplateRows
+
+Define row structure:
+
+```jsx
+<Box display="grid" gridTemplateRows="100px auto 100px" height="100vh">
+  <Box>Header</Box>
+  <Box>Content</Box>
+  <Box>Footer</Box>
+</Box>
+```
+
+From `cssGrid.js:86-88`:
+
+```javascript
+export const gridTemplateRows = style({
+  prop: 'gridTemplateRows',
+});
+```
+
+### gridTemplateAreas
+
+Define named grid areas:
+
+```jsx
+<Box
+  display="grid"
+  gridTemplateAreas={`
+    "header header header"
+    "sidebar main aside"
+    "footer footer footer"
+  `}
+  gridTemplateColumns="200px 1fr 200px"
+  gridTemplateRows="auto 1fr auto"
+  gap={2}
+  minHeight="100vh"
+>
+  <Box gridArea="header">Header</Box>
+  <Box gridArea="sidebar">Sidebar</Box>
+  <Box gridArea="main">Main Content</Box>
+  <Box gridArea="aside">Aside</Box>
+  <Box gridArea="footer">Footer</Box>
+</Box>
+```
+
+From `cssGrid.js:90-92`:
+
+```javascript
+export const gridTemplateAreas = style({
+  prop: 'gridTemplateAreas',
+});
+```
+
+## Item Placement
+
+### gridColumn
+
+Control column span and placement:
+
+```jsx
+<Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap={2}>
+  <Box gridColumn="1 / 3">Spans 2 columns</Box>
+  <Box gridColumn="3 / 5">Spans 2 columns</Box>
+  <Box gridColumn="1 / -1">Spans all columns</Box>
+</Box>
+
+{/* Using span */}
+<Box display="grid" gridTemplateColumns="repeat(4, 1fr)" gap={2}>
+  <Box gridColumn="span 2">Spans 2</Box>
+  <Box gridColumn="span 2">Spans 2</Box>
+</Box>
+```
+
+From `cssGrid.js:62-64`:
+
+```javascript
+export const gridColumn = style({
+  prop: 'gridColumn',
+});
+```
+
+### gridRow
+
+Control row span and placement:
+
+```jsx
+<Box display="grid" gridTemplateRows="repeat(3, 100px)" gap={2}>
+  <Box gridRow="1 / 3">Spans 2 rows</Box>
+  <Box gridRow="1 / 4">Spans 3 rows</Box>
+</Box>
+
+{/* Using span */}
+<Box gridRow="span 2">Spans 2 rows</Box>
+```
+
+From `cssGrid.js:66-68`:
+
+```javascript
+export const gridRow = style({
+  prop: 'gridRow',
+});
+```
+
+### gridArea
+
+Place item in named area or specify row/column:
+
+```jsx
+{/* With named area */}
+<Box gridArea="header">Header content</Box>
+
+{/* With row/column specification */}
+<Box gridArea="1 / 1 / 3 / 3">
+  Spans from row 1-3, column 1-3
+</Box>
+```
+
+From `cssGrid.js:94-96`:
+
+```javascript
+export const gridArea = style({
+  prop: 'gridArea',
+});
+```
+
+## Auto Properties
+
+### gridAutoFlow
+
+Control how auto-placed items flow:
+
+```jsx
+<Box display="grid" gridAutoFlow="row" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
+  {/* Items flow in rows */}
+  <Box>1</Box>
+  <Box>2</Box>
+  <Box>3</Box>
+  <Box>4</Box>
+</Box>
+
+<Box display="grid" gridAutoFlow="column" gridTemplateRows="repeat(2, 1fr)" gap={2}>
+  {/* Items flow in columns */}
+  <Box>1</Box>
+  <Box>2</Box>
+  <Box>3</Box>
+  <Box>4</Box>
+</Box>
+
+<Box display="grid" gridAutoFlow="dense" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
+  {/* Dense packing algorithm */}
+  <Box gridColumn="span 2">Wide item</Box>
+  <Box>Regular</Box>
+  <Box>Regular</Box>
+</Box>
+```
+
+From `cssGrid.js:70-72`:
+
+```javascript
+export const gridAutoFlow = style({
+  prop: 'gridAutoFlow',
+});
+```
+
+### gridAutoColumns
+
+Size implicitly-created columns:
+
+```jsx
+<Box
+  display="grid"
+  gridAutoFlow="column"
+  gridAutoColumns="200px"
+  gap={2}
+>
+  <Box>Auto column 1</Box>
+  <Box>Auto column 2</Box>
+  <Box>Auto column 3</Box>
+</Box>
+```
+
+From `cssGrid.js:74-76`:
+
+```javascript
+export const gridAutoColumns = style({
+  prop: 'gridAutoColumns',
+});
+```
+
+### gridAutoRows
+
+Size implicitly-created rows:
+
+```jsx
+<Box
+  display="grid"
+  gridTemplateColumns="repeat(3, 1fr)"
+  gridAutoRows="100px"
+  gap={2}
+>
+  <Box>Item 1</Box>
+  <Box>Item 2</Box>
+  <Box>Item 3</Box>
+  <Box>Item 4 (auto row)</Box>
+</Box>
+```
+
+From `cssGrid.js:78-80`:
+
+```javascript
+export const gridAutoRows = style({
+  prop: 'gridAutoRows',
+});
+```
+
+## Common Patterns
+
+### Basic Grid Layout
+
+```jsx
+<Box
+  display="grid"
+  gridTemplateColumns="repeat(3, 1fr)"
+  gap={2}
+>
+  <Box>1</Box>
+  <Box>2</Box>
+  <Box>3</Box>
+  <Box>4</Box>
+  <Box>5</Box>
+  <Box>6</Box>
+</Box>
+```
+
+### Responsive Grid
+
+```jsx
+<Box
+  display="grid"
+  gridTemplateColumns={{
+    xs: '1fr',
+    sm: 'repeat(2, 1fr)',
+    md: 'repeat(3, 1fr)',
+    lg: 'repeat(4, 1fr)',
+  }}
+  gap={{ xs: 1, sm: 2, md: 3 }}
+>
+  <Box>Item 1</Box>
+  <Box>Item 2</Box>
+  <Box>Item 3</Box>
+  <Box>Item 4</Box>
+</Box>
+```
+
+### Card Grid
+
+```jsx
+<Box
+  display="grid"
+  gridTemplateColumns="repeat(auto-fill, minmax(300px, 1fr))"
+  gap={3}
+>
+  {cards.map((card) => (
+    <Box
+      key={card.id}
+      border={1}
+      borderColor="divider"
+      borderRadius={2}
+      p={2}
+    >
+      {card.content}
+    </Box>
+  ))}
+</Box>
+```
+
+### Dashboard Layout
+
+```jsx
+<Box
+  display="grid"
+  gridTemplateColumns="repeat(12, 1fr)"
+  gridTemplateRows="auto 1fr auto"
+  gap={2}
+  minHeight="100vh"
+>
+  <Box gridColumn="1 / -1" bgcolor="primary.main" p={2}>
+    Header
+  </Box>
+  <Box gridColumn={{ xs: '1 / -1', md: '1 / 3' }} bgcolor="background.paper" p={2}>
+    Sidebar
+  </Box>
+  <Box gridColumn={{ xs: '1 / -1', md: '3 / -1' }} p={2}>
+    Main Content
+  </Box>
+  <Box gridColumn="1 / -1" bgcolor="grey.100" p={2}>
+    Footer
+  </Box>
+</Box>
+```
+
+### Magazine Layout
+
+```jsx
+<Box
+  display="grid"
+  gridTemplateColumns="repeat(4, 1fr)"
+  gridTemplateRows="repeat(3, 200px)"
+  gap={2}
+>
+  <Box gridColumn="1 / 3" gridRow="1 / 3" bgcolor="primary.light">
+    Featured Article
+  </Box>
+  <Box gridColumn="3 / 5" bgcolor="secondary.light">
+    Article 2
+  </Box>
+  <Box gridColumn="3 / 5" bgcolor="error.light">
+    Article 3
+  </Box>
+  <Box gridColumn="1 / 2" bgcolor="warning.light">
+    Article 4
+  </Box>
+  <Box gridColumn="2 / 5" bgcolor="success.light">
+    Article 5
+  </Box>
+</Box>
+```
+
+### Image Gallery
+
+```jsx
+<Box
+  display="grid"
+  gridTemplateColumns="repeat(auto-fit, minmax(200px, 1fr))"
+  gridAutoRows="200px"
+  gap={1}
+>
+  {images.map((img, index) => (
+    <Box
+      key={index}
+      gridColumn={index % 5 === 0 ? 'span 2' : undefined}
+      gridRow={index % 7 === 0 ? 'span 2' : undefined}
+      sx={{
+        backgroundImage: `url(${img})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+      }}
+    />
+  ))}
+</Box>
+```
+
+### Holy Grail Layout
+
+```jsx
+<Box
+  display="grid"
+  gridTemplateAreas={{
+    xs: `
+      "header"
+      "main"
+      "nav"
+      "aside"
+      "footer"
+    `,
+    md: `
+      "header header header"
+      "nav main aside"
+      "footer footer footer"
+    `,
+  }}
+  gridTemplateColumns={{ md: '200px 1fr 200px' }}
+  gridTemplateRows={{ md: 'auto 1fr auto' }}
+  gap={2}
+  minHeight="100vh"
+>
+  <Box gridArea="header" bgcolor="primary.main" p={2}>Header</Box>
+  <Box gridArea="nav" bgcolor="grey.100" p={2}>Navigation</Box>
+  <Box gridArea="main" p={2}>Main Content</Box>
+  <Box gridArea="aside" bgcolor="grey.100" p={2}>Sidebar</Box>
+  <Box gridArea="footer" bgcolor="grey.200" p={2}>Footer</Box>
+</Box>
+```
+
+## With sx Prop
+
+```jsx
+<Box
+  sx={{
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))',
+    gap: 2,
+    '& > *': {
+      aspectRatio: '16/9',
+    },
+  }}
+>
+  <Box>Item 1</Box>
+  <Box>Item 2</Box>
+  <Box>Item 3</Box>
+</Box>
+```
+
+## TypeScript
+
+```tsx
+import { Box } from '@mui/system';
+
+interface GridContainerProps {
+  columns?: number | string;
+  gap?: number;
+  children: React.ReactNode;
+}
+
+function GridContainer({ columns = 3, gap = 2, children }: GridContainerProps) {
+  return (
+    <Box
+      display="grid"
+      gridTemplateColumns={
+        typeof columns === 'number' ? `repeat(${columns}, 1fr)` : columns
+      }
+      gap={gap}
+    >
+      {children}
+    </Box>
+  );
+}
+```
+
+## Available Properties
+
+| Prop | CSS Property | Theme Key | Transform |
+|------|--------------|-----------|----------|
+| `gap` | `gap` | `spacing` | `createUnaryUnit` |
+| `columnGap` | `column-gap` | `spacing` | `createUnaryUnit` |
+| `rowGap` | `row-gap` | `spacing` | `createUnaryUnit` |
+| `gridColumn` | `grid-column` | - | - |
+| `gridRow` | `grid-row` | - | - |
+| `gridAutoFlow` | `grid-auto-flow` | - | - |
+| `gridAutoColumns` | `grid-auto-columns` | - | - |
+| `gridAutoRows` | `grid-auto-rows` | - | - |
+| `gridTemplateColumns` | `grid-template-columns` | - | - |
+| `gridTemplateRows` | `grid-template-rows` | - | - |
+| `gridTemplateAreas` | `grid-template-areas` | - | - |
+| `gridArea` | `grid-area` | - | - |
+
+## Related
+
+- [Flexbox](/system/flexbox) - Flexbox layout utilities
+- [Display](/system/display) - Display utilities
+- [Spacing](/system/spacing) - Spacing utilities for gaps

@@ -1,0 +1,471 @@
+---
+title: Dark Mode Implementation
+description: Implement dark mode in Material UI with palette mode, color schemes, and theme switching
+---
+
+# Dark Mode Implementation
+
+Material UI provides built-in support for dark mode through palette modes and color schemes.
+
+## Basic Dark Mode
+
+### Static Dark Mode
+
+Create a theme with dark mode:
+
+```tsx
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const darkTheme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
+
+function App() {
+  return (
+    <ThemeProvider theme={darkTheme}>
+      <CssBaseline />
+      {/* Your app content */}
+    </ThemeProvider>
+  );
+}
+```
+
+## Dark Mode Palette Colors
+
+Dark mode uses different default colors optimized for dark backgrounds:
+
+**Light Mode Primary:** `blue[700]` (#1976d2)
+**Dark Mode Primary:** `blue[200]` (#90caf9)
+
+**Light Mode Secondary:** `purple[500]` (#9c27b0)
+**Dark Mode Secondary:** `purple[200]` (#ce93d8)
+
+**Light Mode Error:** `red[700]` (#d32f2f)
+**Dark Mode Error:** `red[500]` (#f44336)
+
+**Light Mode Warning:** `#ed6c02`
+**Dark Mode Warning:** `orange[400]` (#ffa726)
+
+**Light Mode Info:** `lightBlue[700]` (#0288d1)
+**Dark Mode Info:** `lightBlue[400]` (#29b6f6)
+
+**Light Mode Success:** `green[800]` (#2e7d32)
+**Dark Mode Success:** `green[400]` (#66bb6a)
+
+## Dark Mode Background Colors
+
+```tsx
+// Dark mode defaults
+background: {
+  paper: '#121212',
+  default: '#121212',
+}
+
+text: {
+  primary: '#fff',
+  secondary: 'rgba(255, 255, 255, 0.7)',
+  disabled: 'rgba(255, 255, 255, 0.5)',
+}
+
+divider: 'rgba(255, 255, 255, 0.12)'
+```
+
+## Dark Mode Action Colors
+
+```tsx
+action: {
+  active: '#fff',
+  hover: 'rgba(255, 255, 255, 0.08)',
+  hoverOpacity: 0.08,
+  selected: 'rgba(255, 255, 255, 0.16)',
+  selectedOpacity: 0.16,
+  disabled: 'rgba(255, 255, 255, 0.3)',
+  disabledBackground: 'rgba(255, 255, 255, 0.12)',
+  disabledOpacity: 0.38,
+  focus: 'rgba(255, 255, 255, 0.12)',
+  focusOpacity: 0.12,
+  activatedOpacity: 0.24,
+}
+```
+
+## Toggle Dark Mode
+
+Implement a dark mode toggle:
+
+```tsx
+import { useState, useMemo } from 'react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { Button } from '@mui/material';
+import CssBaseline from '@mui/material/CssBaseline';
+
+function App() {
+  const [mode, setMode] = useState('light');
+  
+  const theme = useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+        },
+      }),
+    [mode]
+  );
+  
+  const toggleMode = () => {
+    setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+  };
+  
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Button onClick={toggleMode}>
+        Toggle {mode === 'light' ? 'Dark' : 'Light'} Mode
+      </Button>
+      {/* Your app content */}
+    </ThemeProvider>
+  );
+}
+```
+
+## Color Schemes (Recommended)
+
+Use color schemes for better dark mode support:
+
+```tsx
+const theme = createTheme({
+  colorSchemes: {
+    light: true,
+    dark: true,
+  },
+});
+```
+
+This automatically creates both light and dark color schemes.
+
+## Custom Dark Mode Colors
+
+```tsx
+const theme = createTheme({
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: {
+          main: '#1976d2',
+        },
+        background: {
+          default: '#fff',
+          paper: '#f5f5f5',
+        },
+      },
+    },
+    dark: {
+      palette: {
+        primary: {
+          main: '#90caf9',
+        },
+        background: {
+          default: '#0a0a0a',
+          paper: '#1e1e1e',
+        },
+      },
+    },
+  },
+});
+```
+
+## System Preference Detection
+
+Use CSS variables with media query for automatic detection:
+
+```tsx
+import { createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  cssVariables: true,
+  colorSchemes: {
+    light: true,
+    dark: true,
+  },
+  // Automatically switch based on system preference
+  colorSchemeSelector: 'media',
+});
+```
+
+## Manual Color Scheme Selection
+
+Use class or data attribute selector:
+
+```tsx
+const theme = createTheme({
+  cssVariables: true,
+  colorSchemes: {
+    light: true,
+    dark: true,
+  },
+  defaultColorScheme: 'light',
+  colorSchemeSelector: 'class', // or 'data-*'
+});
+
+// Apply class to enable dark mode
+<html className="dark">
+  {/* Dark mode active */}
+</html>
+```
+
+## useColorScheme Hook
+
+Control color scheme from components:
+
+```tsx
+import { useColorScheme } from '@mui/material/styles';
+
+function ModeToggle() {
+  const { mode, setMode } = useColorScheme();
+  
+  return (
+    <Button
+      onClick={() => {
+        setMode(mode === 'light' ? 'dark' : 'light');
+      }}
+    >
+      {mode === 'light' ? 'Dark' : 'Light'} Mode
+    </Button>
+  );
+}
+```
+
+## Persistent Dark Mode
+
+Save preference to localStorage:
+
+```tsx
+import { useState, useEffect } from 'react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+function App() {
+  const [mode, setMode] = useState(
+    () => localStorage.getItem('theme') || 'light'
+  );
+  
+  useEffect(() => {
+    localStorage.setItem('theme', mode);
+  }, [mode]);
+  
+  const theme = useMemo(
+    () => createTheme({ palette: { mode } }),
+    [mode]
+  );
+  
+  return (
+    <ThemeProvider theme={theme}>
+      {/* Your app */}
+    </ThemeProvider>
+  );
+}
+```
+
+## Dark Mode with CSS Variables
+
+```tsx
+const theme = createTheme({
+  cssVariables: {
+    colorSchemeSelector: 'data-mui-color-scheme',
+  },
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: { main: '#1976d2' },
+      },
+    },
+    dark: {
+      palette: {
+        primary: { main: '#90caf9' },
+      },
+    },
+  },
+});
+
+// Generates CSS variables:
+// --mui-palette-primary-main: #1976d2 (light)
+// --mui-palette-primary-main: #90caf9 (dark)
+```
+
+## Dark Mode Images
+
+Switch images based on mode:
+
+```tsx
+import { useTheme } from '@mui/material/styles';
+
+function Logo() {
+  const theme = useTheme();
+  
+  return (
+    <img
+      src={
+        theme.palette.mode === 'dark'
+          ? '/logo-dark.png'
+          : '/logo-light.png'
+      }
+      alt="Logo"
+    />
+  );
+}
+```
+
+Or use sx prop:
+
+```tsx
+<Box
+  component="img"
+  sx={{
+    content: {
+      light: 'url(/logo-light.png)',
+      dark: 'url(/logo-dark.png)',
+    },
+  }}
+/>
+```
+
+## Dark Mode Styling
+
+Conditional styles based on mode:
+
+```tsx
+import { styled } from '@mui/material/styles';
+
+const MyComponent = styled('div')(({ theme }) => ({
+  backgroundColor:
+    theme.palette.mode === 'dark' ? '#1e1e1e' : '#ffffff',
+  color:
+    theme.palette.mode === 'dark' ? '#ffffff' : '#000000',
+}));
+```
+
+Or with sx prop:
+
+```tsx
+<Box
+  sx={{
+    bgcolor: (theme) =>
+      theme.palette.mode === 'dark' ? 'grey.900' : 'grey.50',
+    color: (theme) =>
+      theme.palette.mode === 'dark' ? 'grey.50' : 'grey.900',
+  }}
+/>
+```
+
+## Material Design Elevation in Dark Mode
+
+Dark mode uses overlays to simulate elevation:
+
+```tsx
+// Automatic elevation in dark mode
+<Paper elevation={4}>
+  {/* Higher elevation = lighter background in dark mode */}
+</Paper>
+```
+
+Custom overlay opacity:
+
+```tsx
+const theme = createTheme({
+  colorSchemes: {
+    dark: {
+      opacity: {
+        // Custom elevation overlays
+        0: 0,
+        1: 0.05,
+        2: 0.07,
+        3: 0.08,
+        4: 0.09,
+        6: 0.11,
+        8: 0.12,
+        12: 0.14,
+        16: 0.15,
+        24: 0.16,
+      },
+    },
+  },
+});
+```
+
+## Default Color Scheme
+
+```tsx
+const theme = createTheme({
+  colorSchemes: {
+    light: true,
+    dark: true,
+  },
+  defaultColorScheme: 'dark', // Start with dark mode
+});
+```
+
+## Testing Dark Mode
+
+Test both modes:
+
+```tsx
+import { render } from '@testing-library/react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+test('renders in dark mode', () => {
+  const darkTheme = createTheme({ palette: { mode: 'dark' } });
+  
+  render(
+    <ThemeProvider theme={darkTheme}>
+      <MyComponent />
+    </ThemeProvider>
+  );
+  
+  // Assertions
+});
+```
+
+## Color Scheme Best Practices
+
+1. **Use semantic colors**: Primary, secondary, error, etc.
+2. **Test contrast ratios**: Ensure WCAG compliance
+3. **Provide mode toggle**: Let users choose
+4. **Respect system preference**: Use `colorSchemeSelector: 'media'`
+5. **Persist preference**: Save to localStorage
+6. **Test both modes**: Ensure all content is visible
+
+## Common Dark Mode Issues
+
+### Issue: White flash on load
+
+**Solution**: Set initial theme in HTML:
+
+```html
+<script>
+  const theme = localStorage.getItem('theme') || 'light';
+  document.documentElement.setAttribute('data-theme', theme);
+</script>
+```
+
+### Issue: Images too bright in dark mode
+
+**Solution**: Apply opacity or use different images:
+
+```tsx
+<Box
+  component="img"
+  sx={{
+    opacity: (theme) => (theme.palette.mode === 'dark' ? 0.8 : 1),
+  }}
+  src="/image.png"
+/>
+```
+
+## Source Reference
+
+The dark mode implementation can be found at:
+- Light palette: `packages/mui-material/src/styles/createPalette.js:12`
+- Dark palette: `packages/mui-material/src/styles/createPalette.js:55`
+- Color schemes: `packages/mui-material/src/styles/createTheme.ts:30`
+- Default colors: `packages/mui-material/src/styles/createPalette.js:116`

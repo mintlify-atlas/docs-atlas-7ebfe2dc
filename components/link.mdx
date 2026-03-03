@@ -1,0 +1,225 @@
+---
+title: Link
+description: The Link component allows you to easily customize anchor elements with your theme colors and typography styles.
+---
+
+# Link
+
+The Link component builds on the Typography component and provides convenient props to handle common link styling patterns.
+
+## Basic Links
+
+The Link component is built on top of the Typography component, meaning that you can use its props.
+
+```tsx
+import * as React from 'react';
+import Link from '@mui/material/Link';
+
+export default function BasicLinks() {
+  return (
+    <Link href="#" underline="hover">
+      Hover to see underline
+    </Link>
+  );
+}
+```
+
+## Underline
+
+The `underline` prop controls when the link should be underlined.
+
+```tsx
+import Link from '@mui/material/Link';
+
+// Always underlined
+<Link href="#" underline="always">
+  Always underlined
+</Link>
+
+// Underline on hover
+<Link href="#" underline="hover">
+  Underline on hover
+</Link>
+
+// Never underlined
+<Link href="#" underline="none">
+  No underline
+</Link>
+```
+
+## Color
+
+Use the `color` prop to apply theme color palette.
+
+```tsx
+<Link href="#" color="primary">
+  Primary color
+</Link>
+
+<Link href="#" color="secondary">
+  Secondary color
+</Link>
+
+<Link href="#" color="error">
+  Error color
+</Link>
+
+<Link href="#" color="inherit">
+  Inherit color
+</Link>
+```
+
+## Typography Variants
+
+The Link component inherits Typography props, including `variant`.
+
+```tsx
+<Link href="#" variant="body2">
+  Body 2 link
+</Link>
+
+<Link href="#" variant="h6">
+  Heading 6 link
+</Link>
+
+<Link href="#" variant="caption">
+  Caption link
+</Link>
+```
+
+## Button as Link
+
+Render the link as a button element.
+
+```tsx
+<Link
+  component="button"
+  variant="body2"
+  onClick={() => {
+    console.info("I'm a button.");
+  }}
+>
+  Button Link
+</Link>
+```
+
+## External Links
+
+For external links, always set appropriate security attributes.
+
+```tsx
+<Link
+  href="https://example.com"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  External Link
+</Link>
+```
+
+## Integration with Routing Libraries
+
+### React Router
+
+```tsx
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@mui/material/Link';
+
+<Link component={RouterLink} to="/about">
+  About
+</Link>
+```
+
+### Next.js
+
+```tsx
+import NextLink from 'next/link';
+import Link from '@mui/material/Link';
+
+<Link component={NextLink} href="/about">
+  About
+</Link>
+```
+
+## Accessible Links
+
+Provide meaningful link text for screen readers.
+
+```tsx
+// Good
+<Link href="/products">View our products</Link>
+
+// Avoid - not descriptive
+<Link href="/products">Click here</Link>
+```
+
+## Props
+
+### color
+
+- **Type:** `'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | 'textPrimary' | 'textSecondary' | 'textDisabled'`
+- **Default:** `'primary'`
+- **Description:** The color of the link. It supports theme colors and typography colors
+
+### underline
+
+- **Type:** `'none' | 'hover' | 'always'`
+- **Default:** `'always'`
+- **Description:** Controls when the link should have an underline
+
+### variant
+
+- **Type:** Typography variant
+- **Default:** `'inherit'`
+- **Description:** Applies the theme typography styles
+
+### component
+
+- **Type:** `React.ElementType`
+- **Default:** `'a'`
+- **Description:** The component used for the root node. Either a string to use an HTML element or a component
+
+### href
+
+- **Type:** `string`
+- **Description:** The URL to link to when clicked. Standard anchor element attribute
+
+### TypographyClasses
+
+- **Type:** `TypographyProps['classes']`
+- **Description:** Classes prop applied to the Typography element
+
+### sx
+
+- **Type:** `SxProps<Theme>`
+- **Description:** System prop for defining CSS styles
+
+## Accessibility
+
+- Use descriptive link text that makes sense out of context
+- Avoid generic text like "click here" or "read more"
+- For external links, consider adding visual indicators
+- When using `component="button"`, ensure proper ARIA attributes
+- Links inherit keyboard navigation from the underlying HTML element
+
+## Security
+
+When linking to external sites:
+
+```tsx
+<Link
+  href="https://external-site.com"
+  target="_blank"
+  rel="noopener noreferrer"
+>
+  External Site
+</Link>
+```
+
+- `rel="noopener"` prevents the new page from accessing `window.opener`
+- `rel="noreferrer"` prevents the browser from sending the HTTP referer header
+
+## API Reference
+
+- [Link API](https://mui.com/material-ui/api/link/)
+- [Typography API](https://mui.com/material-ui/api/typography/)

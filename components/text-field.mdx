@@ -1,0 +1,141 @@
+---
+title: Text Field
+description: Material UI TextField component allows users to input text.
+---
+
+Text fields let users enter and edit text.
+
+## Import
+
+```tsx
+import TextField from '@mui/material/TextField';
+```
+
+## Basic Usage
+
+```tsx
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+
+export default function BasicTextFields() {
+  return (
+    <Box
+      component="form"
+      sx={{ '& > :not(style)': { m: 1, width: '25ch' } }}
+      noValidate
+      autoComplete="off"
+    >
+      <TextField id="outlined-basic" label="Outlined" variant="outlined" />
+      <TextField id="filled-basic" label="Filled" variant="filled" />
+      <TextField id="standard-basic" label="Standard" variant="standard" />
+    </Box>
+  );
+}
+```
+
+## Props
+
+<ParamField path="variant" type="'outlined' | 'standard' | 'filled'" default="'outlined'">
+  The variant to use.
+</ParamField>
+
+<ParamField path="value" type="unknown">
+  The value of the `input` element, required for a controlled component.
+</ParamField>
+
+<ParamField path="defaultValue" type="unknown">
+  The default value. Use when the component is not controlled.
+</ParamField>
+
+<ParamField path="label" type="ReactNode">
+  The label content.
+</ParamField>
+
+<ParamField path="placeholder" type="string">
+  The short hint displayed in the `input` before the user enters a value.
+</ParamField>
+
+<ParamField path="type" type="string">
+  Type of the `input` element. It should be a valid HTML5 input type.
+</ParamField>
+
+<ParamField path="color" type="'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'" default="'primary'">
+  The color of the component. Supports both default and custom theme colors.
+</ParamField>
+
+<ParamField path="size" type="'small' | 'medium'" default="'medium'">
+  The size of the component.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  If `true`, the component is disabled.
+</ParamField>
+
+<ParamField path="error" type="boolean" default="false">
+  If `true`, the label is displayed in an error state.
+</ParamField>
+
+<ParamField path="required" type="boolean" default="false">
+  If `true`, the label is displayed as required and the `input` element is required.
+</ParamField>
+
+<ParamField path="fullWidth" type="boolean" default="false">
+  If `true`, the input will take up the full width of its container.
+</ParamField>
+
+<ParamField path="multiline" type="boolean" default="false">
+  If `true`, a `textarea` element is rendered instead of an input.
+</ParamField>
+
+<ParamField path="rows" type="string | number">
+  Number of rows to display when multiline option is set to true.
+</ParamField>
+
+<ParamField path="maxRows" type="string | number">
+  Maximum number of rows to display when multiline option is set to true.
+</ParamField>
+
+<ParamField path="minRows" type="string | number">
+  Minimum number of rows to display when multiline option is set to true.
+</ParamField>
+
+<ParamField path="helperText" type="ReactNode">
+  The helper text content.
+</ParamField>
+
+<ParamField path="autoComplete" type="string">
+  This prop helps users to fill forms faster, especially on mobile devices. The name can be confusing, as it's more like an autofill.
+</ParamField>
+
+<ParamField path="autoFocus" type="boolean" default="false">
+  If `true`, the `input` element is focused during the first mount.
+</ParamField>
+
+<ParamField path="select" type="boolean" default="false">
+  Render a Select element while passing the Input element to `Select` as `input` parameter. If this option is set you must pass the options of the select as children.
+</ParamField>
+
+<ParamField path="onChange" type="(event: React.ChangeEvent<HTMLInputElement>) => void">
+  Callback fired when the value is changed. You can pull out the new value by accessing `event.target.value` (string).
+</ParamField>
+
+<ParamField path="onBlur" type="(event: React.FocusEvent<HTMLInputElement>) => void">
+  Callback fired when the input loses focus.
+</ParamField>
+
+<ParamField path="onFocus" type="(event: React.FocusEvent<HTMLInputElement>) => void">
+  Callback fired when the input receives focus.
+</ParamField>
+
+<ParamField path="inputRef" type="React.Ref<any>">
+  Pass a ref to the `input` element.
+</ParamField>
+
+<ParamField path="sx" type="SxProps<Theme>">
+  The system prop that allows defining system overrides as well as additional CSS styles.
+</ParamField>
+
+## API Reference
+
+- [TextField API](https://next.mui.com/material-ui/api/text-field/)
+- Inherits [FormControl API](https://next.mui.com/material-ui/api/form-control/)

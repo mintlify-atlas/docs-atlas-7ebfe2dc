@@ -1,0 +1,227 @@
+---
+title: Box
+description: The Box component is a generic wrapper for layout and styling with the sx prop and system props.
+---
+
+# Box
+
+The Box component is a utility wrapper that provides access to all system properties through props. It's the most fundamental layout primitive in Material UI.
+
+## Basic usage
+
+```tsx
+import Box from '@mui/material/Box';
+
+function Demo() {
+  return (
+    <Box
+      sx={{
+        width: 300,
+        height: 300,
+        backgroundColor: 'primary.main',
+        '&:hover': {
+          backgroundColor: 'primary.dark',
+        },
+      }}
+    />
+  );
+}
+```
+
+## System props
+
+Box accepts all system properties as props, allowing you to quickly style components without creating custom styled components.
+
+```tsx
+<Box
+  component="section"
+  sx={{ p: 2, border: '1px dashed grey' }}
+>
+  <Typography>This box has padding and a border.</Typography>
+</Box>
+```
+
+### Spacing
+
+```tsx
+<Box m={2}>        {/* margin: theme.spacing(2) */}
+<Box mt={3}>       {/* margin-top: theme.spacing(3) */}
+<Box mx="auto">   {/* margin-left: auto, margin-right: auto */}
+<Box p={2}>        {/* padding: theme.spacing(2) */}
+<Box px={2}>       {/* padding-left & padding-right */}
+```
+
+### Display and layout
+
+```tsx
+<Box display="flex" alignItems="center" justifyContent="center">
+  <Typography>Centered content</Typography>
+</Box>
+
+<Box display="grid" gridTemplateColumns="repeat(3, 1fr)" gap={2}>
+  <Item>1</Item>
+  <Item>2</Item>
+  <Item>3</Item>
+</Box>
+```
+
+### Color and backgrounds
+
+```tsx
+<Box color="primary.main" bgcolor="background.paper" p={2}>
+  Themed colors
+</Box>
+
+<Box bgcolor="error.light" color="error.contrastText" p={1}>
+  Error styling
+</Box>
+```
+
+## Component prop
+
+Change the rendered element using the `component` prop:
+
+```tsx
+<Box component="span" sx={{ color: 'text.secondary' }}>
+  Rendered as a span
+</Box>
+
+<Box component="section" sx={{ p: 2, border: '1px solid grey' }}>
+  Rendered as a section
+</Box>
+```
+
+## The sx prop
+
+The `sx` prop provides a shortcut for defining custom styles with access to the theme:
+
+```tsx
+<Box
+  sx={{
+    width: 300,
+    height: 300,
+    backgroundColor: 'primary.dark',
+    '&:hover': {
+      backgroundColor: 'primary.main',
+      opacity: [0.9, 0.8, 0.7],
+    },
+  }}
+/>
+```
+
+### Responsive values
+
+```tsx
+<Box
+  sx={{
+    width: {
+      xs: 100,  // 0-600px
+      sm: 200,  // 600-960px
+      md: 300,  // 960-1280px
+      lg: 400,  // 1280-1920px
+      xl: 500,  // 1920px+
+    },
+  }}
+/>
+
+// Array syntax
+<Box sx={{ width: [100, 200, 300, 400, 500] }} />
+```
+
+## Props
+
+### BoxProps
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `React.ReactNode` | - | The content of the component |
+| `component` | `React.ElementType` | `'div'` | The component used for the root node |
+| `sx` | `SxProps<Theme>` | - | System prop for defining custom styles |
+
+### System props
+
+Box supports all system properties from the following categories:
+
+**Borders**: `border`, `borderTop`, `borderRight`, `borderBottom`, `borderLeft`, `borderColor`, `borderRadius`
+
+**Display**: `display`, `displayPrint`, `overflow`, `textOverflow`, `visibility`, `whiteSpace`
+
+**Flexbox**: `flexDirection`, `flexWrap`, `justifyContent`, `alignItems`, `alignContent`, `order`, `flex`, `flexGrow`, `flexShrink`, `alignSelf`
+
+**Grid**: `gap`, `columnGap`, `rowGap`, `gridColumn`, `gridRow`, `gridAutoFlow`, `gridAutoColumns`, `gridAutoRows`, `gridTemplateColumns`, `gridTemplateRows`, `gridTemplateAreas`, `gridArea`
+
+**Palette**: `color`, `bgcolor`, `backgroundColor`
+
+**Positions**: `position`, `zIndex`, `top`, `right`, `bottom`, `left`
+
+**Shadows**: `boxShadow`
+
+**Sizing**: `width`, `maxWidth`, `minWidth`, `height`, `maxHeight`, `minHeight`, `boxSizing`
+
+**Spacing**: `m`, `mt`, `mr`, `mb`, `ml`, `mx`, `my`, `p`, `pt`, `pr`, `pb`, `pl`, `px`, `py`, `margin`, `marginTop`, `marginRight`, `marginBottom`, `marginLeft`, `padding`, `paddingTop`, `paddingRight`, `paddingBottom`, `paddingLeft`
+
+**Typography**: `fontFamily`, `fontSize`, `fontStyle`, `fontWeight`, `letterSpacing`, `lineHeight`, `textAlign`, `textTransform`
+
+## Common patterns
+
+### Card wrapper
+
+```tsx
+<Box
+  sx={{
+    bgcolor: 'background.paper',
+    boxShadow: 1,
+    borderRadius: 2,
+    p: 2,
+    minWidth: 300,
+  }}
+>
+  <Box sx={{ color: 'text.secondary' }}>Sessions</Box>
+  <Box sx={{ color: 'text.primary', fontSize: 34, fontWeight: 'medium' }}>
+    98.3 K
+  </Box>
+  <Box sx={{ color: 'success.dark', display: 'inline', fontWeight: 'bold' }}>
+    +18.77%
+  </Box>
+  <Box sx={{ color: 'text.secondary', display: 'inline' }}>
+    {' '}vs. last week
+  </Box>
+</Box>
+```
+
+### Centered container
+
+```tsx
+<Box
+  sx={{
+    display: 'flex',
+    justifyContent: 'center',
+    alignItems: 'center',
+    minHeight: '100vh',
+  }}
+>
+  <Typography>Vertically and horizontally centered</Typography>
+</Box>
+```
+
+### Responsive grid
+
+```tsx
+<Box
+  sx={{
+    display: 'grid',
+    gridTemplateColumns: {
+      xs: 'repeat(1, 1fr)',
+      sm: 'repeat(2, 1fr)',
+      md: 'repeat(3, 1fr)',
+    },
+    gap: 2,
+  }}
+>
+  {items.map((item) => (
+    <Box key={item.id} sx={{ p: 2, border: '1px solid', borderColor: 'divider' }}>
+      {item.content}
+    </Box>
+  ))}
+</Box>
+```

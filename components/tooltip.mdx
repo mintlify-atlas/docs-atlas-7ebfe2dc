@@ -1,0 +1,409 @@
+---
+title: Tooltip
+description: Tooltips display informative text when users hover over, focus on, or tap an element.
+---
+
+## Introduction
+
+Tooltips display informative text when users interact with an element. They are typically used to provide helpful hints or additional context without cluttering the interface.
+
+## Basic Usage
+
+```tsx
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+
+function Demo() {
+  return (
+    <Tooltip title="Delete">
+      <Button>Hover me</Button>
+    </Tooltip>
+  );
+}
+```
+
+## Positioned Tooltips
+
+The `Tooltip` has 12 placement choices. They don't have directional arrows; instead, they rely on motion emanating from the source to convey direction.
+
+```tsx
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+import Grid from '@mui/material/Grid';
+
+function PositionedTooltips() {
+  return (
+    <Grid container justifyContent="center">
+      <Grid item>
+        <Tooltip title="Top start" placement="top-start">
+          <Button>top-start</Button>
+        </Tooltip>
+        <Tooltip title="Top" placement="top">
+          <Button>top</Button>
+        </Tooltip>
+        <Tooltip title="Top end" placement="top-end">
+          <Button>top-end</Button>
+        </Tooltip>
+      </Grid>
+      <Grid item>
+        <Tooltip title="Left start" placement="left-start">
+          <Button>left-start</Button>
+        </Tooltip>
+        <Tooltip title="Right start" placement="right-start">
+          <Button>right-start</Button>
+        </Tooltip>
+      </Grid>
+      <Grid item>
+        <Tooltip title="Bottom start" placement="bottom-start">
+          <Button>bottom-start</Button>
+        </Tooltip>
+        <Tooltip title="Bottom" placement="bottom">
+          <Button>bottom</Button>
+        </Tooltip>
+        <Tooltip title="Bottom end" placement="bottom-end">
+          <Button>bottom-end</Button>
+        </Tooltip>
+      </Grid>
+    </Grid>
+  );
+}
+```
+
+## Arrow Tooltips
+
+You can use the `arrow` prop to give your tooltip an arrow indicating which element it refers to.
+
+```tsx
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+
+function ArrowTooltips() {
+  return (
+    <Tooltip title="Add" arrow>
+      <Button>Arrow</Button>
+    </Tooltip>
+  );
+}
+```
+
+## Custom Child Element
+
+The tooltip needs to apply DOM event listeners to its child element. If the child is a custom React element, you need to make sure that it spreads its props to the underlying DOM element.
+
+```tsx
+import Tooltip from '@mui/material/Tooltip';
+import { forwardRef } from 'react';
+
+const CustomComponent = forwardRef<HTMLDivElement, { onClick: () => void }>(
+  function CustomComponent(props, ref) {
+    return (
+      <div {...props} ref={ref}>
+        Custom Component
+      </div>
+    );
+  },
+);
+
+function CustomChildTooltip() {
+  return (
+    <Tooltip title="Delete">
+      <CustomComponent onClick={() => {}} />
+    </Tooltip>
+  );
+}
+```
+
+## Triggers
+
+You can define the types of events that cause a tooltip to show.
+
+The touch action requires a long press due to the `enterTouchDelay` prop being set to `700ms` by default.
+
+```tsx
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+
+function TriggersTooltips() {
+  return (
+    <Stack direction="row" spacing={2}>
+      <Tooltip title="Hover tooltip">
+        <Button>Hover</Button>
+      </Tooltip>
+      <Tooltip title="Focus tooltip" disableHoverListener>
+        <Button>Focus</Button>
+      </Tooltip>
+      <Tooltip title="Click tooltip" disableFocusListener disableHoverListener>
+        <Button>Click (not supported)</Button>
+      </Tooltip>
+    </Stack>
+  );
+}
+```
+
+## Controlled Tooltips
+
+You can use the `open`, `onOpen` and `onClose` props to control the behavior of the tooltip.
+
+```tsx
+import { useState } from 'react';
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+
+function ControlledTooltips() {
+  const [open, setOpen] = useState(false);
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  return (
+    <Tooltip open={open} onClose={handleClose} onOpen={handleOpen} title="Controlled">
+      <Button>Controlled</Button>
+    </Tooltip>
+  );
+}
+```
+
+## Variable Width
+
+The `Tooltip` wraps long text by default to make it readable. You can customize this behavior.
+
+```tsx
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+
+function VariableWidth() {
+  const longText = `
+    Aliquam eget finibus ante, non facilisis lectus. Sed vitae dignissim est, vel aliquam tellus.
+    Praesent non nunc mollis, fermentum neque at, semper arcu.
+    Nullam eget est sed sem iaculis gravida eget vitae justo.
+  `;
+
+  return (
+    <Tooltip title={longText}>
+      <Button>Long text tooltip</Button>
+    </Tooltip>
+  );
+}
+```
+
+## Interactive Tooltips
+
+Tooltips are interactive by default (they close when the user hovers over the tooltip before the `leaveDelay` expires). You can disable this behavior with `disableInteractive`.
+
+```tsx
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+
+function InteractiveTooltips() {
+  return (
+    <Tooltip
+      title={
+        <>
+          Tooltip with <a href="#">link</a>
+        </>
+      }
+    >
+      <Button>Interactive (default)</Button>
+    </Tooltip>
+  );
+}
+```
+
+## Disabled Elements
+
+By default, disabled elements like `<button>` do not trigger user interactions, so a Tooltip will not activate on normal events like hover. To accommodate disabled elements, add a simple wrapper element, such as a `span`.
+
+```tsx
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+
+function DisabledTooltips() {
+  return (
+    <Tooltip title="You don't have permission to do this">
+      <span>
+        <Button disabled>Disabled Button</Button>
+      </span>
+    </Tooltip>
+  );
+}
+```
+
+## Transitions
+
+Use a different transition.
+
+```tsx
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+import Fade from '@mui/material/Fade';
+import Zoom from '@mui/material/Zoom';
+
+function TransitionsTooltips() {
+  return (
+    <>
+      <Tooltip title="Fade">
+        <Button>Fade (default)</Button>
+      </Tooltip>
+      <Tooltip
+        slotProps={{
+          transition: { timeout: 600 },
+        }}
+        title="Grow"
+      >
+        <Button>Grow</Button>
+      </Tooltip>
+      <Tooltip
+        slots={{
+          transition: Fade,
+        }}
+        slotProps={{
+          transition: { timeout: 600 },
+        }}
+        title="Fade"
+      >
+        <Button>Fade</Button>
+      </Tooltip>
+      <Tooltip
+        slots={{
+          transition: Zoom,
+        }}
+        title="Zoom"
+      >
+        <Button>Zoom</Button>
+      </Tooltip>
+    </>
+  );
+}
+```
+
+## Follow Cursor
+
+You can enable the tooltip to follow the cursor by setting `followCursor={true}`.
+
+```tsx
+import Tooltip from '@mui/material/Tooltip';
+import Box from '@mui/material/Box';
+
+function FollowCursorTooltips() {
+  return (
+    <Tooltip title="Follow cursor" followCursor>
+      <Box sx={{ bgcolor: 'primary.main', color: 'white', p: 2 }}>
+        Hover over me
+      </Box>
+    </Tooltip>
+  );
+}
+```
+
+## Delay
+
+The tooltip is normally shown immediately when the user's mouse hovers over the element. You can use the `enterDelay` and `leaveDelay` props to change this behavior.
+
+```tsx
+import Tooltip from '@mui/material/Tooltip';
+import Button from '@mui/material/Button';
+
+function DelayTooltips() {
+  return (
+    <Tooltip title="Delayed" enterDelay={500} leaveDelay={200}>
+      <Button>Delayed tooltip</Button>
+    </Tooltip>
+  );
+}
+```
+
+## Props
+
+### Tooltip Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `arrow` | `boolean` | `false` | If true, adds an arrow to the tooltip. |
+| `children` | `element` | - | **Required.** Tooltip reference element. |
+| `classes` | `object` | - | Override or extend the styles applied to the component. |
+| `describeChild` | `boolean` | `false` | If true, the title acts as an accessible description. |
+| `disableFocusListener` | `boolean` | `false` | Do not respond to focus-visible events. |
+| `disableHoverListener` | `boolean` | `false` | Do not respond to hover events. |
+| `disableInteractive` | `boolean` | `false` | Makes tooltip not interactive (closes on hover). |
+| `disableTouchListener` | `boolean` | `false` | Do not respond to long press touch events. |
+| `enterDelay` | `number` | `100` | Milliseconds to wait before showing the tooltip. |
+| `enterNextDelay` | `number` | `0` | Milliseconds to wait before showing tooltip when one was recently opened. |
+| `enterTouchDelay` | `number` | `700` | Milliseconds a user must touch element before showing tooltip. |
+| `followCursor` | `boolean` | `false` | If true, the tooltip follows the cursor over the wrapped element. |
+| `id` | `string` | - | ID for the tooltip. Falls back to randomly generated id. |
+| `leaveDelay` | `number` | `0` | Milliseconds to wait before hiding the tooltip. |
+| `leaveTouchDelay` | `number` | `1500` | Milliseconds after user stops touching element before hiding tooltip. |
+| `onClose` | `function` | - | Callback fired when component requests to be closed. |
+| `onOpen` | `function` | - | Callback fired when component requests to be open. |
+| `open` | `boolean` | - | If true, the component is shown (controlled mode). |
+| `placement` | `'bottom-end'` \| `'bottom-start'` \| `'bottom'` \| `'left-end'` \| `'left-start'` \| `'left'` \| `'right-end'` \| `'right-start'` \| `'right'` \| `'top-end'` \| `'top-start'` \| `'top'` | `'bottom'` | Tooltip placement. |
+| `sx` | `SxProps<Theme>` | - | The system prop for defining CSS overrides and additional styles. |
+| `title` | `node` | - | **Required.** Tooltip title. Zero-length titles are never displayed. |
+
+### Slots
+
+| Slot | Type | Default | Description |
+|------|------|---------|-------------|
+| `popper` | `ElementType` | Popper | The component used for the popper. |
+| `transition` | `ElementType` | Grow | The component used for the transition. |
+| `tooltip` | `ElementType` | `'div'` | The component used for the tooltip. |
+| `arrow` | `ElementType` | `'span'` | The component used for the arrow. |
+
+## CSS Classes
+
+The following CSS classes are available for customization:
+
+- `.MuiTooltip-popper` - Styles applied to the Popper component.
+- `.MuiTooltip-popperInteractive` - Styles applied to the Popper if `disableInteractive={false}`.
+- `.MuiTooltip-popperArrow` - Styles applied to the Popper if `arrow={true}`.
+- `.MuiTooltip-popperClose` - Styles applied to the Popper when tooltip is closed.
+- `.MuiTooltip-tooltip` - Styles applied to the tooltip (label wrapper) element.
+- `.MuiTooltip-tooltipArrow` - Styles applied to the tooltip element if `arrow={true}`.
+- `.MuiTooltip-arrow` - Styles applied to the arrow element.
+- `.MuiTooltip-touch` - Styles applied to the tooltip on touch devices.
+- `.MuiTooltip-tooltipPlacementLeft` - Styles applied if `placement="left"`.
+- `.MuiTooltip-tooltipPlacementRight` - Styles applied if `placement="right"`.
+- `.MuiTooltip-tooltipPlacementTop` - Styles applied if `placement="top"`.
+- `.MuiTooltip-tooltipPlacementBottom` - Styles applied if `placement="bottom"`.
+
+## Accessibility
+
+### ARIA
+
+By default, the tooltip labels its child element with `aria-describedby`. This means a screen reader will read the tooltip content when the user focuses the child element.
+
+If you want the tooltip to act as a label instead, use `describeChild={false}` which applies `aria-labelledby`:
+
+```tsx
+<Tooltip title="Settings" describeChild={false}>
+  <IconButton>
+    <SettingsIcon />
+  </IconButton>
+</Tooltip>
+```
+
+### Keyboard
+
+Tooltips can be triggered via keyboard focus. Make sure interactive elements can receive keyboard focus:
+
+```tsx
+<Tooltip title="Add">
+  <Button>Add Item</Button>
+</Tooltip>
+```
+
+### Touch Devices
+
+On touch devices, tooltips are shown on long press (700ms by default). You can adjust this with `enterTouchDelay`:
+
+```tsx
+<Tooltip title="Quick tooltip" enterTouchDelay={100}>
+  <Button>Fast touch</Button>
+</Tooltip>
+```

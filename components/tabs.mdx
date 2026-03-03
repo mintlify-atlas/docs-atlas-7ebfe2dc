@@ -1,0 +1,377 @@
+---
+title: Tabs
+description: Tabs organize and allow navigation between groups of content that are related and at the same level of hierarchy.
+---
+
+# Tabs
+
+Tabs make it easy to explore and switch between different views.
+
+## Basic Tabs
+
+A simple example with text labels.
+
+```tsx
+import * as React from 'react';
+import Tabs from '@mui/material/Tabs';
+import Tab from '@mui/material/Tab';
+import Box from '@mui/material/Box';
+
+interface TabPanelProps {
+  children?: React.ReactNode;
+  index: number;
+  value: number;
+}
+
+function TabPanel(props: TabPanelProps) {
+  const { children, value, index, ...other } = props;
+
+  return (
+    <div
+      role="tabpanel"
+      hidden={value !== index}
+      id={`simple-tabpanel-${index}`}
+      aria-labelledby={`simple-tab-${index}`}
+      {...other}
+    >
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
+    </div>
+  );
+}
+
+export default function BasicTabs() {
+  const [value, setValue] = React.useState(0);
+
+  const handleChange = (event: React.SyntheticEvent, newValue: number) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+        <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+          <Tab label="Item One" />
+          <Tab label="Item Two" />
+          <Tab label="Item Three" />
+        </Tabs>
+      </Box>
+      <TabPanel value={value} index={0}>
+        Item One
+      </TabPanel>
+      <TabPanel value={value} index={1}>
+        Item Two
+      </TabPanel>
+      <TabPanel value={value} index={2}>
+        Item Three
+      </TabPanel>
+    </Box>
+  );
+}
+```
+
+## Tabs with Icons
+
+Add icons to tabs for better visual communication.
+
+```tsx
+import PhoneIcon from '@mui/icons-material/Phone';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import PersonPinIcon from '@mui/icons-material/PersonPin';
+
+<Tabs value={value} onChange={handleChange}>
+  <Tab icon={<PhoneIcon />} label="Recents" />
+  <Tab icon={<FavoriteIcon />} label="Favorites" />
+  <Tab icon={<PersonPinIcon />} label="Nearby" />
+</Tabs>
+
+// Icon only
+<Tabs value={value} onChange={handleChange}>
+  <Tab icon={<PhoneIcon />} />
+  <Tab icon={<FavoriteIcon />} />
+  <Tab icon={<PersonPinIcon />} />
+</Tabs>
+
+// Icon positioned at top/bottom/start/end
+<Tabs value={value} onChange={handleChange}>
+  <Tab icon={<PhoneIcon />} iconPosition="start" label="Recents" />
+  <Tab icon={<FavoriteIcon />} iconPosition="end" label="Favorites" />
+</Tabs>
+```
+
+## Scrollable Tabs
+
+For many tabs, use scrollable variant.
+
+```tsx
+<Tabs
+  value={value}
+  onChange={handleChange}
+  variant="scrollable"
+  scrollButtons="auto"
+>
+  <Tab label="Item One" />
+  <Tab label="Item Two" />
+  <Tab label="Item Three" />
+  <Tab label="Item Four" />
+  <Tab label="Item Five" />
+  <Tab label="Item Six" />
+  <Tab label="Item Seven" />
+</Tabs>
+
+// Always show scroll buttons
+<Tabs
+  value={value}
+  onChange={handleChange}
+  variant="scrollable"
+  scrollButtons
+>
+  {/* Many tabs */}
+</Tabs>
+
+// Force scroll buttons on mobile
+<Tabs
+  value={value}
+  onChange={handleChange}
+  variant="scrollable"
+  scrollButtons
+  allowScrollButtonsMobile
+>
+  {/* Many tabs */}
+</Tabs>
+```
+
+## Full Width Tabs
+
+Make tabs fill available width.
+
+```tsx
+<Tabs value={value} onChange={handleChange} variant="fullWidth">
+  <Tab label="Item One" />
+  <Tab label="Item Two" />
+  <Tab label="Item Three" />
+</Tabs>
+```
+
+## Centered Tabs
+
+Center the tabs.
+
+```tsx
+<Tabs value={value} onChange={handleChange} centered>
+  <Tab label="Item One" />
+  <Tab label="Item Two" />
+  <Tab label="Item Three" />
+</Tabs>
+```
+
+## Vertical Tabs
+
+Display tabs vertically.
+
+```tsx
+<Box sx={{ display: 'flex', height: 224 }}>
+  <Tabs
+    orientation="vertical"
+    variant="scrollable"
+    value={value}
+    onChange={handleChange}
+    sx={{ borderRight: 1, borderColor: 'divider' }}
+  >
+    <Tab label="Item One" />
+    <Tab label="Item Two" />
+    <Tab label="Item Three" />
+    <Tab label="Item Four" />
+    <Tab label="Item Five" />
+    <Tab label="Item Six" />
+    <Tab label="Item Seven" />
+  </Tabs>
+  {/* Tab panels */}
+</Box>
+```
+
+## Color
+
+Customize indicator and text color.
+
+```tsx
+// Primary indicator (default)
+<Tabs value={value} onChange={handleChange} indicatorColor="primary">
+  <Tab label="Item One" />
+  <Tab label="Item Two" />
+</Tabs>
+
+// Secondary indicator
+<Tabs value={value} onChange={handleChange} indicatorColor="secondary">
+  <Tab label="Item One" />
+  <Tab label="Item Two" />
+</Tabs>
+
+// Text color
+<Tabs value={value} onChange={handleChange} textColor="secondary">
+  <Tab label="Item One" />
+  <Tab label="Item Two" />
+</Tabs>
+
+// Inherit color from parent
+<Tabs value={value} onChange={handleChange} textColor="inherit">
+  <Tab label="Item One" />
+  <Tab label="Item Two" />
+</Tabs>
+```
+
+## Disabled Tab
+
+Disable individual tabs.
+
+```tsx
+<Tabs value={value} onChange={handleChange}>
+  <Tab label="Active" />
+  <Tab label="Disabled" disabled />
+  <Tab label="Active" />
+</Tabs>
+```
+
+## Wrapped Labels
+
+Long labels automatically wrap.
+
+```tsx
+<Tabs value={value} onChange={handleChange}>
+  <Tab label="This is a very long label that will wrap" />
+  <Tab label="Short" />
+  <Tab label="Another long label that demonstrates wrapping behavior" />
+</Tabs>
+```
+
+## Custom Tabs
+
+Use `selectionFollowsFocus` for better keyboard navigation.
+
+```tsx
+<Tabs
+  value={value}
+  onChange={handleChange}
+  selectionFollowsFocus
+>
+  <Tab label="Item One" />
+  <Tab label="Item Two" />
+  <Tab label="Item Three" />
+</Tabs>
+```
+
+## Props
+
+### value
+
+- **Type:** `any`
+- **Description:** The value of the currently selected Tab. If you don't want any selected Tab, set this prop to `false`
+
+### onChange
+
+- **Type:** `(event: React.SyntheticEvent, value: any) => void`
+- **Description:** Callback fired when the value changes. The second parameter is the new value
+
+### orientation
+
+- **Type:** `'horizontal' | 'vertical'`
+- **Default:** `'horizontal'`
+- **Description:** The component orientation (layout flow direction)
+
+### variant
+
+- **Type:** `'standard' | 'scrollable' | 'fullWidth'`
+- **Default:** `'standard'`
+- **Description:** Determines additional display behavior of the tabs
+  - **scrollable:** Allows horizontal scrolling
+  - **fullWidth:** Tabs grow to use all available space
+  - **standard:** Default state
+
+### indicatorColor
+
+- **Type:** `'primary' | 'secondary'`
+- **Default:** `'primary'`
+- **Description:** Determines the color of the indicator
+
+### textColor
+
+- **Type:** `'primary' | 'secondary' | 'inherit'`
+- **Default:** `'primary'`
+- **Description:** Determines the color of the Tab text
+
+### scrollButtons
+
+- **Type:** `'auto' | true | false`
+- **Default:** `'auto'`
+- **Description:** Determine behavior of scroll buttons when tabs are set to scroll
+  - **auto:** Only present when not all items are visible
+  - **true:** Always present
+  - **false:** Never present
+
+### allowScrollButtonsMobile
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** If `true`, the scroll buttons aren't forced hidden on mobile
+
+### centered
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** If `true`, the tabs are centered. This prop is intended for large views
+
+### selectionFollowsFocus
+
+- **Type:** `boolean`
+- **Description:** If `true`, the selected tab changes on focus. Otherwise it only changes on activation
+
+### visibleScrollbar
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** If `true`, the scrollbar is visible. Useful when displaying a long vertical list of tabs
+
+### slots
+
+- **Type:** `{ root?: React.ElementType, scroller?: React.ElementType, list?: React.ElementType, scrollbar?: React.ElementType, indicator?: React.ElementType, scrollButtons?: React.ElementType, startScrollButtonIcon?: React.ElementType, endScrollButtonIcon?: React.ElementType }`
+- **Description:** The components used for each slot inside the tabs
+
+### slotProps
+
+- **Type:** `{ root?: object, scroller?: object, list?: object, scrollbar?: object, indicator?: object, scrollButtons?: object, startScrollButtonIcon?: object, endScrollButtonIcon?: object }`
+- **Description:** The props used for each slot inside the tabs
+
+### sx
+
+- **Type:** `SxProps<Theme>`
+- **Description:** System prop for defining CSS styles
+
+## Accessibility
+
+- Use `aria-label` or `aria-labelledby` on the Tabs component
+- Each Tab panel should have `role="tabpanel"` and be linked via `aria-labelledby` to its Tab
+- Tab navigation with arrow keys is automatically handled
+- Home/End keys jump to first/last tab
+- When a Tab is focused, pressing Space or Enter activates it
+
+## Integration with React Router
+
+```tsx
+import { Link, useLocation } from 'react-router-dom';
+
+function NavTabs() {
+  const location = useLocation();
+
+  return (
+    <Tabs value={location.pathname}>
+      <Tab label="Page One" value="/page1" component={Link} to="/page1" />
+      <Tab label="Page Two" value="/page2" component={Link} to="/page2" />
+      <Tab label="Page Three" value="/page3" component={Link} to="/page3" />
+    </Tabs>
+  );
+}
+```
+
+## API Reference
+
+- [Tabs API](https://mui.com/material-ui/api/tabs/)
+- [Tab API](https://mui.com/material-ui/api/tab/)

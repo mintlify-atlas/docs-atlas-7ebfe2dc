@@ -1,0 +1,455 @@
+---
+title: CSS Theme Variables
+description: Use CSS variables for dynamic theming in Material UI with cssVariables option
+---
+
+# CSS Theme Variables
+
+Material UI supports CSS variables (custom properties) for dynamic theming and improved runtime performance.
+
+## Enabling CSS Variables
+
+Enable CSS variables in your theme:
+
+```tsx
+import { createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  cssVariables: true,
+});
+```
+
+This generates CSS variables for all theme tokens.
+
+## Generated CSS Variables
+
+With CSS variables enabled, Material UI generates variables like:
+
+```css
+:root {
+  /* Palette */
+  --mui-palette-primary-main: #1976d2;
+  --mui-palette-primary-light: #42a5f5;
+  --mui-palette-primary-dark: #1565c0;
+  --mui-palette-primary-contrastText: #fff;
+  
+  /* Spacing */
+  --mui-spacing: 8px;
+  
+  /* Typography */
+  --mui-typography-fontFamily: "Roboto", "Helvetica", "Arial", sans-serif;
+  --mui-typography-fontSize: 14px;
+  
+  /* Shape */
+  --mui-shape-borderRadius: 4px;
+  
+  /* Shadows */
+  --mui-shadows-1: 0px 2px 1px -1px rgba(0,0,0,0.2)...
+}
+```
+
+## Custom CSS Variable Prefix
+
+Change the default `mui` prefix:
+
+```tsx
+const theme = createTheme({
+  cssVariables: {
+    cssVarPrefix: 'my-app',
+  },
+});
+
+// Generates:
+// --my-app-palette-primary-main: #1976d2;
+// --my-app-spacing: 8px;
+```
+
+Or remove the prefix entirely:
+
+```tsx
+const theme = createTheme({
+  cssVariables: {
+    cssVarPrefix: '',
+  },
+});
+
+// Generates:
+// --palette-primary-main: #1976d2;
+// --spacing: 8px;
+```
+
+## Color Scheme Selector
+
+Control how color schemes are applied:
+
+### Media Query (System Preference)
+
+```tsx
+const theme = createTheme({
+  cssVariables: true,
+  colorSchemes: {
+    light: true,
+    dark: true,
+  },
+  colorSchemeSelector: 'media',
+});
+
+// Generates:
+// @media (prefers-color-scheme: light) {
+//   :root { --mui-palette-primary-main: #1976d2; }
+// }
+// @media (prefers-color-scheme: dark) {
+//   :root { --mui-palette-primary-main: #90caf9; }
+// }
+```
+
+### Class Selector
+
+```tsx
+const theme = createTheme({
+  cssVariables: true,
+  colorSchemes: {
+    light: true,
+    dark: true,
+  },
+  colorSchemeSelector: 'class',
+});
+
+// Generates:
+// .light { --mui-palette-primary-main: #1976d2; }
+// .dark { --mui-palette-primary-main: #90caf9; }
+
+// Usage:
+<html className="dark">
+  {/* Dark mode active */}
+</html>
+```
+
+### Data Attribute Selector
+
+```tsx
+const theme = createTheme({
+  cssVariables: true,
+  colorSchemes: {
+    light: true,
+    dark: true,
+  },
+  colorSchemeSelector: 'data-mui-color-scheme',
+});
+
+// Generates:
+// [data-mui-color-scheme="light"] { --mui-palette-primary-main: #1976d2; }
+// [data-mui-color-scheme="dark"] { --mui-palette-primary-main: #90caf9; }
+
+// Usage:
+<html data-mui-color-scheme="dark">
+  {/* Dark mode active */}
+</html>
+```
+
+## Root Selector
+
+Customize where CSS variables are applied:
+
+```tsx
+const theme = createTheme({
+  cssVariables: {
+    rootSelector: '#app',
+  },
+});
+
+// Generates:
+// #app { --mui-palette-primary-main: #1976d2; }
+```
+
+## Accessing CSS Variables
+
+Use the `theme.vars` object:
+
+```tsx
+import { styled } from '@mui/material/styles';
+
+const MyComponent = styled('div')(({ theme }) => ({
+  color: theme.vars.palette.primary.main,
+  // Outputs: var(--mui-palette-primary-main)
+  
+  padding: theme.spacing(2),
+  // Outputs: calc(2 * var(--mui-spacing))
+  
+  borderRadius: theme.vars.shape.borderRadius,
+  // Outputs: var(--mui-shape-borderRadius)
+}));
+```
+
+## CSS Variable Fallbacks
+
+CSS variables include fallback values:
+
+```tsx
+const theme = createTheme({
+  cssVariables: true,
+  palette: {
+    primary: { main: '#1976d2' },
+  },
+});
+
+theme.vars.palette.primary.main;
+// 'var(--mui-palette-primary-main, #1976d2)'
+```
+
+## Skip Generating Variables
+
+Exclude specific paths from CSS variable generation:
+
+```tsx
+const theme = createTheme({
+  cssVariables: {
+    shouldSkipGeneratingVar: (keys, value) => {
+      // Skip functions
+      if (typeof value === 'function') {
+        return true;
+      }
+      // Skip specific keys
+      if (keys[0] === 'mixins') {
+        return true;
+      }
+      return false;
+    },
+  },
+});
+```
+
+Default skip logic:
+
+```tsx
+// These are skipped by default:
+- Functions (getContrastText, augmentColor, etc.)
+- Mixins
+- Breakpoint helpers (up, down, between, etc.)
+- Transition functions
+- Typography.pxToRem
+```
+
+## Using CSS Variables in Components
+
+### sx Prop
+
+```tsx
+import Box from '@mui/material/Box';
+
+<Box
+  sx={{
+    color: 'var(--mui-palette-primary-main)',
+    bgcolor: 'var(--mui-palette-background-paper)',
+  }}
+>
+  Content
+</Box>
+```
+
+### styled API
+
+```tsx
+import { styled } from '@mui/material/styles';
+
+const Card = styled('div')(({ theme }) => ({
+  backgroundColor: theme.vars.palette.background.paper,
+  color: theme.vars.palette.text.primary,
+  padding: theme.spacing(2),
+  borderRadius: theme.vars.shape.borderRadius,
+}));
+```
+
+## Color Channels
+
+CSS variables include color channels for alpha manipulation:
+
+```tsx
+const theme = createTheme({
+  cssVariables: true,
+});
+
+// Generates:
+// --mui-palette-primary-mainChannel: 25 118 210;
+
+// Usage with alpha:
+theme.alpha(theme.vars.palette.primary.main, 0.5);
+// 'rgba(var(--mui-palette-primary-mainChannel) / 0.5)'
+```
+
+## Dynamic Theming
+
+Change theme at runtime:
+
+```tsx
+import { useColorScheme } from '@mui/material/styles';
+
+function ThemeSwitcher() {
+  const { mode, setMode } = useColorScheme();
+  
+  return (
+    <select
+      value={mode}
+      onChange={(e) => setMode(e.target.value)}
+    >
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+      <option value="system">System</option>
+    </select>
+  );
+}
+```
+
+## Multiple Color Schemes
+
+Define custom color schemes:
+
+```tsx
+const theme = createTheme({
+  cssVariables: true,
+  colorSchemes: {
+    light: {
+      palette: {
+        primary: { main: '#1976d2' },
+      },
+    },
+    dark: {
+      palette: {
+        primary: { main: '#90caf9' },
+      },
+    },
+    highContrast: {
+      palette: {
+        mode: 'dark',
+        primary: { main: '#ffffff' },
+        background: { default: '#000000' },
+      },
+    },
+  },
+});
+```
+
+## Server-Side Rendering
+
+CSS variables work seamlessly with SSR:
+
+```tsx
+import { createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  cssVariables: true,
+});
+
+// No flash of unstyled content
+// CSS variables are defined at build time
+```
+
+## Disable CSS Color Scheme
+
+Prevent automatic `color-scheme` CSS property:
+
+```tsx
+const theme = createTheme({
+  cssVariables: {
+    disableCssColorScheme: true,
+  },
+});
+
+// Won't generate:
+// color-scheme: light;
+// color-scheme: dark;
+```
+
+## Native Color Support
+
+Use native CSS color functions:
+
+```tsx
+const theme = createTheme({
+  cssVariables: {
+    nativeColor: true,
+  },
+});
+
+// Uses color-mix() for variants
+// theme.palette.primary.light = color-mix(in srgb, #1976d2, #fff 20%)
+```
+
+## Performance Benefits
+
+CSS variables offer:
+
+1. **Faster theme switching**: No component re-renders
+2. **Smaller bundle size**: Less runtime theme logic
+3. **Better SSR**: No hydration mismatches
+4. **Native browser support**: Leverage CSS engine
+
+## Comparison: CSS Variables vs Runtime Theme
+
+**Without CSS Variables:**
+```tsx
+const theme = createTheme({
+  cssVariables: false,
+  palette: { primary: { main: '#1976d2' } },
+});
+
+// Component style:
+color: theme.palette.primary.main; // '#1976d2'
+```
+
+**With CSS Variables:**
+```tsx
+const theme = createTheme({
+  cssVariables: true,
+  palette: { primary: { main: '#1976d2' } },
+});
+
+// Component style:
+color: theme.vars.palette.primary.main;
+// 'var(--mui-palette-primary-main, #1976d2)'
+```
+
+## Migrating to CSS Variables
+
+Update theme access:
+
+```tsx
+// Before
+const MyComponent = styled('div')(({ theme }) => ({
+  color: theme.palette.primary.main,
+}));
+
+// After
+const MyComponent = styled('div')(({ theme }) => ({
+  color: theme.vars.palette.primary.main,
+}));
+```
+
+Or use helper:
+
+```tsx
+import { alpha } from '@mui/material/styles';
+
+const MyComponent = styled('div')(({ theme }) => ({
+  backgroundColor: alpha(theme.vars.palette.primary.main, 0.1),
+}));
+```
+
+## Browser Support
+
+CSS variables are supported in all modern browsers:
+
+- Chrome 49+
+- Firefox 31+
+- Safari 9.1+
+- Edge 15+
+
+No IE11 support.
+
+## Source Reference
+
+The CSS variables implementation can be found at:
+- `packages/mui-material/src/styles/createThemeWithVars.js:127`
+- `packages/mui-material/src/styles/createTheme.ts:30`
+- CSS variable generation: `packages/mui-system/src/cssVars/prepareCssVars.ts`
+- `createGetCssVar`: `packages/mui-material/src/styles/createThemeWithVars.js:86`

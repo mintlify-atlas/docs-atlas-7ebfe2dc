@@ -1,0 +1,315 @@
+---
+title: Display
+description: Display and visibility utilities in MUI System
+---
+
+# Display
+
+Utilities for controlling the display box type of an element.
+
+## Import
+
+```javascript
+import { display } from '@mui/system';
+```
+
+## API
+
+From `display/display.js:34`:
+
+```javascript
+export default compose(displayPrint, displayRaw, overflow, textOverflow, visibility, whiteSpace);
+```
+
+## Display Property
+
+Control the display type:
+
+```jsx
+<Box display="block">Block</Box>
+<Box display="inline">Inline</Box>
+<Box display="inline-block">Inline Block</Box>
+<Box display="flex">Flex</Box>
+<Box display="grid">Grid</Box>
+<Box display="none">Hidden</Box>
+```
+
+From `display.js:14-16`:
+
+```javascript
+export const displayRaw = style({
+  prop: 'display',
+});
+```
+
+## Responsive Display
+
+Show/hide elements at different breakpoints:
+
+```jsx
+{/* Hide on mobile, show on tablet and up */}
+<Box display={{ xs: 'none', sm: 'block' }}>
+  Hidden on mobile
+</Box>
+
+{/* Show only on mobile */}
+<Box display={{ xs: 'block', sm: 'none' }}>
+  Mobile only
+</Box>
+
+{/* Flex on desktop, block on mobile */}
+<Box display={{ xs: 'block', md: 'flex' }}>
+  Responsive display
+</Box>
+```
+
+## Print Display
+
+Control display for print media:
+
+```jsx
+<Box displayPrint="none">
+  Hidden when printing
+</Box>
+
+<Box displayPrint="block">
+  Visible when printing
+</Box>
+```
+
+From `display.js:4-12`:
+
+```javascript
+export const displayPrint = style({
+  prop: 'displayPrint',
+  cssProperty: false,
+  transform: (value) => ({
+    '@media print': {
+      display: value,
+    },
+  }),
+});
+```
+
+## Overflow
+
+Control content overflow:
+
+```jsx
+<Box overflow="auto">Auto scroll</Box>
+<Box overflow="hidden">Clip overflow</Box>
+<Box overflow="scroll">Always scroll</Box>
+<Box overflow="visible">Visible overflow</Box>
+```
+
+From `display.js:18-20`:
+
+```javascript
+export const overflow = style({
+  prop: 'overflow',
+});
+```
+
+### Directional Overflow
+
+```jsx
+<Box sx={{ overflowX: 'auto', overflowY: 'hidden' }}>
+  Horizontal scroll only
+</Box>
+```
+
+## Text Overflow
+
+Control text overflow behavior:
+
+```jsx
+<Box
+  textOverflow="ellipsis"
+  overflow="hidden"
+  whiteSpace="nowrap"
+  width={200}
+>
+  This text will be truncated with ellipsis...
+</Box>
+
+<Box textOverflow="clip" overflow="hidden" width={200}>
+  This text will be clipped
+</Box>
+```
+
+From `display.js:22-24`:
+
+```javascript
+export const textOverflow = style({
+  prop: 'textOverflow',
+});
+```
+
+## Visibility
+
+Control element visibility:
+
+```jsx
+<Box visibility="visible">Visible</Box>
+<Box visibility="hidden">Hidden but takes space</Box>
+<Box visibility="collapse">Collapsed (for table elements)</Box>
+```
+
+From `display.js:26-28`:
+
+```javascript
+export const visibility = style({
+  prop: 'visibility',
+});
+```
+
+## White Space
+
+Control text wrapping:
+
+```jsx
+<Box whiteSpace="normal">Normal wrapping</Box>
+<Box whiteSpace="nowrap">No wrapping</Box>
+<Box whiteSpace="pre">Preserve whitespace</Box>
+<Box whiteSpace="pre-wrap">Preserve whitespace with wrapping</Box>
+<Box whiteSpace="pre-line">Collapse whitespace, preserve line breaks</Box>
+```
+
+From `display.js:30-32`:
+
+```javascript
+export const whiteSpace = style({
+  prop: 'whiteSpace',
+});
+```
+
+## Common Patterns
+
+### Truncate Text
+
+```jsx
+<Box
+  overflow="hidden"
+  textOverflow="ellipsis"
+  whiteSpace="nowrap"
+  maxWidth={300}
+>
+  This is a long text that will be truncated with ellipsis when it exceeds the maximum width
+</Box>
+```
+
+### Multi-line Truncate
+
+```jsx
+<Box
+  sx={{
+    display: '-webkit-box',
+    overflow: 'hidden',
+    WebkitBoxOrient: 'vertical',
+    WebkitLineClamp: 3,
+  }}
+>
+  This text will be truncated after 3 lines with an ellipsis. This is useful for card descriptions
+  and preview text where you want to show a limited amount of content.
+</Box>
+```
+
+### Scrollable Container
+
+```jsx
+<Box
+  overflow="auto"
+  maxHeight={400}
+  sx={{
+    '&::-webkit-scrollbar': {
+      width: 8,
+    },
+    '&::-webkit-scrollbar-thumb': {
+      backgroundColor: 'divider',
+      borderRadius: 1,
+    },
+  }}
+>
+  Scrollable content...
+</Box>
+```
+
+### Hide/Show on Print
+
+```jsx
+{/* Hide on screen, show when printing */}
+<Box display="none" displayPrint="block">
+  This content only appears when printing
+</Box>
+
+{/* Show on screen, hide when printing */}
+<Box display="block" displayPrint="none">
+  This content is hidden when printing
+</Box>
+```
+
+### Responsive Flex/Grid
+
+```jsx
+<Box
+  display={{ xs: 'block', sm: 'flex', md: 'grid' }}
+  sx={{
+    gap: 2,
+    gridTemplateColumns: { md: 'repeat(3, 1fr)' },
+  }}
+>
+  <Box>Item 1</Box>
+  <Box>Item 2</Box>
+  <Box>Item 3</Box>
+</Box>
+```
+
+## With sx Prop
+
+```jsx
+<Box
+  sx={{
+    display: 'flex',
+    overflow: 'hidden',
+    '&:hover': {
+      overflow: 'auto',
+    },
+  }}
+>
+  Show scrollbar on hover
+</Box>
+```
+
+## TypeScript
+
+```tsx
+import { Box } from '@mui/system';
+
+type DisplayValue = 'block' | 'inline' | 'flex' | 'grid' | 'none';
+
+interface DisplayBoxProps {
+  display?: DisplayValue | { xs?: DisplayValue; sm?: DisplayValue; md?: DisplayValue };
+  children: React.ReactNode;
+}
+
+function DisplayBox({ display, children }: DisplayBoxProps) {
+  return <Box display={display}>{children}</Box>;
+}
+```
+
+## Available Properties
+
+| Prop | CSS Property | Values |
+|------|--------------|--------|
+| `display` | `display` | `block`, `inline`, `inline-block`, `flex`, `grid`, `none`, etc. |
+| `displayPrint` | `display` (in @media print) | Same as `display` |
+| `overflow` | `overflow` | `auto`, `hidden`, `scroll`, `visible` |
+| `textOverflow` | `text-overflow` | `ellipsis`, `clip` |
+| `visibility` | `visibility` | `visible`, `hidden`, `collapse` |
+| `whiteSpace` | `white-space` | `normal`, `nowrap`, `pre`, `pre-wrap`, `pre-line` |
+
+## Related
+
+- [Flexbox](/system/flexbox) - Flex display utilities
+- [Grid](/system/grid) - Grid display utilities
+- [Box Component](/system/box) - Using display with Box

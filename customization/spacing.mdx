@@ -1,0 +1,334 @@
+---
+title: Spacing Utilities
+description: Use Material UI spacing utilities for consistent margin and padding
+---
+
+# Spacing Utilities
+
+Material UI provides a spacing system for consistent margin and padding throughout your application.
+
+## Default Spacing
+
+The default spacing unit is **8px**:
+
+```tsx
+const theme = createTheme();
+
+theme.spacing(0);   // '0px'
+theme.spacing(0.5); // '4px'
+theme.spacing(1);   // '8px'
+theme.spacing(2);   // '16px'
+theme.spacing(3);   // '24px'
+theme.spacing(4);   // '32px'
+theme.spacing(5);   // '40px'
+```
+
+## Custom Spacing
+
+### Number-based Spacing
+
+Set a custom base unit:
+
+```tsx
+const theme = createTheme({
+  spacing: 4, // 4px base unit
+});
+
+theme.spacing(1); // '4px'
+theme.spacing(2); // '8px'
+theme.spacing(3); // '12px'
+```
+
+### Array-based Spacing
+
+Define an array of spacing values:
+
+```tsx
+const theme = createTheme({
+  spacing: [0, 4, 8, 16, 32, 64],
+});
+
+theme.spacing(0); // '0'
+theme.spacing(1); // '4px'
+theme.spacing(2); // '8px'
+theme.spacing(3); // '16px'
+theme.spacing(4); // '32px'
+theme.spacing(5); // '64px'
+```
+
+### Function-based Spacing
+
+Use a custom function:
+
+```tsx
+const theme = createTheme({
+  spacing: (factor) => `${0.25 * factor}rem`, // 0.25rem = 4px
+});
+
+theme.spacing(1); // '0.25rem' (4px)
+theme.spacing(2); // '0.5rem' (8px)
+theme.spacing(4); // '1rem' (16px)
+```
+
+### String-based Spacing
+
+Use a string template:
+
+```tsx
+const theme = createTheme({
+  spacing: '0.5rem',
+});
+
+theme.spacing(1); // '0.5rem'
+theme.spacing(2); // 'calc(2 * 0.5rem)'
+theme.spacing(3); // 'calc(3 * 0.5rem)'
+```
+
+## Spacing in sx Prop
+
+Use spacing values directly in the `sx` prop:
+
+```tsx
+import Box from '@mui/material/Box';
+
+function MyComponent() {
+  return (
+    <Box sx={{ m: 2 }}>        {/* margin: 16px */}
+    <Box sx={{ p: 3 }}>        {/* padding: 24px */}
+    <Box sx={{ mt: 1 }}>       {/* margin-top: 8px */}
+    <Box sx={{ px: 2 }}>       {/* padding-left & padding-right: 16px */}
+    <Box sx={{ py: 1.5 }}>     {/* padding-top & padding-bottom: 12px */}
+  );
+}
+```
+
+## Spacing Properties
+
+### Margin Properties
+
+- `m` - margin (all sides)
+- `mt` - margin-top
+- `mr` - margin-right
+- `mb` - margin-bottom
+- `ml` - margin-left
+- `mx` - margin-left & margin-right
+- `my` - margin-top & margin-bottom
+- `margin` - full CSS property name
+- `marginTop`, `marginRight`, `marginBottom`, `marginLeft`
+- `marginX`, `marginY`
+- `marginInline`, `marginInlineStart`, `marginInlineEnd`
+- `marginBlock`, `marginBlockStart`, `marginBlockEnd`
+
+### Padding Properties
+
+- `p` - padding (all sides)
+- `pt` - padding-top
+- `pr` - padding-right
+- `pb` - padding-bottom
+- `pl` - padding-left
+- `px` - padding-left & padding-right
+- `py` - padding-top & padding-bottom
+- `padding` - full CSS property name
+- `paddingTop`, `paddingRight`, `paddingBottom`, `paddingLeft`
+- `paddingX`, `paddingY`
+- `paddingInline`, `paddingInlineStart`, `paddingInlineEnd`
+- `paddingBlock`, `paddingBlockStart`, `paddingBlockEnd`
+
+## Negative Spacing
+
+Use negative values for negative margins:
+
+```tsx
+<Box sx={{ mt: -2 }}>  {/* margin-top: -16px */}
+<Box sx={{ ml: -1 }}>  {/* margin-left: -8px */}
+```
+
+With arrays:
+
+```tsx
+const theme = createTheme({
+  spacing: [0, 4, 8, 16, 32],
+});
+
+theme.spacing(-2); // '-8px'
+```
+
+With string-based spacing:
+
+```tsx
+const theme = createTheme({
+  spacing: '0.5rem',
+});
+
+theme.spacing(-2); // 'calc(-1 * 2 * 0.5rem)'
+```
+
+## Responsive Spacing
+
+Use responsive values with breakpoints:
+
+```tsx
+<Box
+  sx={{
+    m: { xs: 1, sm: 2, md: 3 },
+    p: { xs: 2, md: 4 },
+  }}
+>
+  Responsive spacing
+</Box>
+```
+
+## Using Spacing in styled()
+
+```tsx
+import { styled } from '@mui/material/styles';
+
+const MyComponent = styled('div')(({ theme }) => ({
+  margin: theme.spacing(2),
+  padding: theme.spacing(3),
+  marginTop: theme.spacing(1),
+  paddingLeft: theme.spacing(4),
+}));
+```
+
+## Combining Multiple Spacing Values
+
+The `spacing` function accepts multiple arguments:
+
+```tsx
+const theme = createTheme();
+
+// Single value for all sides
+theme.spacing(2); // '16px'
+
+// Two values: vertical, horizontal
+theme.spacing(2, 3); // '16px 24px'
+
+// Four values: top, right, bottom, left
+theme.spacing(1, 2, 3, 4); // '8px 16px 24px 32px'
+```
+
+Usage:
+
+```tsx
+<Box
+  sx={{
+    margin: (theme) => theme.spacing(2, 3),
+    padding: (theme) => theme.spacing(1, 2, 3, 4),
+  }}
+/>
+```
+
+## CSS Variables for Spacing
+
+With CSS variables enabled:
+
+```tsx
+const theme = createTheme({
+  cssVariables: true,
+  spacing: 8,
+});
+
+// Generates CSS variable:
+// --mui-spacing: 8px
+
+theme.spacing(2); // 'calc(2 * var(--mui-spacing))'
+```
+
+## String Values
+
+Pass string values directly:
+
+```tsx
+<Box sx={{ m: '1rem' }}>       {/* margin: 1rem */}
+<Box sx={{ p: '20px' }}>       {/* padding: 20px */}
+<Box sx={{ mt: 'auto' }}>      {/* margin-top: auto */}
+```
+
+## Zero Spacing
+
+Special handling for zero with CSS variables:
+
+```tsx
+const theme = createTheme({
+  cssVariables: true,
+  spacing: 'var(--custom-spacing)',
+});
+
+theme.spacing(0); // 0 (not 'calc(0 * var(--custom-spacing))')
+theme.spacing(1); // 'var(--custom-spacing)'
+theme.spacing(2); // 'calc(2 * var(--custom-spacing))'
+```
+
+## Spacing Scale Recommendation
+
+Material Design recommends an 8px spacing scale:
+
+```tsx
+// Recommended scale (8dp grid)
+const spacingScale = {
+  0: '0',
+  0.5: '4px',
+  1: '8px',
+  1.5: '12px',
+  2: '16px',
+  3: '24px',
+  4: '32px',
+  5: '40px',
+  6: '48px',
+  8: '64px',
+  10: '80px',
+  12: '96px',
+};
+```
+
+## Common Patterns
+
+### Card Spacing
+
+```tsx
+<Card sx={{ p: 2 }}>
+  <CardContent sx={{ p: 0 }}>
+    <Typography sx={{ mb: 1.5 }}>
+      Title
+    </Typography>
+    <Typography sx={{ mb: 2 }}>
+      Description
+    </Typography>
+  </CardContent>
+</Card>
+```
+
+### Stack Spacing
+
+```tsx
+import Stack from '@mui/material/Stack';
+
+<Stack spacing={2}>
+  <Item>Item 1</Item>
+  <Item>Item 2</Item>
+  <Item>Item 3</Item>
+</Stack>
+```
+
+### Grid Spacing
+
+```tsx
+import Grid from '@mui/material/Grid';
+
+<Grid container spacing={2}>
+  <Grid item xs={6}>
+    Item 1
+  </Grid>
+  <Grid item xs={6}>
+    Item 2
+  </Grid>
+</Grid>
+```
+
+## Source Reference
+
+The spacing implementation can be found at:
+- `packages/mui-system/src/spacing/spacing.js:185`
+- Spacing keys: `packages/mui-system/src/spacing/spacing.js:47`
+- `createUnarySpacing`: `packages/mui-system/src/spacing/spacing.js:95`

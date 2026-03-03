@@ -1,0 +1,292 @@
+---
+title: Chip
+description: Chips are compact elements that represent an input, attribute, or action.
+---
+
+## Introduction
+
+Chips allow users to enter information, make selections, filter content, or trigger actions. While included here as a standalone component, the most common use will be in some form of input, so some of the behavior demonstrated here is not shown in context.
+
+## Basic Usage
+
+```tsx
+import Chip from '@mui/material/Chip';
+
+function Demo() {
+  return <Chip label="Chip Filled" />;
+}
+```
+
+## Chip Variants
+
+The Chip component supports two variants: `filled` (default) and `outlined`.
+
+```tsx
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+
+function ChipVariants() {
+  return (
+    <Stack direction="row" spacing={1}>
+      <Chip label="Filled" />
+      <Chip label="Outlined" variant="outlined" />
+    </Stack>
+  );
+}
+```
+
+## Chip Actions
+
+You can use the following actions with chips:
+
+- Chips with the `onClick` prop defined become clickable
+- Chips with the `onDelete` prop defined will display a delete icon
+
+```tsx
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+
+function ChipActions() {
+  const handleClick = () => {
+    console.log('Chip clicked');
+  };
+
+  const handleDelete = () => {
+    console.log('Delete icon clicked');
+  };
+
+  return (
+    <Stack direction="row" spacing={1}>
+      <Chip label="Clickable" onClick={handleClick} />
+      <Chip label="Deletable" onDelete={handleDelete} />
+      <Chip label="Clickable & Deletable" onClick={handleClick} onDelete={handleDelete} />
+    </Stack>
+  );
+}
+```
+
+## Clickable Chips
+
+Chips can be made explicitly clickable using the `clickable` prop. This affects the styling even if no `onClick` handler is provided.
+
+```tsx
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+
+function ClickableChips() {
+  return (
+    <Stack direction="row" spacing={1}>
+      <Chip label="Clickable" clickable />
+      <Chip label="Clickable" variant="outlined" clickable />
+    </Stack>
+  );
+}
+```
+
+## Clickable Link
+
+You can also use chips as links by providing a `component` prop.
+
+```tsx
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+
+function ChipLink() {
+  return (
+    <Stack direction="row" spacing={1}>
+      <Chip label="Clickable Link" component="a" href="#chip" clickable />
+      <Chip 
+        label="Clickable Link" 
+        component="a" 
+        href="#chip" 
+        variant="outlined" 
+        clickable 
+      />
+    </Stack>
+  );
+}
+```
+
+## Custom Delete Icon
+
+You can customize the delete icon using the `deleteIcon` prop.
+
+```tsx
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import DoneIcon from '@mui/icons-material/Done';
+
+function CustomDeleteIcon() {
+  const handleDelete = () => {
+    console.log('Delete clicked');
+  };
+
+  return (
+    <Stack direction="row" spacing={1}>
+      <Chip
+        label="Custom delete icon"
+        onDelete={handleDelete}
+        deleteIcon={<DoneIcon />}
+      />
+    </Stack>
+  );
+}
+```
+
+## Chip Adornments
+
+You can add icons or avatars to the beginning of the chip using the `icon` and `avatar` props.
+
+```tsx
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+import Avatar from '@mui/material/Avatar';
+import FaceIcon from '@mui/icons-material/Face';
+
+function ChipAdornments() {
+  return (
+    <Stack direction="row" spacing={1}>
+      <Chip icon={<FaceIcon />} label="With Icon" />
+      <Chip
+        avatar={<Avatar>M</Avatar>}
+        label="With Avatar"
+      />
+      <Chip
+        avatar={<Avatar alt="User" src="/static/images/avatar/1.jpg" />}
+        label="With Image"
+      />
+    </Stack>
+  );
+}
+```
+
+## Color
+
+The `color` prop supports all theme palette colors.
+
+```tsx
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+
+function ColorChips() {
+  return (
+    <Stack direction="row" spacing={1}>
+      <Chip label="Default" />
+      <Chip label="Primary" color="primary" />
+      <Chip label="Secondary" color="secondary" />
+      <Chip label="Success" color="success" />
+      <Chip label="Error" color="error" />
+      <Chip label="Info" color="info" />
+      <Chip label="Warning" color="warning" />
+    </Stack>
+  );
+}
+```
+
+## Sizes
+
+The Chip component supports two sizes: `medium` (default) and `small`.
+
+```tsx
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+
+function ChipSizes() {
+  return (
+    <Stack direction="row" spacing={1}>
+      <Chip label="Small" size="small" />
+      <Chip label="Medium" />
+    </Stack>
+  );
+}
+```
+
+## Chip Array
+
+An example of rendering multiple chips from an array of values, with the ability to delete chips.
+
+```tsx
+import { useState } from 'react';
+import Chip from '@mui/material/Chip';
+import Stack from '@mui/material/Stack';
+
+interface ChipData {
+  key: number;
+  label: string;
+}
+
+function ChipArray() {
+  const [chipData, setChipData] = useState<ChipData[]>([
+    { key: 0, label: 'Angular' },
+    { key: 1, label: 'jQuery' },
+    { key: 2, label: 'Polymer' },
+    { key: 3, label: 'React' },
+    { key: 4, label: 'Vue.js' },
+  ]);
+
+  const handleDelete = (chipToDelete: ChipData) => () => {
+    setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+  };
+
+  return (
+    <Stack direction="row" spacing={1}>
+      {chipData.map((data) => (
+        <Chip
+          key={data.key}
+          label={data.label}
+          onDelete={handleDelete(data)}
+        />
+      ))}
+    </Stack>
+  );
+}
+```
+
+## Props
+
+### Chip Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `avatar` | `element` | - | The Avatar element to display. |
+| `clickable` | `boolean` | - | If true, the chip will appear clickable, even if onClick is not defined. |
+| `color` | `'default'` \| `'primary'` \| `'secondary'` \| `'error'` \| `'info'` \| `'success'` \| `'warning'` | `'default'` | The color of the component. Supports theme palette colors. |
+| `deleteIcon` | `element` | - | Override the default delete icon element. Shown only if onDelete is set. |
+| `disabled` | `boolean` | `false` | If true, the component is disabled. |
+| `icon` | `element` | - | Icon element. |
+| `label` | `node` | - | The content of the component. |
+| `onDelete` | `function` | - | Callback fired when the delete icon is clicked. If set, the delete icon will be shown. |
+| `size` | `'small'` \| `'medium'` | `'medium'` | The size of the component. |
+| `skipFocusWhenDisabled` | `boolean` | `false` | If true, allows the disabled chip to escape focus. |
+| `sx` | `SxProps<Theme>` | - | The system prop for defining CSS overrides and additional styles. |
+| `variant` | `'filled'` \| `'outlined'` | `'filled'` | The variant to use. |
+
+### Slots
+
+| Slot | Type | Default | Description |
+|------|------|---------|-------------|
+| `root` | `ElementType` | `'div'` | The component that renders the root. |
+| `label` | `ElementType` | `'span'` | The component that renders the label. |
+
+## CSS Classes
+
+The following CSS classes are available for customization:
+
+- `.MuiChip-root` - Styles applied to the root element.
+- `.MuiChip-filled` - Styles applied to the root element if `variant="filled"`.
+- `.MuiChip-outlined` - Styles applied to the root element if `variant="outlined"`.
+- `.MuiChip-clickable` - Styles applied to the root element if `clickable={true}`.
+- `.MuiChip-deletable` - Styles applied to the root element if `onDelete` is defined.
+- `.MuiChip-sizeSmall` - Styles applied to the root element if `size="small"`.
+- `.MuiChip-sizeMedium` - Styles applied to the root element if `size="medium"`.
+- `.MuiChip-colorPrimary` - Styles applied to the root element if `color="primary"`.
+- `.MuiChip-colorSecondary` - Styles applied to the root element if `color="secondary"`.
+- `.MuiChip-disabled` - Styles applied to the root element if `disabled={true}`.
+- `.MuiChip-icon` - Styles applied to the icon element.
+- `.MuiChip-label` - Styles applied to the label span element.
+- `.MuiChip-avatar` - Styles applied to the avatar element.
+- `.MuiChip-deleteIcon` - Styles applied to the deleteIcon element.
+
+## Accessibility
+
+If the Chip is deletable or clickable then it is a button in tab order. When focused (e.g., when tabbing) releasing (`keyup` event) `Backspace` or `Delete` will call the `onDelete` handler while releasing `Escape` will blur the Chip.

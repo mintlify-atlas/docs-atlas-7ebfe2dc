@@ -1,0 +1,198 @@
+---
+title: Using styled-components with Material UI
+description: Learn how to use styled-components instead of Emotion as the styling engine for Material UI.
+---
+
+## Overview
+
+By default, Material UI uses [Emotion](https://emotion.sh/) to generate CSS styles. However, you can use [styled-components](https://styled-components.com/) instead by configuring the `@mui/styled-engine-sc` package.
+
+<Warning>
+Styled-components is **not compatible** with server-rendered Material UI projects when using `babel-plugin-styled-components`. The plugin cannot work with the `styled()` utility inside `@mui` packages.
+
+For SSR projects, we **strongly recommend** using Emotion instead. See [this GitHub issue](https://github.com/mui/material-ui/issues/29742) for more details.
+</Warning>
+
+## Installation
+
+First, install the required packages:
+
+```bash
+npm install styled-components @mui/styled-engine-sc
+```
+
+## Bundler Configuration
+
+Material UI's packages have `@mui/styled-engine` as a dependency. You need to configure your bundler to replace it with `@mui/styled-engine-sc`.
+
+### Yarn
+
+Use package resolutions in `package.json`:
+
+```json
+{
+  "dependencies": {
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@next"
+  },
+  "resolutions": {
+    "@mui/styled-engine": "npm:@mui/styled-engine-sc@next"
+  }
+}
+```
+
+### npm
+
+Configure your bundler's alias. For webpack:
+
+```js
+module.exports = {
+  resolve: {
+    alias: {
+      '@mui/styled-engine': '@mui/styled-engine-sc'
+    },
+  },
+};
+```
+
+### TypeScript Configuration
+
+Update `tsconfig.json` to map the styled engine:
+
+```json
+{
+  "compilerOptions": {
+    "paths": {
+      "@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
+    }
+  }
+}
+```
+
+### Next.js
+
+For Next.js projects, update `next.config.js`:
+
+```js
+module.exports = {
+  webpack: (config) => {
+    config.resolve.alias = {
+      ...config.resolve.alias,
+      '@mui/styled-engine': '@mui/styled-engine-sc',
+    };
+    return config;
+  }
+};
+```
+
+## Version Compatibility
+
+The major version of `@mui/styled-engine-sc` must match your `styled-components` version:
+
+- `styled-components` v5 → `@mui/styled-engine-sc` v5
+- `styled-components` v6 → `@mui/styled-engine-sc` v6 (currently in alpha)
+
+## Usage
+
+Once configured, Material UI components will use styled-components under the hood:
+
+```tsx
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+
+const CustomButton = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.primary.contrastText,
+  '&:hover': {
+    backgroundColor: theme.palette.primary.dark,
+  },
+}));
+
+function App() {
+  return <CustomButton>Styled with styled-components</CustomButton>;
+}
+```
+
+## StyledEngineProvider
+
+The `@mui/styled-engine-sc` package provides a `StyledEngineProvider` component to control style injection order:
+
+```tsx
+import { StyledEngineProvider } from '@mui/material/styles';
+
+function App() {
+  return (
+    <StyledEngineProvider injectFirst>
+      {/* Your app components */}
+    </StyledEngineProvider>
+  );
+}
+```
+
+When `injectFirst` is `true`, Material UI styles are injected before other styles, allowing you to easily override them.
+
+## Implementation Details
+
+The styled-components wrapper implements the same interface as the Emotion wrapper, providing:
+
+- `styled()` - The main styling API
+- `GlobalStyles` - Component for global styles
+- `keyframes` - Animation keyframes helper
+- `css` - CSS template literal helper
+- `ThemeContext` - Access to theme context
+
+From `@mui/styled-engine-sc/src/index.js`:
+
+```js
+export { ThemeContext, keyframes, css } from 'styled-components';
+export { default as StyledEngineProvider } from './StyledEngineProvider';
+export { default as GlobalStyles } from './GlobalStyles';
+```
+
+The wrapper handles component display names and prop forwarding automatically:
+
+```js
+function styled(tag, options) {
+  let stylesFactory;
+
+  if (options) {
+    stylesFactory = scStyled(tag).withConfig({
+      displayName: options.label,
+      shouldForwardProp: options.shouldForwardProp,
+    });
+  } else {
+    stylesFactory = scStyled(tag);
+  }
+
+  return stylesFactory;
+}
+```
+
+## Global Styles
+
+Use the `GlobalStyles` component to inject global styles:
+
+```tsx
+import { GlobalStyles } from '@mui/material';
+
+function App() {
+  return (
+    <>
+      <GlobalStyles
+        styles={{
+          body: {
+            backgroundColor: '#f5f5f5',
+            margin: 0,
+          },
+        }}
+      />
+      {/* Your app */}
+    </>
+  );
+}
+```
+
+## Resources
+
+- [styled-components documentation](https://styled-components.com/)
+- [@mui/styled-engine-sc on npm](https://www.npmjs.com/package/@mui/styled-engine-sc)
+- [GitHub issue #29742](https://github.com/mui/material-ui/issues/29742)

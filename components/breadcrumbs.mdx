@@ -1,0 +1,203 @@
+---
+title: Breadcrumbs
+description: Breadcrumbs consist of a list of links that help a user visualize a page's location within the hierarchical structure of a website.
+---
+
+# Breadcrumbs
+
+Breadcrumbs allow users to make selections from a range of values by navigating through the hierarchy.
+
+## Basic Breadcrumbs
+
+A simple breadcrumb navigation using typography and link components.
+
+```tsx
+import * as React from 'react';
+import Breadcrumbs from '@mui/material/Breadcrumbs';
+import Link from '@mui/material/Link';
+import Typography from '@mui/material/Typography';
+
+export default function BasicBreadcrumbs() {
+  return (
+    <Breadcrumbs aria-label="breadcrumb">
+      <Link underline="hover" color="inherit" href="/">
+        Home
+      </Link>
+      <Link underline="hover" color="inherit" href="/getting-started/installation/">
+        Core
+      </Link>
+      <Typography color="text.primary">Breadcrumbs</Typography>
+    </Breadcrumbs>
+  );
+}
+```
+
+## Custom Separator
+
+Use the `separator` prop to change the separator character.
+
+```tsx
+import NavigateNextIcon from '@mui/icons-material/NavigateNext';
+
+<Breadcrumbs separator="›" aria-label="breadcrumb">
+  <Link href="/">Home</Link>
+  <Link href="/core">Core</Link>
+  <Typography>Breadcrumbs</Typography>
+</Breadcrumbs>
+
+// Using an icon
+<Breadcrumbs separator={<NavigateNextIcon fontSize="small" />} aria-label="breadcrumb">
+  <Link href="/">Home</Link>
+  <Link href="/core">Core</Link>
+  <Typography>Breadcrumbs</Typography>
+</Breadcrumbs>
+```
+
+## Breadcrumbs with Icons
+
+Incorporate icons alongside text labels.
+
+```tsx
+import HomeIcon from '@mui/icons-material/Home';
+import WhatshotIcon from '@mui/icons-material/Whatshot';
+import GrainIcon from '@mui/icons-material/Grain';
+
+<Breadcrumbs aria-label="breadcrumb">
+  <Link
+    underline="hover"
+    sx={{ display: 'flex', alignItems: 'center' }}
+    color="inherit"
+    href="/"
+  >
+    <HomeIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+    Home
+  </Link>
+  <Link
+    underline="hover"
+    sx={{ display: 'flex', alignItems: 'center' }}
+    color="inherit"
+    href="/material-ui/getting-started/installation/"
+  >
+    <WhatshotIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+    Core
+  </Link>
+  <Typography sx={{ display: 'flex', alignItems: 'center' }} color="text.primary">
+    <GrainIcon sx={{ mr: 0.5 }} fontSize="inherit" />
+    Breadcrumb
+  </Typography>
+</Breadcrumbs>
+```
+
+## Collapsed Breadcrumbs
+
+When there are many breadcrumb items, use `maxItems` to limit the visible items.
+
+```tsx
+<Breadcrumbs maxItems={2} aria-label="breadcrumb">
+  <Link href="#">Home</Link>
+  <Link href="#">Catalog</Link>
+  <Link href="#">Accessories</Link>
+  <Link href="#">New Collection</Link>
+  <Typography>Belts</Typography>
+</Breadcrumbs>
+```
+
+## Customized Collapsed Items
+
+Control which items appear before and after the ellipsis.
+
+```tsx
+<Breadcrumbs
+  maxItems={4}
+  itemsBeforeCollapse={2}
+  itemsAfterCollapse={2}
+  aria-label="breadcrumb"
+>
+  <Link href="#">Home</Link>
+  <Link href="#">Catalog</Link>
+  <Link href="#">Accessories</Link>
+  <Link href="#">New Collection</Link>
+  <Link href="#">Winter</Link>
+  <Typography>Belts</Typography>
+</Breadcrumbs>
+```
+
+## Props
+
+### separator
+
+- **Type:** `React.ReactNode`
+- **Default:** `'/'`
+- **Description:** Custom separator node between breadcrumb items
+
+### maxItems
+
+- **Type:** `number`
+- **Default:** `8`
+- **Description:** Specifies the maximum number of breadcrumbs to display. When exceeded, only the first `itemsBeforeCollapse` and last `itemsAfterCollapse` are shown with an ellipsis in between
+
+### itemsBeforeCollapse
+
+- **Type:** `number`
+- **Default:** `1`
+- **Description:** If max items is exceeded, the number of items to show before the ellipsis
+
+### itemsAfterCollapse
+
+- **Type:** `number`
+- **Default:** `1`
+- **Description:** If max items is exceeded, the number of items to show after the ellipsis
+
+### expandText
+
+- **Type:** `string`
+- **Default:** `'Show path'`
+- **Description:** Override the default label for the expand button. Used for localization
+
+### component
+
+- **Type:** `React.ElementType`
+- **Default:** `'nav'`
+- **Description:** The component used for the root node
+
+### slots
+
+- **Type:** `{ CollapsedIcon?: React.ElementType }`
+- **Description:** The components used for each slot inside the breadcrumb
+
+### slotProps
+
+- **Type:** `{ collapsedIcon?: object }`
+- **Description:** The props used for each slot inside the breadcrumb
+
+### sx
+
+- **Type:** `SxProps<Theme>`
+- **Description:** System prop for defining CSS styles
+
+## Accessibility
+
+- Use `aria-label` on the `Breadcrumbs` component to describe the type of navigation
+- The last breadcrumb is automatically marked as `aria-current="page"`
+- The expand button is properly labeled for screen readers
+
+## Integration with React Router
+
+```tsx
+import { Link as RouterLink } from 'react-router-dom';
+import Link from '@mui/material/Link';
+
+<Breadcrumbs>
+  <Link component={RouterLink} to="/">
+    Home
+  </Link>
+  <Link component={RouterLink} to="/products">
+    Products
+  </Link>
+  <Typography>Details</Typography>
+</Breadcrumbs>
+```
+
+## API Reference
+
+- [Breadcrumbs API](https://mui.com/material-ui/api/breadcrumbs/)

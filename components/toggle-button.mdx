@@ -1,0 +1,132 @@
+---
+title: Toggle Button
+description: Material UI ToggleButton component allows users to select from a group of options.
+---
+
+A Toggle Button can be used to group related options. To emphasize groups of related Toggle buttons, a group should share a common container.
+
+## Import
+
+```tsx
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+```
+
+## Basic Usage
+
+```tsx
+import * as React from 'react';
+import ToggleButton from '@mui/material/ToggleButton';
+import ToggleButtonGroup from '@mui/material/ToggleButtonGroup';
+
+export default function ColorToggleButton() {
+  const [alignment, setAlignment] = React.useState('web');
+
+  const handleChange = (
+    event: React.MouseEvent<HTMLElement>,
+    newAlignment: string,
+  ) => {
+    setAlignment(newAlignment);
+  };
+
+  return (
+    <ToggleButtonGroup
+      color="primary"
+      value={alignment}
+      exclusive
+      onChange={handleChange}
+      aria-label="Platform"
+    >
+      <ToggleButton value="web">Web</ToggleButton>
+      <ToggleButton value="android">Android</ToggleButton>
+      <ToggleButton value="ios">iOS</ToggleButton>
+    </ToggleButtonGroup>
+  );
+}
+```
+
+## ToggleButton Props
+
+<ParamField path="value" type="NonNullable<unknown>" required>
+  The value to associate with the button when selected in a ToggleButtonGroup.
+</ParamField>
+
+<ParamField path="selected" type="boolean">
+  If `true`, the button is rendered in an active state.
+</ParamField>
+
+<ParamField path="color" type="'standard' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'" default="'standard'">
+  The color of the button when it is in an active state. Supports both default and custom theme colors.
+</ParamField>
+
+<ParamField path="size" type="'small' | 'medium' | 'large'" default="'medium'">
+  The size of the component. The prop defaults to the value inherited from the parent ToggleButtonGroup component.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  If `true`, the component is disabled.
+</ParamField>
+
+<ParamField path="disableFocusRipple" type="boolean" default="false">
+  If `true`, the keyboard focus ripple is disabled.
+</ParamField>
+
+<ParamField path="fullWidth" type="boolean" default="false">
+  If `true`, the button will take up the full width of its container.
+</ParamField>
+
+<ParamField path="onChange" type="(event: React.MouseEvent<HTMLElement>, value: any) => void">
+  Callback fired when the state changes.
+</ParamField>
+
+<ParamField path="onClick" type="(event: React.MouseEvent<HTMLElement>, value: any) => void">
+  Callback fired when the button is clicked.
+</ParamField>
+
+<ParamField path="sx" type="SxProps<Theme>">
+  The system prop that allows defining system overrides as well as additional CSS styles.
+</ParamField>
+
+<ParamField path="children" type="ReactNode">
+  The content of the component.
+</ParamField>
+
+## ToggleButtonGroup Props
+
+<ParamField path="value" type="any | any[]">
+  The currently selected value within the group or an array of selected values when `exclusive` is false.
+</ParamField>
+
+<ParamField path="exclusive" type="boolean">
+  If `true`, only allow one of the child ToggleButton values to be selected.
+</ParamField>
+
+<ParamField path="onChange" type="(event: React.MouseEvent<HTMLElement>, value: any) => void">
+  Callback fired when the value changes.
+</ParamField>
+
+<ParamField path="color" type="'standard' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'" default="'standard'">
+  The color of the button when it is selected. Supports both default and custom theme colors.
+</ParamField>
+
+<ParamField path="size" type="'small' | 'medium' | 'large'" default="'medium'">
+  The size of the component.
+</ParamField>
+
+<ParamField path="orientation" type="'horizontal' | 'vertical'" default="'horizontal'">
+  The component orientation.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  If `true`, the component is disabled.
+</ParamField>
+
+<ParamField path="fullWidth" type="boolean" default="false">
+  If `true`, the button group will take up the full width of its container.
+</ParamField>
+
+## API Reference
+
+- [ToggleButton API](https://next.mui.com/material-ui/api/toggle-button/)
+- [ToggleButtonGroup API](https://next.mui.com/material-ui/api/toggle-button-group/)
+- Inherits [ButtonBase API](https://next.mui.com/material-ui/api/button-base/)

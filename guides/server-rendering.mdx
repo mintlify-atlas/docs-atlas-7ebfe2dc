@@ -1,0 +1,323 @@
+---
+title: Server-Side Rendering (SSR)
+description: Learn how to implement server-side rendering with Material UI using Emotion and Next.js.
+---
+
+## Overview
+
+Server-side rendering (SSR) is the process of rendering React components on the server and sending the fully-rendered HTML to the client. This improves initial page load performance and SEO.
+
+Material UI was designed from the ground up to support server-side rendering. The key requirement is providing the page with the required CSS to prevent the flash of unstyled content (FOUC).
+
+## How It Works
+
+To implement SSR with Material UI:
+
+1. Create a fresh Emotion cache instance on every request
+2. Render the React tree with the server-side collector
+3. Extract the critical CSS
+4. Pass the CSS and HTML to the client
+5. On the client side, inject the CSS again before removing the server-injected CSS
+
+## Express.js Setup
+
+Here's a complete example using Express.js and Emotion.
+
+### Shared Emotion Cache
+
+Create a cache factory that works on both server and client:
+
+```js
+// createEmotionCache.js
+import createCache from '@emotion/cache';
+
+const isBrowser = typeof document !== 'undefined';
+
+export default function createEmotionCache() {
+  let insertionPoint;
+
+  if (isBrowser) {
+    const emotionInsertionPoint = document.querySelector(
+      'meta[name="emotion-insertion-point"]'
+    );
+    insertionPoint = emotionInsertionPoint ?? undefined;
+  }
+
+  return createCache({ key: 'mui-style', insertionPoint });
+}
+```
+
+The insertion point meta tag ensures Material UI styles load first, making them easy to override.
+
+### Theme Configuration
+
+Create a theme shared between client and server:
+
+```js
+// theme.js
+import { createTheme } from '@mui/material/styles';
+import { red } from '@mui/material/colors';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#556cd6',
+    },
+    secondary: {
+      main: '#19857b',
+    },
+    error: {
+      main: red.A400,
+    },
+  },
+});
+
+export default theme;
+```
+
+### Server Implementation
+
+Implement the Express server with SSR:
+
+```js
+// server.js
+import express from 'express';
+import * as React from 'react';
+import * as ReactDOMServer from 'react-dom/server';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+import { CacheProvider } from '@emotion/react';
+import createEmotionServer from '@emotion/server/create-instance';
+import createEmotionCache from './createEmotionCache';
+import App from './App';
+import theme from './theme';
+
+function renderFullPage(html, css) {
+  return `
+    <!DOCTYPE html>
+    <html lang="en">
+      <head>
+        <meta charset="utf-8" />
+        <title>My page</title>
+        <meta name="viewport" content="initial-scale=1, width=device-width" />
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+        <link
+          rel="stylesheet"
+          href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"
+        />
+        <meta name="emotion-insertion-point" content="" />
+        ${css}
+      </head>
+      <body>
+        <script async src="build/bundle.js"></script>
+        <div id="root">${html}</div>
+      </body>
+    </html>
+  `;
+}
+
+function handleRender(req, res) {
+  const cache = createEmotionCache();
+  const { extractCriticalToChunks, constructStyleTagsFromChunks } =
+    createEmotionServer(cache);
+
+  // Render the component to a string
+  const html = ReactDOMServer.renderToString(
+    <CacheProvider value={cache}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <App />
+      </ThemeProvider>
+    </CacheProvider>,
+  );
+
+  // Extract critical CSS from emotion
+  const emotionChunks = extractCriticalToChunks(html);
+  const emotionCss = constructStyleTagsFromChunks(emotionChunks);
+
+  // Send the rendered page back to the client
+  res.send(renderFullPage(html, emotionCss));
+}
+
+const app = express();
+app.use('/build', express.static('build'));
+app.use(handleRender);
+
+const port = 3000;
+app.listen(port, () => {
+  console.log(`Listening on ${port}`);
+});
+```
+
+### Client Hydration
+
+Hydrate the server-rendered content on the client:
+
+```js
+// client.js
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+import { CacheProvider } from '@emotion/react';
+import App from './App';
+import theme from './theme';
+import createEmotionCache from './createEmotionCache';
+
+const cache = createEmotionCache();
+
+function Main() {
+  return (
+    <CacheProvider value={cache}>
+      <ThemeProvider theme={theme}>
+        <CssBaseline />
+        <App />
+      </ThemeProvider>
+    </CacheProvider>
+  );
+}
+
+ReactDOM.hydrateRoot(document.querySelector('#root'), <Main />);
+```
+
+## Next.js Integration
+
+Next.js provides built-in SSR support. Material UI offers the `@mui/material-nextjs` package for seamless integration.
+
+### Installation
+
+```bash
+npm install @mui/material-nextjs
+```
+
+### App Router (Next.js 13+)
+
+For the App Router, use `AppRouterCacheProvider`:
+
+```tsx
+// app/layout.tsx
+import * as React from 'react';
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter';
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import InitColorSchemeScript from '@mui/material/InitColorSchemeScript';
+import theme from '@/theme';
+
+export default function RootLayout(props: { children: React.ReactNode }) {
+  return (
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <InitColorSchemeScript attribute="class" />
+        <AppRouterCacheProvider options={{ enableCssLayer: true }}>
+          <ThemeProvider theme={theme}>
+            <CssBaseline />
+            {props.children}
+          </ThemeProvider>
+        </AppRouterCacheProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+### Theme with CSS Variables
+
+Leverage CSS variables for color schemes:
+
+```tsx
+// theme.ts
+'use client';
+import { createTheme } from '@mui/material/styles';
+import { Roboto } from 'next/font/google';
+
+const roboto = Roboto({
+  weight: ['300', '400', '500', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+});
+
+const theme = createTheme({
+  colorSchemes: { light: true, dark: true },
+  cssVariables: {
+    colorSchemeSelector: 'class',
+  },
+  typography: {
+    fontFamily: roboto.style.fontFamily,
+  },
+});
+
+export default theme;
+```
+
+### Color Scheme Script
+
+The `InitColorSchemeScript` component prevents color scheme flashing:
+
+```tsx
+<InitColorSchemeScript attribute="class" />
+```
+
+This must be placed before any Material UI components to properly initialize the color scheme on the server.
+
+## CSS Layer Support
+
+The `enableCssLayer` option wraps Material UI styles in a CSS layer:
+
+```tsx
+<AppRouterCacheProvider options={{ enableCssLayer: true }}>
+```
+
+This makes it easier to override Material UI styles with your own CSS.
+
+## Key Concepts
+
+### Emotion Cache
+
+The cache configuration must be identical on server and client. The `key` property determines the class name prefix:
+
+```js
+createCache({ key: 'mui-style' }) // Generates classes like .mui-style-xxx
+```
+
+### Critical CSS Extraction
+
+Emotion's `extractCriticalToChunks` identifies which styles are needed for the rendered HTML:
+
+```js
+const emotionChunks = extractCriticalToChunks(html);
+const emotionCss = constructStyleTagsFromChunks(emotionChunks);
+```
+
+### Hydration
+
+Use `ReactDOM.hydrateRoot()` instead of `ReactDOM.createRoot()` to attach event listeners to server-rendered markup:
+
+```js
+ReactDOM.hydrateRoot(document.querySelector('#root'), <Main />);
+```
+
+## Examples
+
+Reference implementations:
+
+- [Express.js SSR example](https://github.com/mui/material-ui/tree/master/examples/material-ui-express-ssr)
+- [Next.js App Router example](https://github.com/mui/material-ui/tree/master/examples/material-ui-nextjs-ts)
+- [Next.js Pages Router example](https://github.com/mui/material-ui/tree/master/examples/material-ui-nextjs-pages-router-ts)
+
+## Troubleshooting
+
+### Styles Not Loading
+
+Ensure the Emotion cache key matches between server and client. Mismatched keys cause hydration errors.
+
+### Flash of Unstyled Content
+
+Verify the CSS is being injected in the server HTML. Check the response HTML for `<style>` tags with the correct cache key.
+
+### Hydration Mismatch
+
+The server and client trees must be identical. Common causes:
+- Different theme configuration
+- Conditional rendering based on browser APIs
+- Missing `suppressHydrationWarning` on `<html>`

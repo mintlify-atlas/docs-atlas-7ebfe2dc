@@ -1,0 +1,579 @@
+---
+title: Typography
+description: Typography style utilities in MUI System
+---
+
+# Typography
+
+Utilities for controlling typography with theme integration.
+
+## Import
+
+```javascript
+import { typography } from '@mui/system';
+```
+
+## API
+
+From `typography/typography.js:46-56`:
+
+```javascript
+const typography = compose(
+  typographyVariant,
+  fontFamily,
+  fontSize,
+  fontStyle,
+  fontWeight,
+  letterSpacing,
+  lineHeight,
+  textAlign,
+  textTransform,
+);
+```
+
+## Font Family
+
+Set the font family with theme integration:
+
+```jsx
+<Box fontFamily="default">Default font family</Box>
+<Box fontFamily="monospace">Monospace font</Box>
+<Box fontFamily="h1.fontFamily">Heading font family</Box>
+```
+
+From `typography.js:4-7`:
+
+```javascript
+export const fontFamily = style({
+  prop: 'fontFamily',
+  themeKey: 'typography',
+});
+```
+
+## Font Size
+
+Control font size with theme values:
+
+```jsx
+<Box fontSize={12}>12px font size</Box>
+<Box fontSize="h1.fontSize">H1 font size</Box>
+<Box fontSize="body1.fontSize">Body1 font size</Box>
+<Box fontSize="1rem">1rem font size</Box>
+```
+
+From `typography.js:9-12`:
+
+```javascript
+export const fontSize = style({
+  prop: 'fontSize',
+  themeKey: 'typography',
+});
+```
+
+## Font Style
+
+Set font style:
+
+```jsx
+<Box fontStyle="normal">Normal text</Box>
+<Box fontStyle="italic">Italic text</Box>
+<Box fontStyle="oblique">Oblique text</Box>
+```
+
+From `typography.js:14-17`:
+
+```javascript
+export const fontStyle = style({
+  prop: 'fontStyle',
+  themeKey: 'typography',
+});
+```
+
+## Font Weight
+
+Control font weight:
+
+```jsx
+<Box fontWeight="light">Light (300)</Box>
+<Box fontWeight="regular">Regular (400)</Box>
+<Box fontWeight="medium">Medium (500)</Box>
+<Box fontWeight="bold">Bold (700)</Box>
+<Box fontWeight={600}>600 weight</Box>
+```
+
+From `typography.js:19-22`:
+
+```javascript
+export const fontWeight = style({
+  prop: 'fontWeight',
+  themeKey: 'typography',
+});
+```
+
+## Letter Spacing
+
+Control letter spacing:
+
+```jsx
+<Box letterSpacing="normal">Normal spacing</Box>
+<Box letterSpacing={0.5}>0.5px spacing</Box>
+<Box letterSpacing="0.1em">0.1em spacing</Box>
+<Box letterSpacing={-0.5}>Tight spacing</Box>
+```
+
+From `typography.js:24-26`:
+
+```javascript
+export const letterSpacing = style({
+  prop: 'letterSpacing',
+});
+```
+
+## Line Height
+
+Control line height:
+
+```jsx
+<Box lineHeight="normal">Normal line height</Box>
+<Box lineHeight={1.5}>1.5 line height</Box>
+<Box lineHeight="1.6">1.6 line height</Box>
+<Box lineHeight="24px">24px line height</Box>
+```
+
+From `typography.js:32-34`:
+
+```javascript
+export const lineHeight = style({
+  prop: 'lineHeight',
+});
+```
+
+## Text Align
+
+Align text:
+
+```jsx
+<Box textAlign="left">Left aligned</Box>
+<Box textAlign="center">Center aligned</Box>
+<Box textAlign="right">Right aligned</Box>
+<Box textAlign="justify">Justified text</Box>
+```
+
+From `typography.js:36-38`:
+
+```javascript
+export const textAlign = style({
+  prop: 'textAlign',
+});
+```
+
+## Text Transform
+
+Transform text:
+
+```jsx
+<Box textTransform="none">No transformation</Box>
+<Box textTransform="capitalize">Capitalize Text</Box>
+<Box textTransform="uppercase">UPPERCASE TEXT</Box>
+<Box textTransform="lowercase">lowercase text</Box>
+```
+
+From `typography.js:28-30`:
+
+```javascript
+export const textTransform = style({
+  prop: 'textTransform',
+});
+```
+
+## Typography Variant
+
+Apply complete typography variant from theme:
+
+```jsx
+<Box typography="h1">Heading 1 style</Box>
+<Box typography="h2">Heading 2 style</Box>
+<Box typography="body1">Body 1 style</Box>
+<Box typography="body2">Body 2 style</Box>
+<Box typography="caption">Caption style</Box>
+<Box typography="button">Button style</Box>
+```
+
+From `typography.js:40-44`:
+
+```javascript
+export const typographyVariant = style({
+  prop: 'typography',
+  cssProperty: false,
+  themeKey: 'typography',
+});
+```
+
+## Theme Typography Structure
+
+```javascript
+import { createTheme } from '@mui/system';
+
+const theme = createTheme({
+  typography: {
+    fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+    fontSize: 14,
+    fontWeightLight: 300,
+    fontWeightRegular: 400,
+    fontWeightMedium: 500,
+    fontWeightBold: 700,
+    h1: {
+      fontFamily: '"Roboto", "Helvetica", "Arial", sans-serif',
+      fontSize: '6rem',
+      fontWeight: 300,
+      lineHeight: 1.167,
+      letterSpacing: '-0.01562em',
+    },
+    h2: {
+      fontSize: '3.75rem',
+      fontWeight: 300,
+      lineHeight: 1.2,
+    },
+    h3: {
+      fontSize: '3rem',
+      fontWeight: 400,
+      lineHeight: 1.167,
+    },
+    h4: {
+      fontSize: '2.125rem',
+      fontWeight: 400,
+      lineHeight: 1.235,
+    },
+    h5: {
+      fontSize: '1.5rem',
+      fontWeight: 400,
+      lineHeight: 1.334,
+    },
+    h6: {
+      fontSize: '1.25rem',
+      fontWeight: 500,
+      lineHeight: 1.6,
+    },
+    subtitle1: {
+      fontSize: '1rem',
+      fontWeight: 400,
+      lineHeight: 1.75,
+    },
+    subtitle2: {
+      fontSize: '0.875rem',
+      fontWeight: 500,
+      lineHeight: 1.57,
+    },
+    body1: {
+      fontSize: '1rem',
+      fontWeight: 400,
+      lineHeight: 1.5,
+    },
+    body2: {
+      fontSize: '0.875rem',
+      fontWeight: 400,
+      lineHeight: 1.43,
+    },
+    button: {
+      fontSize: '0.875rem',
+      fontWeight: 500,
+      lineHeight: 1.75,
+      textTransform: 'uppercase',
+    },
+    caption: {
+      fontSize: '0.75rem',
+      fontWeight: 400,
+      lineHeight: 1.66,
+    },
+    overline: {
+      fontSize: '0.75rem',
+      fontWeight: 400,
+      lineHeight: 2.66,
+      textTransform: 'uppercase',
+    },
+  },
+});
+```
+
+## Common Patterns
+
+### Heading Styles
+
+```jsx
+<Box component="h1" typography="h1" mb={2}>
+  Main Heading
+</Box>
+
+<Box component="h2" typography="h2" mb={2}>
+  Section Heading
+</Box>
+
+<Box component="h3" typography="h3" mb={1}>
+  Subsection Heading
+</Box>
+```
+
+### Body Text
+
+```jsx
+<Box typography="body1" mb={2}>
+  Primary body text with standard size and line height.
+</Box>
+
+<Box typography="body2" color="text.secondary">
+  Secondary body text, slightly smaller.
+</Box>
+```
+
+### Caption and Label
+
+```jsx
+<Box typography="caption" color="text.secondary">
+  Small caption text
+</Box>
+
+<Box typography="overline" color="text.secondary">
+  Overline text
+</Box>
+```
+
+### Custom Typography
+
+```jsx
+<Box
+  fontSize="2rem"
+  fontWeight="bold"
+  lineHeight={1.2}
+  letterSpacing={-0.5}
+>
+  Custom styled text
+</Box>
+```
+
+### Responsive Font Size
+
+```jsx
+<Box
+  fontSize={{ xs: '1rem', sm: '1.25rem', md: '1.5rem' }}
+  fontWeight={{ xs: 400, md: 500 }}
+>
+  Responsive typography
+</Box>
+```
+
+### Text Alignment
+
+```jsx
+<Box
+  textAlign={{ xs: 'center', md: 'left' }}
+  fontSize="1.5rem"
+>
+  Responsive alignment
+</Box>
+```
+
+### Emphasized Text
+
+```jsx
+<Box component="p" typography="body1">
+  Regular text with{' '}
+  <Box component="span" fontWeight="bold">
+    bold emphasis
+  </Box>{' '}
+  and{' '}
+  <Box component="span" fontStyle="italic">
+    italic text
+  </Box>
+  .
+</Box>
+```
+
+### Quote Block
+
+```jsx
+<Box
+  component="blockquote"
+  fontSize="1.25rem"
+  fontStyle="italic"
+  fontWeight="light"
+  lineHeight={1.6}
+  borderLeft="4px solid"
+  borderColor="primary.main"
+  pl={2}
+  my={3}
+>
+  This is a styled quote
+</Box>
+```
+
+### Code Text
+
+```jsx
+<Box
+  component="code"
+  fontFamily="monospace"
+  fontSize="0.875rem"
+  bgcolor="grey.100"
+  p={0.5}
+  borderRadius={1}
+>
+  const code = true;
+</Box>
+```
+
+### Button Text
+
+```jsx
+<Box
+  component="button"
+  typography="button"
+  px={2}
+  py={1}
+  bgcolor="primary.main"
+  color="primary.contrastText"
+  border="none"
+  borderRadius={1}
+>
+  Button Text
+</Box>
+```
+
+### Card Title and Description
+
+```jsx
+<Box
+  border={1}
+  borderColor="divider"
+  borderRadius={2}
+  p={2}
+>
+  <Box typography="h6" mb={1}>
+    Card Title
+  </Box>
+  <Box typography="body2" color="text.secondary">
+    Card description text
+  </Box>
+</Box>
+```
+
+## Font Weight Scale
+
+```jsx
+<Box fontWeight={100}>Thin (100)</Box>
+<Box fontWeight={200}>Extra Light (200)</Box>
+<Box fontWeight={300}>Light (300)</Box>
+<Box fontWeight={400}>Regular (400)</Box>
+<Box fontWeight={500}>Medium (500)</Box>
+<Box fontWeight={600}>Semi Bold (600)</Box>
+<Box fontWeight={700}>Bold (700)</Box>
+<Box fontWeight={800}>Extra Bold (800)</Box>
+<Box fontWeight={900}>Black (900)</Box>
+
+{/* Using theme values */}
+<Box fontWeight="light">Light</Box>
+<Box fontWeight="regular">Regular</Box>
+<Box fontWeight="medium">Medium</Box>
+<Box fontWeight="bold">Bold</Box>
+```
+
+## Custom Font Family
+
+```javascript
+import { createTheme } from '@mui/system';
+
+const theme = createTheme({
+  typography: {
+    fontFamily: '"Inter", "Helvetica", "Arial", sans-serif',
+    h1: {
+      fontFamily: '"Playfair Display", serif',
+    },
+  },
+});
+```
+
+## With sx Prop
+
+```jsx
+<Box
+  sx={{
+    typography: 'h4',
+    fontWeight: 'bold',
+    textAlign: 'center',
+    color: 'primary.main',
+    '&:hover': {
+      color: 'primary.dark',
+    },
+  }}
+>
+  Interactive heading
+</Box>
+```
+
+## TypeScript
+
+```tsx
+import { Box } from '@mui/system';
+
+type TypographyVariant = 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6' | 'body1' | 'body2' | 'caption';
+
+interface TextProps {
+  variant?: TypographyVariant;
+  align?: 'left' | 'center' | 'right' | 'justify';
+  children: React.ReactNode;
+}
+
+function Text({ variant = 'body1', align = 'left', children }: TextProps) {
+  return (
+    <Box typography={variant} textAlign={align}>
+      {children}
+    </Box>
+  );
+}
+```
+
+## Available Properties
+
+| Prop | CSS Property | Theme Key | Example Values |
+|------|--------------|-----------|----------------|
+| `fontFamily` | `font-family` | `typography` | `'default'`, `'monospace'`, `'h1.fontFamily'` |
+| `fontSize` | `font-size` | `typography` | `12`, `'1rem'`, `'h1.fontSize'` |
+| `fontStyle` | `font-style` | `typography` | `'normal'`, `'italic'`, `'oblique'` |
+| `fontWeight` | `font-weight` | `typography` | `'light'`, `'regular'`, `'medium'`, `'bold'`, `400`, `700` |
+| `letterSpacing` | `letter-spacing` | - | `0.5`, `'0.1em'`, `'-0.5px'` |
+| `lineHeight` | `line-height` | - | `1.5`, `'1.6'`, `'24px'` |
+| `textAlign` | `text-align` | - | `'left'`, `'center'`, `'right'`, `'justify'` |
+| `textTransform` | `text-transform` | - | `'none'`, `'capitalize'`, `'uppercase'`, `'lowercase'` |
+| `typography` | Multiple | `typography` | `'h1'`, `'h2'`, `'body1'`, `'body2'`, `'caption'` |
+
+## Typography Variants
+
+Default theme typography variants:
+
+- **h1** - Largest heading (96px, light)
+- **h2** - Second level heading (60px, light)
+- **h3** - Third level heading (48px, regular)
+- **h4** - Fourth level heading (34px, regular)
+- **h5** - Fifth level heading (24px, regular)
+- **h6** - Sixth level heading (20px, medium)
+- **subtitle1** - Subtitle text (16px, regular)
+- **subtitle2** - Smaller subtitle (14px, medium)
+- **body1** - Default body text (16px, regular)
+- **body2** - Secondary body text (14px, regular)
+- **button** - Button text (14px, medium, uppercase)
+- **caption** - Small text (12px, regular)
+- **overline** - Small uppercase text (12px, regular, uppercase)
+
+## Best Practices
+
+1. **Use typography variants** - Leverage theme variants for consistency
+2. **Semantic HTML** - Use appropriate HTML elements with `component` prop
+3. **Responsive sizing** - Adjust font sizes for different breakpoints
+4. **Readable line height** - Use 1.5+ for body text
+5. **Contrast** - Ensure sufficient color contrast
+6. **Font loading** - Optimize web font loading
+
+## Related
+
+- [Box Component](/system/box) - Using typography with Box
+- [Palette](/system/palette) - Text color utilities
+- [sx Prop](/system/the-sx-prop) - Advanced typography styling

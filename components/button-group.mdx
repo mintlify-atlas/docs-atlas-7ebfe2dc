@@ -1,0 +1,79 @@
+---
+title: Button Group
+description: Material UI ButtonGroup component groups related buttons together.
+---
+
+The ButtonGroup component can be used to group related buttons.
+
+## Import
+
+```tsx
+import ButtonGroup from '@mui/material/ButtonGroup';
+```
+
+## Basic Usage
+
+```tsx
+import Button from '@mui/material/Button';
+import ButtonGroup from '@mui/material/ButtonGroup';
+
+export default function BasicButtonGroup() {
+  return (
+    <ButtonGroup variant="contained" aria-label="Basic button group">
+      <Button>One</Button>
+      <Button>Two</Button>
+      <Button>Three</Button>
+    </ButtonGroup>
+  );
+}
+```
+
+## Props
+
+<ParamField path="variant" type="'text' | 'outlined' | 'contained'" default="'outlined'">
+  The variant to use.
+</ParamField>
+
+<ParamField path="color" type="'inherit' | 'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'" default="'primary'">
+  The color of the component. Supports both default and custom theme colors.
+</ParamField>
+
+<ParamField path="size" type="'small' | 'medium' | 'large'" default="'medium'">
+  The size of the component. `small` is equivalent to the dense button styling.
+</ParamField>
+
+<ParamField path="orientation" type="'vertical' | 'horizontal'" default="'horizontal'">
+  The component orientation (layout flow direction).
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  If `true`, the component is disabled.
+</ParamField>
+
+<ParamField path="disableElevation" type="boolean" default="false">
+  If `true`, no elevation is used.
+</ParamField>
+
+<ParamField path="disableFocusRipple" type="boolean" default="false">
+  If `true`, the button keyboard focus ripple is disabled.
+</ParamField>
+
+<ParamField path="disableRipple" type="boolean" default="false">
+  If `true`, the button ripple effect is disabled.
+</ParamField>
+
+<ParamField path="fullWidth" type="boolean" default="false">
+  If `true`, the buttons will take up the full width of its container.
+</ParamField>
+
+<ParamField path="sx" type="SxProps<Theme>">
+  The system prop that allows defining system overrides as well as additional CSS styles.
+</ParamField>
+
+<ParamField path="children" type="ReactNode">
+  The content of the component.
+</ParamField>
+
+## API Reference
+
+- [ButtonGroup API](https://next.mui.com/material-ui/api/button-group/)

@@ -1,0 +1,422 @@
+---
+title: Portal
+description: The Portal component renders its children into a new subtree outside of the current DOM hierarchy.
+---
+
+## Introduction
+
+Portals provide a first-class way to render children into a DOM node that exists outside the DOM hierarchy of the parent component.
+
+```jsx
+import Portal from '@mui/material/Portal';
+```
+
+## Basic Usage
+
+```jsx
+import * as React from 'react';
+import Portal from '@mui/material/Portal';
+import Box from '@mui/material/Box';
+
+export default function BasicPortal() {
+  const [show, setShow] = React.useState(false);
+  const container = React.useRef(null);
+
+  return (
+    <div>
+      <button onClick={() => setShow(!show)}>
+        {show ? 'Unmount children' : 'Mount children'}
+      </button>
+      <Box sx={{ p: 1, my: 1, border: '1px solid' }}>
+        It looks like I will render here.
+        {show ? (
+          <Portal container={container.current}>
+            <span>But I actually render here!</span>
+          </Portal>
+        ) : null}
+      </Box>
+      <Box sx={{ p: 1, my: 1, border: '1px solid' }} ref={container} />
+    </div>
+  );
+}
+```
+
+## Props
+
+### children
+
+- Type: `React.ReactNode`
+- Default: `undefined`
+
+The children to render into the `container`.
+
+### container
+
+- Type: `HTMLElement | (() => HTMLElement | null)`
+- Default: `document.body`
+
+An HTML element or function that returns one. The `container` will have the portal children appended to it.
+
+You can also provide a callback, which is called in a React layout effect. This lets you set the container from a ref, and also makes server-side rendering possible.
+
+```jsx
+const container = React.useRef(null);
+
+<Portal container={container.current}>
+  <div>Portal content</div>
+</Portal>
+```
+
+### disablePortal
+
+- Type: `boolean`
+- Default: `false`
+
+The `children` will be under the DOM hierarchy of the parent component.
+
+```jsx
+<Portal disablePortal>
+  <div>Rendered in the parent DOM hierarchy</div>
+</Portal>
+```
+
+## Usage Examples
+
+### Rendering to Body
+
+By default, Portal renders to `document.body`:
+
+```jsx
+function BodyPortal() {
+  return (
+    <div>
+      <p>This is in the normal DOM hierarchy</p>
+      <Portal>
+        <div style={{
+          position: 'fixed',
+          top: 0,
+          right: 0,
+          padding: 16,
+          backgroundColor: 'white',
+          border: '1px solid black',
+        }}>
+          This is rendered to document.body
+        </div>
+      </Portal>
+    </div>
+  );
+}
+```
+
+### Custom Container
+
+```jsx
+function CustomContainer() {
+  const container = React.useRef(null);
+
+  return (
+    <div>
+      <div>Main content area</div>
+      <Portal container={container.current}>
+        <div>Rendered in custom container</div>
+      </Portal>
+      <div ref={container} id="portal-container" />
+    </div>
+  );
+}
+```
+
+### Dynamic Container
+
+```jsx
+function DynamicContainer() {
+  const [container, setContainer] = React.useState(null);
+
+  return (
+    <div>
+      <Portal container={() => container}>
+        <div>Dynamic portal content</div>
+      </Portal>
+      <div ref={setContainer} />
+    </div>
+  );
+}
+```
+
+## Common Use Cases
+
+### Modal/Dialog
+
+```jsx
+function ModalExample() {
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <>
+      <button onClick={() => setOpen(true)}>Open Modal</button>
+      {open && (
+        <Portal>
+          <div
+            style={{
+              position: 'fixed',
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              backgroundColor: 'rgba(0, 0, 0, 0.5)',
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+            onClick={() => setOpen(false)}
+          >
+            <div
+              style={{
+                backgroundColor: 'white',
+                padding: 32,
+                borderRadius: 8,
+              }}
+              onClick={(e) => e.stopPropagation()}
+            >
+              <h2>Modal Content</h2>
+              <button onClick={() => setOpen(false)}>Close</button>
+            </div>
+          </div>
+        </Portal>
+      )}
+    </>
+  );
+}
+```
+
+### Tooltip
+
+```jsx
+function TooltipExample() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [position, setPosition] = React.useState({ top: 0, left: 0 });
+
+  const handleMouseEnter = (event) => {
+    const rect = event.currentTarget.getBoundingClientRect();
+    setPosition({
+      top: rect.bottom + 5,
+      left: rect.left,
+    });
+    setAnchorEl(event.currentTarget);
+  };
+
+  return (
+    <>
+      <button
+        onMouseEnter={handleMouseEnter}
+        onMouseLeave={() => setAnchorEl(null)}
+      >
+        Hover me
+      </button>
+      {anchorEl && (
+        <Portal>
+          <div
+            style={{
+              position: 'fixed',
+              top: position.top,
+              left: position.left,
+              backgroundColor: 'black',
+              color: 'white',
+              padding: 8,
+              borderRadius: 4,
+            }}
+          >
+            Tooltip content
+          </div>
+        </Portal>
+      )}
+    </>
+  );
+}
+```
+
+### Dropdown Menu
+
+```jsx
+function DropdownExample() {
+  const [open, setOpen] = React.useState(false);
+  const buttonRef = React.useRef(null);
+  const [position, setPosition] = React.useState({ top: 0, left: 0 });
+
+  const handleClick = () => {
+    if (!open && buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setPosition({
+        top: rect.bottom + 5,
+        left: rect.left,
+      });
+    }
+    setOpen(!open);
+  };
+
+  return (
+    <>
+      <button ref={buttonRef} onClick={handleClick}>
+        Menu
+      </button>
+      {open && (
+        <Portal>
+          <div
+            style={{
+              position: 'fixed',
+              top: position.top,
+              left: position.left,
+              backgroundColor: 'white',
+              border: '1px solid #ccc',
+              borderRadius: 4,
+              boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
+            }}
+          >
+            <div onClick={() => setOpen(false)}>Option 1</div>
+            <div onClick={() => setOpen(false)}>Option 2</div>
+            <div onClick={() => setOpen(false)}>Option 3</div>
+          </div>
+        </Portal>
+      )}
+    </>
+  );
+}
+```
+
+## Server-Side Rendering
+
+Portal supports server-side rendering when using a container callback:
+
+```jsx
+function SSRPortal() {
+  const [container, setContainer] = React.useState(null);
+
+  return (
+    <>
+      <Portal container={() => container}>
+        <div>This works with SSR</div>
+      </Portal>
+      <div ref={setContainer} />
+    </>
+  );
+}
+```
+
+## Disabling Portal
+
+You can disable the portal behavior for testing or other purposes:
+
+```jsx
+<Portal disablePortal>
+  <div>Rendered in place, not portaled</div>
+</Portal>
+```
+
+This is useful for:
+- Unit testing
+- Storybook stories
+- Debugging layout issues
+- Avoiding z-index conflicts
+
+## Multiple Portals
+
+You can have multiple portals with different containers:
+
+```jsx
+function MultiplePortals() {
+  const container1 = React.useRef(null);
+  const container2 = React.useRef(null);
+
+  return (
+    <div>
+      <Portal container={container1.current}>
+        <div>Portal 1 content</div>
+      </Portal>
+      <Portal container={container2.current}>
+        <div>Portal 2 content</div>
+      </Portal>
+      
+      <div ref={container1} className="portal-1" />
+      <div ref={container2} className="portal-2" />
+    </div>
+  );
+}
+```
+
+## Event Bubbling
+
+Portal preserves React event bubbling even though the DOM structure is different:
+
+```jsx
+function EventBubbling() {
+  const handleClick = () => {
+    console.log('Clicked! Event bubbles through portal');
+  };
+
+  return (
+    <div onClick={handleClick}>
+      <Portal>
+        <button>Click me (event bubbles)</button>
+      </Portal>
+    </div>
+  );
+}
+```
+
+## Best Practices
+
+1. **Use refs for containers**: Always use refs when specifying a custom container
+2. **Clean up**: Portal automatically cleans up when unmounted
+3. **SSR compatibility**: Use container callbacks for SSR
+4. **Z-index management**: Be mindful of z-index stacking contexts
+5. **Accessibility**: Ensure portaled content maintains proper ARIA relationships
+
+## Common Pitfalls
+
+### Container Not Ready
+
+```jsx
+// ❌ Wrong - container might be null
+<Portal container={containerRef.current}>
+  Content
+</Portal>
+
+// ✅ Correct - use callback or conditional
+<Portal container={() => containerRef.current}>
+  Content
+</Portal>
+```
+
+### Missing Container in SSR
+
+```jsx
+// ❌ Wrong - breaks SSR
+const container = document.getElementById('portal');
+
+// ✅ Correct - use ref or callback
+const [container, setContainer] = React.useState(null);
+<div ref={setContainer} id="portal" />
+```
+
+## Comparison with React Portal
+
+Material-UI Portal is a wrapper around ReactDOM.createPortal that:
+
+- Provides better ref handling
+- Supports server-side rendering
+- Offers `disablePortal` option
+- Integrates with Material-UI components
+
+## When to Use Portal
+
+**Use Portal for:**
+- Modals and dialogs
+- Tooltips and popovers
+- Dropdown menus
+- Notifications and snackbars
+- Any UI that needs to escape parent overflow/z-index
+
+**Don't use Portal for:**
+- Regular content
+- Simple styling needs
+- When parent hierarchy is sufficient

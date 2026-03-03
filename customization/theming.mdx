@@ -1,0 +1,193 @@
+---
+title: Theme Customization
+description: Customize Material UI with createTheme to define your design system
+---
+
+# Theme Customization
+
+Material UI uses a powerful theming system powered by `createTheme` to customize the look and feel of your application.
+
+## Creating a Theme
+
+The `createTheme` function generates a theme object that defines your design system.
+
+```tsx
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import { deepOrange, green } from '@mui/material/colors';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: deepOrange[500],
+    },
+    secondary: {
+      main: green.A400,
+    },
+  },
+});
+
+function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      {/* Your app content */}
+    </ThemeProvider>
+  );
+}
+```
+
+## Theme Structure
+
+A complete theme object includes:
+
+- **palette** - Color palette configuration
+- **typography** - Typography system settings
+- **spacing** - Spacing scale (default: 8px)
+- **breakpoints** - Responsive breakpoint values
+- **shape** - Border radius configuration
+- **shadows** - Elevation shadow definitions
+- **transitions** - Animation duration and easing
+- **zIndex** - Z-index layering system
+- **components** - Component-specific overrides
+
+## API Signature
+
+```tsx
+function createTheme(
+  options?: ThemeOptions,
+  ...args: object[]
+): Theme
+```
+
+### Parameters
+
+**options** (ThemeOptions): Takes an incomplete theme object and adds the missing parts.
+
+**...args** (object[]): Deep merge additional arguments with the theme.
+
+**Returns**: A complete, ready-to-use theme object.
+
+## Merging Themes
+
+You can pass multiple theme objects to merge them:
+
+```tsx
+const theme = createTheme(
+  {
+    palette: {
+      primary: { main: '#1976d2' },
+    },
+  },
+  {
+    typography: {
+      fontSize: 16,
+    },
+  }
+);
+```
+
+## Accessing Theme in Components
+
+Use the `useTheme` hook to access theme values:
+
+```tsx
+import { useTheme } from '@mui/material/styles';
+
+function MyComponent() {
+  const theme = useTheme();
+  
+  return (
+    <div style={{ color: theme.palette.primary.main }}>
+      Themed content
+    </div>
+  );
+}
+```
+
+## Theme with Custom Properties
+
+Extend the theme with custom properties:
+
+```tsx
+const theme = createTheme({
+  palette: {
+    primary: { main: '#1976d2' },
+  },
+  custom: {
+    headerHeight: 64,
+    sidebarWidth: 240,
+  },
+});
+```
+
+## Spacing Helper
+
+The theme provides a `spacing` function for consistent spacing:
+
+```tsx
+const theme = createTheme();
+
+// Default spacing unit is 8px
+theme.spacing(1); // '8px'
+theme.spacing(2); // '16px'
+theme.spacing(0.5); // '4px'
+```
+
+## Custom Spacing
+
+Override the default spacing:
+
+```tsx
+const theme = createTheme({
+  spacing: 4, // 4px base unit
+});
+
+theme.spacing(2); // '8px' (4px * 2)
+```
+
+Or use an array:
+
+```tsx
+const theme = createTheme({
+  spacing: [0, 4, 8, 16, 32, 64],
+});
+
+theme.spacing(3); // '16px'
+```
+
+Or a custom function:
+
+```tsx
+const theme = createTheme({
+  spacing: (factor) => `${0.5 * factor}rem`,
+});
+
+theme.spacing(2); // '1rem'
+```
+
+## TypeScript
+
+To add custom properties with TypeScript, use module augmentation:
+
+```tsx
+declare module '@mui/material/styles' {
+  interface Theme {
+    custom: {
+      headerHeight: number;
+      sidebarWidth: number;
+    };
+  }
+  
+  interface ThemeOptions {
+    custom?: {
+      headerHeight?: number;
+      sidebarWidth?: number;
+    };
+  }
+}
+```
+
+## Source Reference
+
+The createTheme implementation can be found at:
+- `packages/mui-material/src/styles/createTheme.ts:61`
+- `packages/mui-material/src/styles/createThemeNoVars.js:74`

@@ -1,0 +1,514 @@
+---
+title: Flexbox
+description: Flexbox layout utilities in MUI System
+---
+
+# Flexbox
+
+Utilities for controlling flexbox layouts.
+
+## Import
+
+```javascript
+import { flexbox } from '@mui/system';
+```
+
+## API
+
+From `flexbox/flexbox.js:56-70`:
+
+```javascript
+const flexbox = compose(
+  flexBasis,
+  flexDirection,
+  flexWrap,
+  justifyContent,
+  alignItems,
+  alignContent,
+  order,
+  flex,
+  flexGrow,
+  flexShrink,
+  alignSelf,
+  justifyItems,
+  justifySelf,
+);
+```
+
+## Container Properties
+
+### flexDirection
+
+Set the direction of flex items:
+
+```jsx
+<Box display="flex" flexDirection="row">
+  <Box>1</Box>
+  <Box>2</Box>
+  <Box>3</Box>
+</Box>
+
+<Box display="flex" flexDirection="column">
+  <Box>1</Box>
+  <Box>2</Box>
+  <Box>3</Box>
+</Box>
+
+<Box display="flex" flexDirection="row-reverse">
+  <Box>1</Box>
+  <Box>2</Box>
+  <Box>3</Box>
+</Box>
+```
+
+From `flexbox.js:8-10`:
+
+```javascript
+export const flexDirection = style({
+  prop: 'flexDirection',
+});
+```
+
+### flexWrap
+
+Control whether flex items wrap:
+
+```jsx
+<Box display="flex" flexWrap="nowrap">
+  Items don't wrap
+</Box>
+
+<Box display="flex" flexWrap="wrap">
+  Items wrap to next line
+</Box>
+
+<Box display="flex" flexWrap="wrap-reverse">
+  Items wrap in reverse
+</Box>
+```
+
+From `flexbox.js:12-14`:
+
+```javascript
+export const flexWrap = style({
+  prop: 'flexWrap',
+});
+```
+
+### justifyContent
+
+Align items along the main axis:
+
+```jsx
+<Box display="flex" justifyContent="flex-start">
+  Start
+</Box>
+
+<Box display="flex" justifyContent="center">
+  Center
+</Box>
+
+<Box display="flex" justifyContent="flex-end">
+  End
+</Box>
+
+<Box display="flex" justifyContent="space-between">
+  <Box>1</Box>
+  <Box>2</Box>
+  <Box>3</Box>
+</Box>
+
+<Box display="flex" justifyContent="space-around">
+  <Box>1</Box>
+  <Box>2</Box>
+  <Box>3</Box>
+</Box>
+
+<Box display="flex" justifyContent="space-evenly">
+  <Box>1</Box>
+  <Box>2</Box>
+  <Box>3</Box>
+</Box>
+```
+
+From `flexbox.js:16-18`:
+
+```javascript
+export const justifyContent = style({
+  prop: 'justifyContent',
+});
+```
+
+### alignItems
+
+Align items along the cross axis:
+
+```jsx
+<Box display="flex" alignItems="flex-start" height={200}>
+  Top aligned
+</Box>
+
+<Box display="flex" alignItems="center" height={200}>
+  Vertically centered
+</Box>
+
+<Box display="flex" alignItems="flex-end" height={200}>
+  Bottom aligned
+</Box>
+
+<Box display="flex" alignItems="stretch" height={200}>
+  Stretched to fill
+</Box>
+
+<Box display="flex" alignItems="baseline">
+  Baseline aligned
+</Box>
+```
+
+From `flexbox.js:20-22`:
+
+```javascript
+export const alignItems = style({
+  prop: 'alignItems',
+});
+```
+
+### alignContent
+
+Align wrapped flex lines:
+
+```jsx
+<Box
+  display="flex"
+  flexWrap="wrap"
+  alignContent="flex-start"
+  height={400}
+>
+  Multiple wrapped lines
+</Box>
+
+<Box
+  display="flex"
+  flexWrap="wrap"
+  alignContent="space-between"
+  height={400}
+>
+  Space between lines
+</Box>
+```
+
+From `flexbox.js:24-26`:
+
+```javascript
+export const alignContent = style({
+  prop: 'alignContent',
+});
+```
+
+### justifyItems
+
+Align items along the inline axis (for grid and flex):
+
+```jsx
+<Box display="flex" justifyItems="center">
+  Centered items
+</Box>
+```
+
+From `flexbox.js:48-50`:
+
+```javascript
+export const justifyItems = style({
+  prop: 'justifyItems',
+});
+```
+
+## Item Properties
+
+### flex
+
+Shorthand for flex-grow, flex-shrink, and flex-basis:
+
+```jsx
+<Box display="flex">
+  <Box flex={1}>Flex 1</Box>
+  <Box flex={2}>Flex 2 (twice as wide)</Box>
+  <Box>No flex</Box>
+</Box>
+
+<Box display="flex">
+  <Box flex="1 1 auto">Full flex shorthand</Box>
+  <Box flex="0 0 200px">Fixed width</Box>
+</Box>
+```
+
+From `flexbox.js:32-34`:
+
+```javascript
+export const flex = style({
+  prop: 'flex',
+});
+```
+
+### flexGrow
+
+Control how much an item grows:
+
+```jsx
+<Box display="flex">
+  <Box flexGrow={0}>Don't grow</Box>
+  <Box flexGrow={1}>Grow to fill</Box>
+  <Box flexGrow={2}>Grow twice as much</Box>
+</Box>
+```
+
+From `flexbox.js:36-38`:
+
+```javascript
+export const flexGrow = style({
+  prop: 'flexGrow',
+});
+```
+
+### flexShrink
+
+Control how much an item shrinks:
+
+```jsx
+<Box display="flex" width={200}>
+  <Box flexShrink={0} width={300}>Don't shrink</Box>
+  <Box flexShrink={1}>Can shrink</Box>
+</Box>
+```
+
+From `flexbox.js:40-42`:
+
+```javascript
+export const flexShrink = style({
+  prop: 'flexShrink',
+});
+```
+
+### flexBasis
+
+Set the initial size of a flex item:
+
+```jsx
+<Box display="flex">
+  <Box flexBasis="200px">200px base</Box>
+  <Box flexBasis="50%">50% base</Box>
+  <Box flexBasis="auto">Auto base</Box>
+</Box>
+```
+
+From `flexbox.js:4-6`:
+
+```javascript
+export const flexBasis = style({
+  prop: 'flexBasis',
+});
+```
+
+### alignSelf
+
+Override alignItems for individual items:
+
+```jsx
+<Box display="flex" alignItems="flex-start" height={200}>
+  <Box>Default (start)</Box>
+  <Box alignSelf="center">Centered</Box>
+  <Box alignSelf="flex-end">End aligned</Box>
+</Box>
+```
+
+From `flexbox.js:44-46`:
+
+```javascript
+export const alignSelf = style({
+  prop: 'alignSelf',
+});
+```
+
+### justifySelf
+
+Align an item along the inline axis:
+
+```jsx
+<Box display="flex">
+  <Box justifySelf="flex-start">Start</Box>
+  <Box justifySelf="center">Center</Box>
+  <Box justifySelf="flex-end">End</Box>
+</Box>
+```
+
+From `flexbox.js:52-54`:
+
+```javascript
+export const justifySelf = style({
+  prop: 'justifySelf',
+});
+```
+
+### order
+
+Control the order of flex items:
+
+```jsx
+<Box display="flex">
+  <Box order={3}>Third (order: 3)</Box>
+  <Box order={1}>First (order: 1)</Box>
+  <Box order={2}>Second (order: 2)</Box>
+</Box>
+```
+
+From `flexbox.js:28-30`:
+
+```javascript
+export const order = style({
+  prop: 'order',
+});
+```
+
+## Common Patterns
+
+### Centered Content
+
+```jsx
+<Box
+  display="flex"
+  justifyContent="center"
+  alignItems="center"
+  minHeight="100vh"
+>
+  Perfectly centered
+</Box>
+```
+
+### Navigation Bar
+
+```jsx
+<Box
+  display="flex"
+  justifyContent="space-between"
+  alignItems="center"
+  p={2}
+>
+  <Box>Logo</Box>
+  <Box display="flex" gap={2}>
+    <Box>Home</Box>
+    <Box>About</Box>
+    <Box>Contact</Box>
+  </Box>
+</Box>
+```
+
+### Card Layout
+
+```jsx
+<Box
+  display="flex"
+  flexDirection="column"
+  height="100%"
+>
+  <Box>Header</Box>
+  <Box flexGrow={1}>Content (fills available space)</Box>
+  <Box>Footer</Box>
+</Box>
+```
+
+### Responsive Grid
+
+```jsx
+<Box
+  display="flex"
+  flexWrap="wrap"
+  gap={2}
+>
+  <Box flexBasis={{ xs: '100%', sm: 'calc(50% - 8px)', md: 'calc(33.33% - 11px)' }}>
+    Item 1
+  </Box>
+  <Box flexBasis={{ xs: '100%', sm: 'calc(50% - 8px)', md: 'calc(33.33% - 11px)' }}>
+    Item 2
+  </Box>
+  <Box flexBasis={{ xs: '100%', sm: 'calc(50% - 8px)', md: 'calc(33.33% - 11px)' }}>
+    Item 3
+  </Box>
+</Box>
+```
+
+### Sidebar Layout
+
+```jsx
+<Box display="flex" minHeight="100vh">
+  <Box flexShrink={0} width={250}>
+    Sidebar (fixed width)
+  </Box>
+  <Box flexGrow={1}>
+    Main content (fills remaining space)
+  </Box>
+</Box>
+```
+
+## Responsive Flexbox
+
+```jsx
+<Box
+  display="flex"
+  flexDirection={{ xs: 'column', md: 'row' }}
+  justifyContent={{ md: 'space-between' }}
+  alignItems={{ xs: 'stretch', md: 'center' }}
+>
+  <Box>Item 1</Box>
+  <Box>Item 2</Box>
+</Box>
+```
+
+## TypeScript
+
+```tsx
+import { Box } from '@mui/system';
+
+interface FlexContainerProps {
+  direction?: 'row' | 'column';
+  justify?: 'flex-start' | 'center' | 'flex-end' | 'space-between';
+  align?: 'flex-start' | 'center' | 'flex-end' | 'stretch';
+  children: React.ReactNode;
+}
+
+function FlexContainer({ direction = 'row', justify = 'flex-start', align = 'stretch', children }: FlexContainerProps) {
+  return (
+    <Box
+      display="flex"
+      flexDirection={direction}
+      justifyContent={justify}
+      alignItems={align}
+    >
+      {children}
+    </Box>
+  );
+}
+```
+
+## Available Properties
+
+| Prop | CSS Property | Values |
+|------|--------------|--------|
+| `flexDirection` | `flex-direction` | `row`, `column`, `row-reverse`, `column-reverse` |
+| `flexWrap` | `flex-wrap` | `nowrap`, `wrap`, `wrap-reverse` |
+| `justifyContent` | `justify-content` | `flex-start`, `center`, `flex-end`, `space-between`, `space-around`, `space-evenly` |
+| `alignItems` | `align-items` | `flex-start`, `center`, `flex-end`, `stretch`, `baseline` |
+| `alignContent` | `align-content` | `flex-start`, `center`, `flex-end`, `space-between`, `space-around`, `stretch` |
+| `flex` | `flex` | Number or string |
+| `flexGrow` | `flex-grow` | Number |
+| `flexShrink` | `flex-shrink` | Number |
+| `flexBasis` | `flex-basis` | Length or `auto` |
+| `alignSelf` | `align-self` | `auto`, `flex-start`, `center`, `flex-end`, `stretch`, `baseline` |
+| `order` | `order` | Number |
+| `justifyItems` | `justify-items` | `flex-start`, `center`, `flex-end`, `stretch` |
+| `justifySelf` | `justify-self` | `auto`, `flex-start`, `center`, `flex-end`, `stretch` |
+
+## Related
+
+- [Display](/system/display) - Display utilities
+- [Grid](/system/grid) - CSS Grid utilities
+- [Spacing](/system/spacing) - Spacing utilities for gaps

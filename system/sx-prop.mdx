@@ -1,0 +1,127 @@
+---
+title: sx Prop Overview
+description: Quick overview of the sx prop in MUI System
+---
+
+# The `sx` Prop
+
+The `sx` prop is a shortcut for defining custom styles with access to the theme. It's available on all MUI components.
+
+## Basic Example
+
+```jsx
+import { Box } from '@mui/system';
+
+<Box
+  sx={{
+    width: 300,
+    height: 300,
+    backgroundColor: 'primary.main',
+  }}
+/>
+```
+
+## Key Features
+
+### Theme-aware
+
+Access theme values using dot notation:
+
+```jsx
+<Box
+  sx={{
+    color: 'primary.main',
+    bgcolor: 'background.paper',
+    p: 2, // theme.spacing(2)
+    borderRadius: 1, // theme.shape.borderRadius
+  }}
+/>
+```
+
+### Responsive
+
+Define responsive styles with arrays or objects:
+
+```jsx
+<Box
+  sx={{
+    width: {
+      xs: '100%',
+      sm: '50%',
+      md: '33.33%',
+    },
+    fontSize: ['12px', '14px', '16px'],
+  }}
+/>
+```
+
+### Pseudo-selectors
+
+Style hover, focus, and other states:
+
+```jsx
+<Box
+  sx={{
+    color: 'primary.main',
+    '&:hover': {
+      color: 'primary.dark',
+      backgroundColor: 'action.hover',
+    },
+  }}
+/>
+```
+
+### Nested Selectors
+
+Target child elements:
+
+```jsx
+<Box
+  sx={{
+    '& .child': {
+      color: 'text.secondary',
+    },
+    '& > button': {
+      margin: 1,
+    },
+  }}
+/>
+```
+
+## Supported Properties
+
+All CSS properties are supported, plus shorthand properties:
+
+- `m`, `mt`, `mr`, `mb`, `ml`, `mx`, `my` - Margin
+- `p`, `pt`, `pr`, `pb`, `pl`, `px`, `py` - Padding
+- `bgcolor` - Background color
+
+See the [detailed guide](/system/the-sx-prop) for more information.
+
+## Performance
+
+The `sx` prop is optimized for performance:
+
+- Styles are memoized based on theme
+- CSS is generated at build time when possible
+- Only changed styles trigger re-renders
+
+## TypeScript
+
+Full type safety with `SxProps`:
+
+```tsx
+import { SxProps, Theme } from '@mui/system';
+
+const styles: SxProps<Theme> = {
+  width: 300,
+  height: 300,
+  backgroundColor: 'primary.main',
+};
+
+<Box sx={styles} />
+```
+
+## Learn More
+
+For a detailed guide with all features and examples, see [The sx Prop - Detailed Guide](/system/the-sx-prop).

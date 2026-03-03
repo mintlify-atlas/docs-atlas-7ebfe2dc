@@ -1,0 +1,313 @@
+---
+title: Speed Dial
+description: When pressed, a floating action button can display three to six related actions in the form of a Speed Dial.
+---
+
+# Speed Dial
+
+When pressed, a floating action button can fling out related actions. The button should remain on screen after the menu is invoked.
+
+## Basic Speed Dial
+
+The Speed Dial component renders a floating action button that displays related actions.
+
+```tsx
+import * as React from 'react';
+import SpeedDial from '@mui/material/SpeedDial';
+import SpeedDialIcon from '@mui/material/SpeedDialIcon';
+import SpeedDialAction from '@mui/material/SpeedDialAction';
+import FileCopyIcon from '@mui/icons-material/FileCopyOutlined';
+import SaveIcon from '@mui/icons-material/Save';
+import PrintIcon from '@mui/icons-material/Print';
+import ShareIcon from '@mui/icons-material/Share';
+
+const actions = [
+  { icon: <FileCopyIcon />, name: 'Copy' },
+  { icon: <SaveIcon />, name: 'Save' },
+  { icon: <PrintIcon />, name: 'Print' },
+  { icon: <ShareIcon />, name: 'Share' },
+];
+
+export default function BasicSpeedDial() {
+  return (
+    <SpeedDial
+      ariaLabel="SpeedDial basic example"
+      sx={{ position: 'absolute', bottom: 16, right: 16 }}
+      icon={<SpeedDialIcon />}
+    >
+      {actions.map((action) => (
+        <SpeedDialAction
+          key={action.name}
+          icon={action.icon}
+          slotProps={{
+            tooltip: { title: action.name }
+          }}
+        />
+      ))}
+    </SpeedDial>
+  );
+}
+```
+
+## Controlled Speed Dial
+
+Control the open state with the `open` prop.
+
+```tsx
+const [open, setOpen] = React.useState(false);
+const handleOpen = () => setOpen(true);
+const handleClose = () => setOpen(false);
+
+<SpeedDial
+  ariaLabel="SpeedDial controlled example"
+  icon={<SpeedDialIcon />}
+  onClose={handleClose}
+  onOpen={handleOpen}
+  open={open}
+>
+  {actions.map((action) => (
+    <SpeedDialAction
+      key={action.name}
+      icon={action.icon}
+      slotProps={{
+        tooltip: { title: action.name }
+      }}
+      onClick={handleClose}
+    />
+  ))}
+</SpeedDial>
+```
+
+## Direction
+
+The actions can open in different directions.
+
+```tsx
+// Up (default)
+<SpeedDial
+  ariaLabel="SpeedDial up"
+  icon={<SpeedDialIcon />}
+  direction="up"
+>
+  {/* Actions */}
+</SpeedDial>
+
+// Down
+<SpeedDial
+  ariaLabel="SpeedDial down"
+  icon={<SpeedDialIcon />}
+  direction="down"
+>
+  {/* Actions */}
+</SpeedDial>
+
+// Left
+<SpeedDial
+  ariaLabel="SpeedDial left"
+  icon={<SpeedDialIcon />}
+  direction="left"
+>
+  {/* Actions */}
+</SpeedDial>
+
+// Right
+<SpeedDial
+  ariaLabel="SpeedDial right"
+  icon={<SpeedDialIcon />}
+  direction="right"
+>
+  {/* Actions */}
+</SpeedDial>
+```
+
+## Custom Close Icon
+
+Provide a custom icon to display when the Speed Dial is open.
+
+```tsx
+import EditIcon from '@mui/icons-material/Edit';
+
+<SpeedDial
+  ariaLabel="SpeedDial openIcon example"
+  icon={<SpeedDialIcon openIcon={<EditIcon />} />}
+>
+  {actions.map((action) => (
+    <SpeedDialAction key={action.name} icon={action.icon} slotProps={{ tooltip: { title: action.name } }} />
+  ))}
+</SpeedDial>
+```
+
+## Persistent Action Tooltips
+
+Make tooltips always visible without hovering.
+
+```tsx
+<SpeedDial ariaLabel="SpeedDial tooltip example" icon={<SpeedDialIcon />}>
+  {actions.map((action) => (
+    <SpeedDialAction
+      key={action.name}
+      icon={action.icon}
+      slotProps={{
+        tooltip: {
+          title: action.name,
+          open: true  // Always show tooltip
+        }
+      }}
+    />
+  ))}
+</SpeedDial>
+```
+
+## Hidden Speed Dial
+
+Hide the Speed Dial on scroll or based on conditions.
+
+```tsx
+const [hidden, setHidden] = React.useState(false);
+
+const handleScroll = () => {
+  if (window.scrollY > 100) {
+    setHidden(true);
+  } else {
+    setHidden(false);
+  }
+};
+
+React.useEffect(() => {
+  window.addEventListener('scroll', handleScroll);
+  return () => window.removeEventListener('scroll', handleScroll);
+}, []);
+
+<SpeedDial
+  ariaLabel="SpeedDial hidden example"
+  icon={<SpeedDialIcon />}
+  hidden={hidden}
+>
+  {actions.map((action) => (
+    <SpeedDialAction key={action.name} icon={action.icon} slotProps={{ tooltip: { title: action.name } }} />
+  ))}
+</SpeedDial>
+```
+
+## Custom Fab Props
+
+Customize the floating action button.
+
+```tsx
+<SpeedDial
+  ariaLabel="SpeedDial custom fab"
+  icon={<SpeedDialIcon />}
+  FabProps={{
+    color: 'secondary',
+    size: 'large',
+  }}
+>
+  {actions.map((action) => (
+    <SpeedDialAction key={action.name} icon={action.icon} slotProps={{ tooltip: { title: action.name } }} />
+  ))}
+</SpeedDial>
+```
+
+## SpeedDial Props
+
+### ariaLabel
+
+- **Type:** `string`
+- **Required:** Yes
+- **Description:** The aria-label of the button element. Also used to provide the id for the SpeedDial element and its children
+
+### icon
+
+- **Type:** `React.ReactNode`
+- **Description:** The icon to display in the SpeedDial Fab. The SpeedDialIcon component provides a default icon with animation
+
+### openIcon
+
+- **Type:** `React.ReactNode`
+- **Description:** The icon to display in the SpeedDial Fab when the SpeedDial is open
+
+### direction
+
+- **Type:** `'up' | 'down' | 'left' | 'right'`
+- **Default:** `'up'`
+- **Description:** The direction the actions open relative to the floating action button
+
+### open
+
+- **Type:** `boolean`
+- **Description:** If `true`, the component is shown. Use this for controlled components
+
+### onOpen
+
+- **Type:** `(event: React.SyntheticEvent, reason: 'toggle' | 'focus' | 'mouseEnter') => void`
+- **Description:** Callback fired when the component requests to be open
+
+### onClose
+
+- **Type:** `(event: React.SyntheticEvent, reason: 'toggle' | 'blur' | 'mouseLeave' | 'escapeKeyDown') => void`
+- **Description:** Callback fired when the component requests to be closed
+
+### hidden
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** If `true`, the SpeedDial is hidden
+
+### FabProps
+
+- **Type:** `Partial<FabProps>`
+- **Default:** `{}`
+- **Description:** Props applied to the Fab element
+
+### transitionDuration
+
+- **Type:** `number | { appear?: number, enter?: number, exit?: number }`
+- **Default:** `{ enter: theme.transitions.duration.enteringScreen, exit: theme.transitions.duration.leavingScreen }`
+- **Description:** The duration for the transition, in milliseconds
+
+### slots
+
+- **Type:** `{ root?: React.ElementType, transition?: React.ElementType }`
+- **Description:** The components used for each slot inside the SpeedDial
+
+### slotProps
+
+- **Type:** `{ root?: object, transition?: object }`
+- **Description:** The props used for each slot inside the SpeedDial
+
+### sx
+
+- **Type:** `SxProps<Theme>`
+- **Description:** System prop for defining CSS styles
+
+## SpeedDialAction Props
+
+### icon
+
+- **Type:** `React.ReactNode`
+- **Description:** The icon to display in the SpeedDial Fab
+
+### delay
+
+- **Type:** `number`
+- **Default:** `0`
+- **Description:** Adds a transition delay to allow a series of SpeedDialActions to be animated
+
+### slotProps
+
+- **Type:** `{ fab?: object, tooltip?: object, staticTooltip?: object, staticTooltipLabel?: object }`
+- **Description:** Props forwarded to the different slots. The `tooltip` slot accepts all Tooltip props, including `title` for the tooltip text and `open` for persistent tooltips
+
+## Accessibility
+
+- The SpeedDial has `role="menu"` with proper ARIA attributes
+- The main Fab button has `aria-haspopup="true"` and `aria-expanded` state
+- Each action is properly labeled and keyboard accessible
+- Pressing Escape closes the SpeedDial
+- Arrow keys navigate between actions when open
+
+## API Reference
+
+- [SpeedDial API](https://mui.com/material-ui/api/speed-dial/)
+- [SpeedDialAction API](https://mui.com/material-ui/api/speed-dial-action/)
+- [SpeedDialIcon API](https://mui.com/material-ui/api/speed-dial-icon/)

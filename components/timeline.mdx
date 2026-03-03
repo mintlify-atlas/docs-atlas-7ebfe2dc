@@ -1,0 +1,281 @@
+---
+title: Timeline
+description: The Timeline component displays a list of events in chronological order
+---
+
+# Timeline
+
+The Timeline component displays a list of events in chronological order, connected by lines and markers.
+
+## Basic Timeline
+
+A simple timeline showing events from top to bottom:
+
+```jsx
+import Timeline from '@mui/lab/Timeline';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineContent from '@mui/lab/TimelineContent';
+import TimelineDot from '@mui/lab/TimelineDot';
+
+function BasicTimeline() {
+  return (
+    <Timeline>
+      <TimelineItem>
+        <TimelineSeparator>
+          <TimelineDot />
+          <TimelineConnector />
+        </TimelineSeparator>
+        <TimelineContent>Eat</TimelineContent>
+      </TimelineItem>
+      <TimelineItem>
+        <TimelineSeparator>
+          <TimelineDot />
+          <TimelineConnector />
+        </TimelineSeparator>
+        <TimelineContent>Code</TimelineContent>
+      </TimelineItem>
+      <TimelineItem>
+        <TimelineSeparator>
+          <TimelineDot />
+        </TimelineSeparator>
+        <TimelineContent>Sleep</TimelineContent>
+      </TimelineItem>
+    </Timeline>
+  );
+}
+```
+
+## Timeline Positions
+
+Control where content appears relative to the timeline axis using the `position` prop:
+
+```jsx
+<Timeline position="right">
+  {/* Content appears on the right side (default) */}
+</Timeline>
+
+<Timeline position="left">
+  {/* Content appears on the left side */}
+</Timeline>
+
+<Timeline position="alternate">
+  {/* Content alternates between left and right */}
+</Timeline>
+
+<Timeline position="alternate-reverse">
+  {/* Content alternates, starting from left */}
+</Timeline>
+```
+
+## Colored Dots
+
+TimelineDot supports different colors to indicate status or importance:
+
+```jsx
+import TimelineDot from '@mui/lab/TimelineDot';
+
+<TimelineItem>
+  <TimelineSeparator>
+    <TimelineDot color="primary" />
+    <TimelineConnector />
+  </TimelineSeparator>
+  <TimelineContent>Primary event</TimelineContent>
+</TimelineItem>
+
+<TimelineItem>
+  <TimelineSeparator>
+    <TimelineDot color="secondary" />
+    <TimelineConnector />
+  </TimelineSeparator>
+  <TimelineContent>Secondary event</TimelineContent>
+</TimelineItem>
+
+<TimelineItem>
+  <TimelineSeparator>
+    <TimelineDot color="error" />
+    <TimelineConnector />
+  </TimelineSeparator>
+  <TimelineContent>Error event</TimelineContent>
+</TimelineItem>
+
+<TimelineItem>
+  <TimelineSeparator>
+    <TimelineDot color="success" />
+  </TimelineSeparator>
+  <TimelineContent>Success event</TimelineContent>
+</TimelineItem>
+```
+
+## Outlined Dots
+
+Use the `variant` prop for outlined style:
+
+```jsx
+<TimelineDot variant="outlined" color="primary" />
+<TimelineDot variant="outlined" color="secondary" />
+<TimelineDot variant="filled" color="error" /> {/* default */}
+```
+
+## Opposite Content
+
+Add content on the opposite side of the timeline:
+
+```jsx
+import TimelineOppositeContent from '@mui/lab/TimelineOppositeContent';
+
+<Timeline position="alternate">
+  <TimelineItem>
+    <TimelineOppositeContent color="text.secondary">
+      09:30 am
+    </TimelineOppositeContent>
+    <TimelineSeparator>
+      <TimelineDot />
+      <TimelineConnector />
+    </TimelineSeparator>
+    <TimelineContent>Eat breakfast</TimelineContent>
+  </TimelineItem>
+  <TimelineItem>
+    <TimelineOppositeContent color="text.secondary">
+      10:00 am
+    </TimelineOppositeContent>
+    <TimelineSeparator>
+      <TimelineDot color="primary" />
+      <TimelineConnector />
+    </TimelineSeparator>
+    <TimelineContent>Start coding</TimelineContent>
+  </TimelineItem>
+</Timeline>
+```
+
+## Custom Icons
+
+Add icons inside TimelineDot:
+
+```jsx
+import FastfoodIcon from '@mui/icons-material/Fastfood';
+import LaptopMacIcon from '@mui/icons-material/LaptopMac';
+import HotelIcon from '@mui/icons-material/Hotel';
+import RepeatIcon from '@mui/icons-material/Repeat';
+
+<Timeline position="alternate">
+  <TimelineItem>
+    <TimelineSeparator>
+      <TimelineDot color="grey">
+        <FastfoodIcon />
+      </TimelineDot>
+      <TimelineConnector />
+    </TimelineSeparator>
+    <TimelineContent>Eat</TimelineContent>
+  </TimelineItem>
+  <TimelineItem>
+    <TimelineSeparator>
+      <TimelineDot color="primary">
+        <LaptopMacIcon />
+      </TimelineDot>
+      <TimelineConnector />
+    </TimelineSeparator>
+    <TimelineContent>Code</TimelineContent>
+  </TimelineItem>
+  <TimelineItem>
+    <TimelineSeparator>
+      <TimelineDot color="secondary">
+        <HotelIcon />
+      </TimelineDot>
+      <TimelineConnector />
+    </TimelineSeparator>
+    <TimelineContent>Sleep</TimelineContent>
+  </TimelineItem>
+  <TimelineItem>
+    <TimelineSeparator>
+      <TimelineDot color="success">
+        <RepeatIcon />
+      </TimelineDot>
+    </TimelineSeparator>
+    <TimelineContent>Repeat</TimelineContent>
+  </TimelineItem>
+</Timeline>
+```
+
+## API Reference
+
+### Timeline Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `node` | - | The content of the component |
+| `classes` | `object` | - | Override or extend styles |
+| `className` | `string` | - | CSS class name |
+| `position` | `'left'` \| `'right'` \| `'alternate'` \| `'alternate-reverse'` | `'right'` | Position where content appears relative to the time axis |
+| `sx` | `object` | - | System prop for CSS overrides |
+
+### TimelineItem Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `node` | - | The content of the component |
+| `classes` | `object` | - | Override or extend styles |
+| `position` | `'left'` \| `'right'` \| `'alternate'` \| `'alternate-reverse'` | - | Override the parent Timeline position |
+| `sx` | `object` | - | System prop for CSS overrides |
+
+### TimelineDot Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `node` | - | The content of the component (e.g., an icon) |
+| `classes` | `object` | - | Override or extend styles |
+| `color` | `'inherit'` \| `'grey'` \| `'primary'` \| `'secondary'` \| `'error'` \| `'info'` \| `'success'` \| `'warning'` | `'grey'` | The color of the dot |
+| `variant` | `'filled'` \| `'outlined'` | `'filled'` | The variant to use |
+| `sx` | `object` | - | System prop for CSS overrides |
+
+### TimelineContent Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `node` | - | The content of the component |
+| `classes` | `object` | - | Override or extend styles |
+| `sx` | `object` | - | System prop for CSS overrides |
+
+TimelineContent inherits props from [Typography](https://mui.com/material-ui/api/typography/).
+
+### TimelineSeparator Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `node` | - | Usually contains TimelineDot and TimelineConnector |
+| `classes` | `object` | - | Override or extend styles |
+| `sx` | `object` | - | System prop for CSS overrides |
+
+### TimelineConnector Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `classes` | `object` | - | Override or extend styles |
+| `sx` | `object` | - | System prop for CSS overrides |
+
+### TimelineOppositeContent Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `node` | - | The content of the component |
+| `classes` | `object` | - | Override or extend styles |
+| `sx` | `object` | - | System prop for CSS overrides |
+
+TimelineOppositeContent inherits props from [Typography](https://mui.com/material-ui/api/typography/).
+
+## Component Structure
+
+The Timeline component is rendered as an unordered list (`<ul>`) element. Each TimelineItem is rendered as a list item.
+
+**Source location**: `/home/daytona/workspace/source/packages/mui-lab/src/Timeline/Timeline.tsx:52`
+
+## CSS Classes
+
+You can override styles using these CSS classes:
+
+- `.MuiTimeline-root` - Styles applied to the root element
+- `.MuiTimeline-positionLeft` - Styles when `position="left"`
+- `.MuiTimeline-positionRight` - Styles when `position="right"`
+- `.MuiTimeline-positionAlternate` - Styles when `position="alternate"`
+- `.MuiTimeline-positionAlternateReverse` - Styles when `position="alternate-reverse"`

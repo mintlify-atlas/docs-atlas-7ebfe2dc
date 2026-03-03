@@ -1,0 +1,474 @@
+---
+title: Palette
+description: Color and palette utilities in MUI System
+---
+
+# Palette
+
+Utilities for controlling text and background colors with theme integration.
+
+## Import
+
+```javascript
+import { palette } from '@mui/system';
+```
+
+## API
+
+From `palette/palette.js:30-32`:
+
+```javascript
+const palette = compose(color, bgcolor, backgroundColor);
+```
+
+## Transform Function
+
+From `palette.js:4-9`:
+
+```javascript
+export function paletteTransform(value, userValue) {
+  if (userValue === 'grey') {
+    return userValue;
+  }
+  return value;
+}
+```
+
+## Color
+
+Set text color with theme palette:
+
+```jsx
+<Box color="primary.main">Primary text</Box>
+<Box color="secondary.main">Secondary text</Box>
+<Box color="error.main">Error text</Box>
+<Box color="warning.main">Warning text</Box>
+<Box color="info.main">Info text</Box>
+<Box color="success.main">Success text</Box>
+<Box color="text.primary">Primary text color</Box>
+<Box color="text.secondary">Secondary text color</Box>
+<Box color="text.disabled">Disabled text color</Box>
+```
+
+From `palette.js:11-15`:
+
+```javascript
+export const color = style({
+  prop: 'color',
+  themeKey: 'palette',
+  transform: paletteTransform,
+});
+```
+
+## Background Color
+
+### bgcolor (Shorthand)
+
+```jsx
+<Box bgcolor="primary.main">Primary background</Box>
+<Box bgcolor="secondary.light">Light secondary background</Box>
+<Box bgcolor="background.default">Default background</Box>
+<Box bgcolor="background.paper">Paper background</Box>
+<Box bgcolor="action.hover">Hover background</Box>
+```
+
+From `palette.js:17-22`:
+
+```javascript
+export const bgcolor = style({
+  prop: 'bgcolor',
+  cssProperty: 'backgroundColor',
+  themeKey: 'palette',
+  transform: paletteTransform,
+});
+```
+
+### backgroundColor
+
+Full property name also supported:
+
+```jsx
+<Box backgroundColor="primary.main">Primary background</Box>
+```
+
+From `palette.js:24-28`:
+
+```javascript
+export const backgroundColor = style({
+  prop: 'backgroundColor',
+  themeKey: 'palette',
+  transform: paletteTransform,
+});
+```
+
+## Theme Palette Structure
+
+```javascript
+import { createTheme } from '@mui/system';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1976d2',
+      light: '#42a5f5',
+      dark: '#1565c0',
+      contrastText: '#fff',
+    },
+    secondary: {
+      main: '#9c27b0',
+      light: '#ba68c8',
+      dark: '#7b1fa2',
+      contrastText: '#fff',
+    },
+    error: {
+      main: '#d32f2f',
+      light: '#ef5350',
+      dark: '#c62828',
+    },
+    warning: {
+      main: '#ed6c02',
+      light: '#ff9800',
+      dark: '#e65100',
+    },
+    info: {
+      main: '#0288d1',
+      light: '#03a9f4',
+      dark: '#01579b',
+    },
+    success: {
+      main: '#2e7d32',
+      light: '#4caf50',
+      dark: '#1b5e20',
+    },
+    grey: {
+      50: '#fafafa',
+      100: '#f5f5f5',
+      200: '#eeeeee',
+      300: '#e0e0e0',
+      400: '#bdbdbd',
+      500: '#9e9e9e',
+      600: '#757575',
+      700: '#616161',
+      800: '#424242',
+      900: '#212121',
+    },
+    text: {
+      primary: 'rgba(0, 0, 0, 0.87)',
+      secondary: 'rgba(0, 0, 0, 0.6)',
+      disabled: 'rgba(0, 0, 0, 0.38)',
+    },
+    background: {
+      default: '#fff',
+      paper: '#fff',
+    },
+    action: {
+      active: 'rgba(0, 0, 0, 0.54)',
+      hover: 'rgba(0, 0, 0, 0.04)',
+      selected: 'rgba(0, 0, 0, 0.08)',
+      disabled: 'rgba(0, 0, 0, 0.26)',
+      disabledBackground: 'rgba(0, 0, 0, 0.12)',
+    },
+    divider: 'rgba(0, 0, 0, 0.12)',
+  },
+});
+```
+
+## Color Variants
+
+Access different color shades:
+
+```jsx
+{/* Main shades */}
+<Box color="primary.main">Main</Box>
+<Box color="primary.light">Light</Box>
+<Box color="primary.dark">Dark</Box>
+
+{/* Grey scale */}
+<Box color="grey.50">Grey 50</Box>
+<Box color="grey.500">Grey 500</Box>
+<Box color="grey.900">Grey 900</Box>
+
+{/* Numbered palette */}
+<Box bgcolor="primary.100">Primary 100</Box>
+<Box bgcolor="primary.500">Primary 500</Box>
+```
+
+## Common Patterns
+
+### Card with Themed Colors
+
+```jsx
+<Box
+  bgcolor="background.paper"
+  color="text.primary"
+  border={1}
+  borderColor="divider"
+  borderRadius={2}
+  p={2}
+>
+  <Box component="h2" color="primary.main" mt={0}>
+    Card Title
+  </Box>
+  <Box color="text.secondary">
+    Card description goes here
+  </Box>
+</Box>
+```
+
+### Alert Boxes
+
+```jsx
+{/* Error alert */}
+<Box bgcolor="error.light" color="error.dark" p={2} borderRadius={1}>
+  Error message
+</Box>
+
+{/* Success alert */}
+<Box bgcolor="success.light" color="success.dark" p={2} borderRadius={1}>
+  Success message
+</Box>
+
+{/* Warning alert */}
+<Box bgcolor="warning.light" color="warning.dark" p={2} borderRadius={1}>
+  Warning message
+</Box>
+
+{/* Info alert */}
+<Box bgcolor="info.light" color="info.dark" p={2} borderRadius={1}>
+  Info message
+</Box>
+```
+
+### Button Colors
+
+```jsx
+<Box
+  component="button"
+  bgcolor="primary.main"
+  color="primary.contrastText"
+  border="none"
+  borderRadius={1}
+  p={1}
+  px={2}
+  sx={{
+    cursor: 'pointer',
+    '&:hover': {
+      bgcolor: 'primary.dark',
+    },
+  }}
+>
+  Button
+</Box>
+```
+
+### Hover Effects
+
+```jsx
+<Box
+  bgcolor="background.paper"
+  p={2}
+  sx={{
+    '&:hover': {
+      bgcolor: 'action.hover',
+    },
+  }}
+>
+  Hover me
+</Box>
+```
+
+### Status Indicators
+
+```jsx
+<Box display="flex" alignItems="center" gap={1}>
+  <Box
+    width={12}
+    height={12}
+    bgcolor="success.main"
+    borderRadius="50%"
+  />
+  <Box color="text.secondary">Online</Box>
+</Box>
+
+<Box display="flex" alignItems="center" gap={1}>
+  <Box
+    width={12}
+    height={12}
+    bgcolor="error.main"
+    borderRadius="50%"
+  />
+  <Box color="text.secondary">Offline</Box>
+</Box>
+```
+
+### Gradient Backgrounds
+
+```jsx
+<Box
+  sx={{
+    background: (theme) =>
+      `linear-gradient(45deg, ${theme.palette.primary.main} 30%, ${theme.palette.secondary.main} 90%)`,
+    color: 'primary.contrastText',
+    p: 3,
+  }}
+>
+  Gradient background
+</Box>
+```
+
+## Responsive Colors
+
+```jsx
+<Box
+  color={{
+    xs: 'primary.main',
+    sm: 'secondary.main',
+    md: 'error.main',
+  }}
+  bgcolor={{
+    xs: 'grey.100',
+    md: 'background.paper',
+  }}
+>
+  Responsive colors
+</Box>
+```
+
+## Dark Mode Support
+
+```jsx
+import { createTheme, ThemeProvider } from '@mui/system';
+
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+    primary: {
+      main: '#90caf9',
+    },
+    background: {
+      default: '#121212',
+      paper: '#1e1e1e',
+    },
+    text: {
+      primary: '#fff',
+      secondary: 'rgba(255, 255, 255, 0.7)',
+    },
+  },
+});
+
+function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <Box bgcolor="background.default" color="text.primary" minHeight="100vh">
+        Dark mode content
+      </Box>
+    </ThemeProvider>
+  );
+}
+```
+
+## With sx Prop
+
+```jsx
+<Box
+  sx={{
+    color: 'primary.main',
+    bgcolor: 'background.paper',
+    '&:hover': {
+      bgcolor: 'action.hover',
+    },
+    '&.active': {
+      bgcolor: 'action.selected',
+      color: 'primary.dark',
+    },
+  }}
+>
+  Interactive element
+</Box>
+```
+
+## TypeScript
+
+```tsx
+import { Box } from '@mui/system';
+import { PaletteColor } from '@mui/system';
+
+interface ColoredBoxProps {
+  variant?: 'primary' | 'secondary' | 'error' | 'warning' | 'info' | 'success';
+  children: React.ReactNode;
+}
+
+function ColoredBox({ variant = 'primary', children }: ColoredBoxProps) {
+  return (
+    <Box
+      bgcolor={`${variant}.light`}
+      color={`${variant}.dark`}
+      p={2}
+      borderRadius={1}
+    >
+      {children}
+    </Box>
+  );
+}
+```
+
+## Custom Palette Colors
+
+Extend the palette with custom colors:
+
+```javascript
+import { createTheme } from '@mui/system';
+
+const theme = createTheme({
+  palette: {
+    custom: {
+      main: '#ff6b6b',
+      light: '#ff8787',
+      dark: '#cc5555',
+    },
+  },
+});
+
+// TypeScript declaration
+declare module '@mui/system' {
+  interface Palette {
+    custom: PaletteColor;
+  }
+  interface PaletteOptions {
+    custom?: PaletteColorOptions;
+  }
+}
+
+// Usage
+<Box color="custom.main">Custom color</Box>
+```
+
+## Available Properties
+
+| Prop | CSS Property | Theme Key | Transform |
+|------|--------------|-----------|----------|
+| `color` | `color` | `palette` | `paletteTransform` |
+| `bgcolor` | `background-color` | `palette` | `paletteTransform` |
+| `backgroundColor` | `background-color` | `palette` | `paletteTransform` |
+
+## Theme Palette Paths
+
+Common palette paths you can use:
+
+- `primary.main`, `primary.light`, `primary.dark`, `primary.contrastText`
+- `secondary.main`, `secondary.light`, `secondary.dark`, `secondary.contrastText`
+- `error.main`, `error.light`, `error.dark`
+- `warning.main`, `warning.light`, `warning.dark`
+- `info.main`, `info.light`, `info.dark`
+- `success.main`, `success.light`, `success.dark`
+- `grey[50-900]`
+- `text.primary`, `text.secondary`, `text.disabled`
+- `background.default`, `background.paper`
+- `action.active`, `action.hover`, `action.selected`, `action.disabled`, `action.disabledBackground`
+- `divider`
+
+## Related
+
+- [Borders](/system/borders) - Border color utilities
+- [sx Prop](/system/the-sx-prop) - Advanced color styling
+- [Box Component](/system/box) - Using colors with Box

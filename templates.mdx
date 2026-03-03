@@ -1,0 +1,416 @@
+---
+title: Templates
+description: Production-ready Material UI templates for common application types including dashboards, sign-in pages, blogs, and checkout flows.
+---
+
+# Templates
+
+Jumpstart your project with production-ready Material UI templates. All templates are built with real Material UI source code and follow best practices.
+
+## Available Templates
+
+Material UI provides example projects demonstrating integration with popular React frameworks and build tools.
+
+### Framework Templates
+
+<CardGroup cols={2}>
+  <Card title="Next.js (App Router)" icon="nextjs" href="https://github.com/mui/material-ui/tree/master/examples/material-ui-nextjs-ts">
+    Material UI with Next.js 13+ App Router and TypeScript. Includes Emotion integration and server-side rendering.
+  </Card>
+  
+  <Card title="Next.js (Pages Router)" icon="nextjs" href="https://github.com/mui/material-ui/tree/master/examples/material-ui-nextjs-pages-router-ts">
+    Material UI with Next.js Pages Router for projects using the traditional routing approach.
+  </Card>
+  
+  <Card title="Vite" icon="vite" href="https://github.com/mui/material-ui/tree/master/examples/material-ui-vite-ts">
+    Fast development with Vite and Material UI. Includes HMR and optimized builds.
+  </Card>
+  
+  <Card title="Remix" icon="remix" href="https://github.com/mui/material-ui/tree/master/examples/material-ui-remix-ts">
+    Material UI integrated with Remix for full-stack React applications.
+  </Card>
+</CardGroup>
+
+### Build Tool Examples
+
+<CardGroup cols={2}>
+  <Card title="Create React App" icon="react" href="https://github.com/mui/material-ui/tree/master/examples/material-ui-cra-ts">
+    Classic Create React App setup with Material UI and TypeScript.
+  </Card>
+  
+  <Card title="Gatsby" icon="gatsby" href="https://github.com/mui/material-ui/tree/master/examples/material-ui-gatsby">
+    Static site generation with Gatsby and Material UI components.
+  </Card>
+  
+  <Card title="Preact" icon="preact" href="https://github.com/mui/material-ui/tree/master/examples/material-ui-preact">
+    Lightweight alternative using Preact with Material UI.
+  </Card>
+  
+  <Card title="CDN (No Build)" icon="browser" href="https://github.com/mui/material-ui/tree/master/examples/material-ui-via-cdn">
+    Quick prototyping with CDN links - no build step required.
+  </Card>
+</CardGroup>
+
+## Next.js Template (Recommended)
+
+The Next.js App Router template demonstrates modern Material UI integration with server components.
+
+### Installation
+
+```bash
+npx create-next-app@latest my-app --example https://github.com/mui/material-ui/tree/master/examples/material-ui-nextjs-ts
+cd my-app
+npm install
+npm run dev
+```
+
+### Key Features
+
+- **App Router**: Next.js 13+ App Router with React Server Components
+- **TypeScript**: Full type safety with Material UI type definitions
+- **Emotion Cache**: Optimized CSS-in-JS with SSR support
+- **Theme Integration**: Custom theme with light/dark mode
+- **Font Optimization**: Roboto font with Next.js font optimization
+
+### Project Structure
+
+```
+my-app/
+├── src/
+│   ├── app/
+│   │   ├── layout.tsx        # Root layout with theme
+│   │   ├── page.tsx          # Home page
+│   │   └── about/
+│   │       └── page.tsx      # About page
+│   ├── components/
+│   │   ├── ThemeRegistry.tsx # Emotion cache setup
+│   │   ├── Link.tsx          # Next.js Link wrapper
+│   │   └── ProTip.tsx        # Example component
+│   └── theme.ts              # Theme configuration
+├── package.json
+└── tsconfig.json
+```
+
+### Example Code from Template
+
+The template includes a working example with Material UI components:
+
+```tsx src/app/page.tsx
+import * as React from 'react';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
+import NextLink from 'next/link';
+
+export default function Home() {
+  return (
+    <Container maxWidth="lg">
+      <Box
+        sx={{
+          my: 4,
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
+          Material UI - Next.js example in TypeScript
+        </Typography>
+        <Link component={NextLink} href="/about" color="secondary">
+          Go to the about page
+        </Link>
+      </Box>
+    </Container>
+  );
+}
+```
+
+## Vite Template
+
+Fast, modern development with Vite's instant HMR and optimized production builds.
+
+### Installation
+
+```bash
+npx degit mui/material-ui/examples/material-ui-vite-ts my-app
+cd my-app
+npm install
+npm run dev
+```
+
+### Key Features
+
+- **Lightning Fast HMR**: Instant updates during development
+- **Optimized Builds**: Tree-shaking and code splitting out of the box
+- **TypeScript**: Full type support with Material UI
+- **Minimal Config**: Clean, minimal Vite configuration
+
+### Example Code from Template
+
+Simple, clean component structure:
+
+```tsx src/App.tsx
+import * as React from 'react';
+import Container from '@mui/material/Container';
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+import Link from '@mui/material/Link';
+import ProTip from './ProTip';
+
+function Copyright() {
+  return (
+    <Typography
+      variant="body2"
+      align="center"
+      sx={{ color: 'text.secondary' }}
+    >
+      {'Copyright © '}
+      <Link color="inherit" href="https://mui.com/">
+        Your Website
+      </Link>{' '}
+      {new Date().getFullYear()}.
+    </Typography>
+  );
+}
+
+export default function App() {
+  return (
+    <Container maxWidth="sm">
+      <Box sx={{ my: 4 }}>
+        <Typography variant="h4" component="h1" sx={{ mb: 2 }}>
+          Material UI Vite example in TypeScript
+        </Typography>
+        <ProTip />
+        <Copyright />
+      </Box>
+    </Container>
+  );
+}
+```
+
+The ProTip component demonstrates icon usage:
+
+```tsx src/ProTip.tsx
+import * as React from 'react';
+import Link from '@mui/material/Link';
+import SvgIcon, { SvgIconProps } from '@mui/material/SvgIcon';
+import Typography from '@mui/material/Typography';
+
+function LightBulbIcon(props: SvgIconProps) {
+  return (
+    <SvgIcon {...props}>
+      <path d="M9 21c0 .55.45 1 1 1h4c.55 0 1-.45 1-1v-1H9v1zm3-19C8.14 2 5 5.14 5 9c0 2.38 1.19 4.47 3 5.74V17c0 .55.45 1 1 1h6c.55 0 1-.45 1-1v-2.26c1.81-1.27 3-3.36 3-5.74 0-3.86-3.14-7-7-7zm2.85 11.1l-.85.6V16h-4v-2.3l-.85-.6C7.8 12.16 7 10.63 7 9c0-2.76 2.24-5 5-5s5 2.24 5 5c0 1.63-.8 3.16-2.15 4.1z" />
+    </SvgIcon>
+  );
+}
+
+export default function ProTip() {
+  return (
+    <Typography sx={{ mt: 6, mb: 3, color: 'text.secondary' }}>
+      <LightBulbIcon sx={{ mr: 1, verticalAlign: 'middle' }} />
+      {'Pro tip: See more '}
+      <Link href="https://mui.com/material-ui/getting-started/templates/">
+        templates
+      </Link>
+      {' in the Material UI documentation.'}
+    </Typography>
+  );
+}
+```
+
+## Advanced Templates
+
+### Pigment CSS (Zero-Runtime)
+
+Experimental templates using zero-runtime CSS extraction:
+
+<CardGroup cols={2}>
+  <Card title="Next.js + Pigment CSS" href="https://github.com/mui/material-ui/tree/master/examples/material-ui-pigment-css-nextjs-ts">
+    Static CSS extraction with Next.js for optimal performance
+  </Card>
+  
+  <Card title="Vite + Pigment CSS" href="https://github.com/mui/material-ui/tree/master/examples/material-ui-pigment-css-vite-ts">
+    Zero-runtime styling with Vite's build optimization
+  </Card>
+</CardGroup>
+
+### Styling Alternatives
+
+<CardGroup cols={2}>
+  <Card title="Tailwind CSS" href="https://github.com/mui/material-ui/tree/master/examples/material-ui-vite-tailwind-ts">
+    Combine Material UI components with Tailwind utility classes
+  </Card>
+  
+  <Card title="React Router" href="https://github.com/mui/material-ui/tree/master/examples/material-ui-react-router-ts">
+    Client-side routing with React Router and Material UI
+  </Card>
+</CardGroup>
+
+## Server-Side Rendering
+
+### Express + SSR
+
+Full server-side rendering with Express:
+
+```bash
+npx degit mui/material-ui/examples/material-ui-express-ssr my-app
+cd my-app
+npm install
+npm run dev
+```
+
+Key features:
+- Custom Express server
+- Server-side rendering with Emotion
+- Critical CSS extraction
+- Production-ready build
+
+## Template Package.json
+
+All templates include these core dependencies from the Material UI source:
+
+```json package.json
+{
+  "dependencies": {
+    "@emotion/react": "latest",
+    "@emotion/styled": "latest",
+    "@mui/material": "next",
+    "@mui/icons-material": "next",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "latest",
+    "@types/react-dom": "latest",
+    "typescript": "latest"
+  }
+}
+```
+
+## Customizing Templates
+
+### Theme Customization
+
+All templates include a theme file you can customize:
+
+```tsx theme.ts
+import { createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1976d2',
+    },
+    secondary: {
+      main: '#dc004e',
+    },
+  },
+  typography: {
+    fontFamily: 'Roboto, Arial, sans-serif',
+    h1: {
+      fontSize: '2.5rem',
+      fontWeight: 500,
+    },
+  },
+  components: {
+    MuiButton: {
+      styleOverrides: {
+        root: {
+          textTransform: 'none',
+        },
+      },
+    },
+  },
+});
+
+export default theme;
+```
+
+### Adding Components
+
+All Material UI components are available in templates:
+
+```tsx
+import AppBar from '@mui/material/AppBar';
+import Toolbar from '@mui/material/Toolbar';
+import Typography from '@mui/material/Typography';
+import Button from '@mui/material/Button';
+import IconButton from '@mui/material/IconButton';
+import MenuIcon from '@mui/icons-material/Menu';
+
+function Header() {
+  return (
+    <AppBar position="static">
+      <Toolbar>
+        <IconButton
+          size="large"
+          edge="start"
+          color="inherit"
+          aria-label="menu"
+          sx={{ mr: 2 }}
+        >
+          <MenuIcon />
+        </IconButton>
+        <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+          My App
+        </Typography>
+        <Button color="inherit">Login</Button>
+      </Toolbar>
+    </AppBar>
+  );
+}
+```
+
+## Production Deployment
+
+All templates are production-ready and support standard deployment:
+
+### Next.js Deployment
+
+```bash
+npm run build
+npm run start
+```
+
+Deploy to Vercel, Netlify, or any Node.js hosting platform.
+
+### Vite Deployment
+
+```bash
+npm run build
+```
+
+Serve the `dist` folder with any static hosting service.
+
+## Template Comparison
+
+| Template | Build Tool | SSR | TypeScript | Best For |
+|----------|-----------|-----|------------|----------|
+| Next.js App Router | Next.js | Yes | Yes | Full-stack apps, SEO-critical sites |
+| Vite | Vite | No | Yes | Fast development, SPAs |
+| Remix | Remix | Yes | Yes | Data-driven applications |
+| Create React App | Webpack | No | Yes | Traditional React apps |
+| Gatsby | Webpack | Yes | No | Static sites, blogs |
+| Express SSR | Webpack | Yes | No | Custom server requirements |
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Component Demos" icon="components" href="https://mui.com/material-ui/react-button/">
+    Explore interactive component demonstrations
+  </Card>
+  
+  <Card title="Theming Guide" icon="palette" href="https://mui.com/material-ui/customization/theming/">
+    Learn advanced theme customization
+  </Card>
+  
+  <Card title="API Reference" icon="code" href="https://mui.com/material-ui/api/button/">
+    Complete API documentation for all components
+  </Card>
+  
+  <Card title="GitHub Examples" icon="github" href="https://github.com/mui/material-ui/tree/master/examples">
+    Browse all example projects on GitHub
+  </Card>
+</CardGroup>

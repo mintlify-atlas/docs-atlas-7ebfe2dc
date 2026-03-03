@@ -1,0 +1,382 @@
+---
+title: Stepper
+description: Steppers convey progress through numbered steps. It provides a wizard-like workflow.
+---
+
+# Stepper
+
+Steppers display progress through a sequence of logical and numbered steps. They may also be used for navigation.
+
+## Horizontal Stepper
+
+A horizontal stepper with linear flow.
+
+```tsx
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
+const steps = ['Select campaign settings', 'Create an ad group', 'Create an ad'];
+
+export default function HorizontalLinearStepper() {
+  const [activeStep, setActiveStep] = React.useState(0);
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
+  };
+
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const handleReset = () => {
+    setActiveStep(0);
+  };
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <Stepper activeStep={activeStep}>
+        {steps.map((label) => (
+          <Step key={label}>
+            <StepLabel>{label}</StepLabel>
+          </Step>
+        ))}
+      </Stepper>
+      {activeStep === steps.length ? (
+        <React.Fragment>
+          <Typography sx={{ mt: 2, mb: 1 }}>
+            All steps completed
+          </Typography>
+          <Button onClick={handleReset}>Reset</Button>
+        </React.Fragment>
+      ) : (
+        <React.Fragment>
+          <Typography sx={{ mt: 2, mb: 1 }}>Step {activeStep + 1}</Typography>
+          <Box sx={{ display: 'flex', flexDirection: 'row', pt: 2 }}>
+            <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+            >
+              Back
+            </Button>
+            <Box sx={{ flex: '1 1 auto' }} />
+            <Button onClick={handleNext}>
+              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </Button>
+          </Box>
+        </React.Fragment>
+      )}
+    </Box>
+  );
+}
+```
+
+## Vertical Stepper
+
+A vertical stepper for mobile layouts or detailed steps.
+
+```tsx
+import Stepper from '@mui/material/Stepper';
+import Step from '@mui/material/Step';
+import StepLabel from '@mui/material/StepLabel';
+import StepContent from '@mui/material/StepContent';
+
+<Stepper activeStep={activeStep} orientation="vertical">
+  {steps.map((step, index) => (
+    <Step key={step.label}>
+      <StepLabel>{step.label}</StepLabel>
+      <StepContent>
+        <Typography>{step.description}</Typography>
+        <Box sx={{ mb: 2 }}>
+          <Button
+            variant="contained"
+            onClick={handleNext}
+            sx={{ mt: 1, mr: 1 }}
+          >
+            {index === steps.length - 1 ? 'Finish' : 'Continue'}
+          </Button>
+          <Button
+            disabled={index === 0}
+            onClick={handleBack}
+            sx={{ mt: 1, mr: 1 }}
+          >
+            Back
+          </Button>
+        </Box>
+      </StepContent>
+    </Step>
+  ))}
+</Stepper>
+```
+
+## Non-linear Stepper
+
+Allow users to enter a multi-step flow at any point.
+
+```tsx
+const [activeStep, setActiveStep] = React.useState(0);
+const [completed, setCompleted] = React.useState<{
+  [k: number]: boolean;
+}>({});
+
+const handleStep = (step: number) => () => {
+  setActiveStep(step);
+};
+
+const handleComplete = () => {
+  const newCompleted = completed;
+  newCompleted[activeStep] = true;
+  setCompleted(newCompleted);
+  handleNext();
+};
+
+<Stepper nonLinear activeStep={activeStep}>
+  {steps.map((label, index) => (
+    <Step key={label} completed={completed[index]}>
+      <StepButton color="inherit" onClick={handleStep(index)}>
+        {label}
+      </StepButton>
+    </Step>
+  ))}
+</Stepper>
+```
+
+## Alternative Label
+
+Place labels below the step icon.
+
+```tsx
+<Stepper activeStep={activeStep} alternativeLabel>
+  {steps.map((label) => (
+    <Step key={label}>
+      <StepLabel>{label}</StepLabel>
+    </Step>
+  ))}
+</Stepper>
+```
+
+## Custom Icons
+
+Use custom icons for step indicators.
+
+```tsx
+import StepLabel from '@mui/material/StepLabel';
+import SettingsIcon from '@mui/icons-material/Settings';
+import GroupAddIcon from '@mui/icons-material/GroupAdd';
+import VideoLabelIcon from '@mui/icons-material/VideoLabel';
+import StepIconProps from '@mui/material/StepIcon';
+
+function ColorlibStepIcon(props: StepIconProps) {
+  const { active, completed, className } = props;
+
+  const icons: { [index: string]: React.ReactElement } = {
+    1: <SettingsIcon />,
+    2: <GroupAddIcon />,
+    3: <VideoLabelIcon />,
+  };
+
+  return (
+    <div className={className}>
+      {icons[String(props.icon)]}
+    </div>
+  );
+}
+
+<Stepper activeStep={activeStep}>
+  {steps.map((label) => (
+    <Step key={label}>
+      <StepLabel StepIconComponent={ColorlibStepIcon}>
+        {label}
+      </StepLabel>
+    </Step>
+  ))}
+</Stepper>
+```
+
+## Optional Steps
+
+Mark certain steps as optional.
+
+```tsx
+const isStepOptional = (step: number) => {
+  return step === 1;
+};
+
+<Stepper activeStep={activeStep}>
+  {steps.map((label, index) => {
+    const stepProps: { completed?: boolean } = {};
+    const labelProps: { optional?: React.ReactNode } = {};
+    
+    if (isStepOptional(index)) {
+      labelProps.optional = (
+        <Typography variant="caption">Optional</Typography>
+      );
+    }
+    
+    return (
+      <Step key={label} {...stepProps}>
+        <StepLabel {...labelProps}>{label}</StepLabel>
+      </Step>
+    );
+  })}
+</Stepper>
+```
+
+## Error Steps
+
+Indicate errors in specific steps.
+
+```tsx
+const isStepFailed = (step: number) => {
+  return step === 1;
+};
+
+<Stepper activeStep={activeStep}>
+  {steps.map((label, index) => {
+    const labelProps: {
+      optional?: React.ReactNode;
+      error?: boolean;
+    } = {};
+    
+    if (isStepFailed(index)) {
+      labelProps.optional = (
+        <Typography variant="caption" color="error">
+          Alert message
+        </Typography>
+      );
+      labelProps.error = true;
+    }
+    
+    return (
+      <Step key={label}>
+        <StepLabel {...labelProps}>{label}</StepLabel>
+      </Step>
+    );
+  })}
+</Stepper>
+```
+
+## Custom Connector
+
+Customize the connector between steps.
+
+```tsx
+import StepConnector from '@mui/material/StepConnector';
+import { styled } from '@mui/material/styles';
+
+const CustomConnector = styled(StepConnector)(({ theme }) => ({
+  alternativeLabel: {
+    top: 22,
+  },
+  active: {
+    '& .MuiStepConnector-line': {
+      backgroundImage:
+        'linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)',
+    },
+  },
+  completed: {
+    '& .MuiStepConnector-line': {
+      backgroundImage:
+        'linear-gradient( 95deg,rgb(242,113,33) 0%,rgb(233,64,87) 50%,rgb(138,35,135) 100%)',
+    },
+  },
+}));
+
+<Stepper activeStep={activeStep} connector={<CustomConnector />}>
+  {steps.map((label) => (
+    <Step key={label}>
+      <StepLabel>{label}</StepLabel>
+    </Step>
+  ))}
+</Stepper>
+```
+
+## Props
+
+### activeStep
+
+- **Type:** `number`
+- **Default:** `0`
+- **Description:** Set the active step (zero based index). Set to -1 to disable all the steps
+
+### orientation
+
+- **Type:** `'horizontal' | 'vertical'`
+- **Default:** `'horizontal'`
+- **Description:** The component orientation (layout flow direction)
+
+### alternativeLabel
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** If set to `true` and orientation is horizontal, then the step label will be positioned under the icon
+
+### nonLinear
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** If set the Stepper will not assist in controlling steps for linear flow
+
+### connector
+
+- **Type:** `React.ReactElement | null`
+- **Default:** `<StepConnector />`
+- **Description:** An element to be placed between each step
+
+### component
+
+- **Type:** `React.ElementType`
+- **Default:** `'div'`
+- **Description:** The component used for the root node
+
+### sx
+
+- **Type:** `SxProps<Theme>`
+- **Description:** System prop for defining CSS styles
+
+## Accessibility
+
+- The Stepper provides semantic structure for assistive technologies
+- Use descriptive labels for each step
+- Completed and active states are communicated to screen readers
+- Optional and error states should have clear text alternatives
+- Ensure buttons for navigation are keyboard accessible
+
+## Mobile Stepper
+
+For mobile devices, consider using the MobileStepper component instead:
+
+```tsx
+import MobileStepper from '@mui/material/MobileStepper';
+
+<MobileStepper
+  variant="dots"
+  steps={6}
+  position="static"
+  activeStep={activeStep}
+  nextButton={
+    <Button size="small" onClick={handleNext} disabled={activeStep === 5}>
+      Next
+    </Button>
+  }
+  backButton={
+    <Button size="small" onClick={handleBack} disabled={activeStep === 0}>
+      Back
+    </Button>
+  }
+/>
+```
+
+## API Reference
+
+- [Stepper API](https://mui.com/material-ui/api/stepper/)
+- [Step API](https://mui.com/material-ui/api/step/)
+- [StepLabel API](https://mui.com/material-ui/api/step-label/)
+- [StepButton API](https://mui.com/material-ui/api/step-button/)
+- [StepContent API](https://mui.com/material-ui/api/step-content/)
+- [StepConnector API](https://mui.com/material-ui/api/step-connector/)

@@ -1,0 +1,413 @@
+---
+title: Right-to-Left (RTL) Support
+description: Learn how to enable RTL text direction for languages like Arabic, Persian, and Hebrew in Material UI.
+---
+
+## Overview
+
+Material UI supports right-to-left (RTL) languages such as Arabic (ar), Persian (fa), and Hebrew (he). Implementing RTL requires three configuration steps:
+
+1. Set the HTML direction attribute
+2. Configure the theme direction
+3. Install and configure the RTL style plugin
+
+## Step 1: Set HTML Direction
+
+You can apply RTL direction globally or to specific components.
+
+### Global Configuration
+
+Add `dir="rtl"` to the root `<html>` element:
+
+```html
+<html dir="rtl"></html>
+```
+
+If you cannot modify the HTML element directly, use JavaScript before rendering:
+
+```js
+document.documentElement.setAttribute('dir', 'rtl');
+```
+
+### Local Configuration
+
+Apply `dir="rtl"` to any container element:
+
+```tsx
+import Box from '@mui/material/Box';
+
+function RtlSection() {
+  return (
+    <Box dir="rtl">
+      {/* RTL content */}
+    </Box>
+  );
+}
+```
+
+### Portals and RTL
+
+<Warning>
+Components using React portals (like Dialog, Menu, Popover) do not inherit the `dir` attribute from their parent because they render outside the parent's DOM tree.
+
+You must apply `dir="rtl"` directly to these components:
+</Warning>
+
+```tsx
+import Box from '@mui/material/Box';
+import Dialog from '@mui/material/Dialog';
+
+function App() {
+  return (
+    <Box dir="rtl">
+      {/* ❌ This Dialog will still be LTR */}
+      <Dialog open>
+        <div>Content</div>
+      </Dialog>
+
+      {/* ✅ This Dialog will be RTL */}
+      <Dialog dir="rtl" open>
+        <div>Content</div>
+      </Dialog>
+    </Box>
+  );
+}
+```
+
+## Step 2: Configure Theme Direction
+
+Set the theme's `direction` property to `'rtl'`:
+
+```tsx
+import { createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  direction: 'rtl',
+});
+```
+
+Apply the theme using `ThemeProvider`:
+
+```tsx
+import { ThemeProvider } from '@mui/material/styles';
+
+function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      {/* Your app */}
+    </ThemeProvider>
+  );
+}
+```
+
+## Step 3: Install RTL Plugin
+
+Material UI uses the `@mui/stylis-plugin-rtl` package to transform CSS for RTL layouts.
+
+### Installation
+
+```bash
+npm install stylis @mui/stylis-plugin-rtl
+```
+
+The package depends on [cssjanus](https://github.com/cssjanus/cssjanus) to flip CSS properties:
+
+```tsx
+// From @mui/stylis-plugin-rtl/src/index.ts
+import cssjanus from 'cssjanus';
+import { compile, serialize, RULESET, KEYFRAMES } from 'stylis';
+
+function stylisRTLPlugin(element, index, children, callback) {
+  if (
+    element.type === KEYFRAMES ||
+    element.type === RULESET
+  ) {
+    const stringified = cssjanus.transform(
+      stringifyPreserveComments(element, index, children)
+    );
+
+    element.children = stringified ? compile(stringified)[0].children : [];
+    element.return = '';
+  }
+}
+```
+
+### With Emotion (Default)
+
+Use `CacheProvider` to configure the RTL plugin:
+
+```tsx
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
+import { prefixer } from 'stylis';
+import rtlPlugin from '@mui/stylis-plugin-rtl';
+
+// Create RTL cache
+const rtlCache = createCache({
+  key: 'muirtl',
+  stylisPlugins: [prefixer, rtlPlugin],
+});
+
+function RTL({ children }: { children: React.ReactNode }) {
+  return <CacheProvider value={rtlCache}>{children}</CacheProvider>;
+}
+
+export default function App() {
+  return (
+    <RTL>
+      <ThemeProvider theme={theme}>
+        {/* Your app */}
+      </ThemeProvider>
+    </RTL>
+  );
+}
+```
+
+### With styled-components
+
+Use `StyleSheetManager` from styled-components:
+
+```tsx
+import { StyleSheetManager } from 'styled-components';
+import rtlPlugin from '@mui/stylis-plugin-rtl';
+
+function RTL({ children }: { children: React.ReactNode }) {
+  return (
+    <StyleSheetManager stylisPlugins={[rtlPlugin]}>
+      {children}
+    </StyleSheetManager>
+  );
+}
+
+export default function App() {
+  return (
+    <RTL>
+      <ThemeProvider theme={theme}>
+        {/* Your app */}
+      </ThemeProvider>
+    </RTL>
+  );
+}
+```
+
+## Complete Example
+
+Here's a full implementation with Emotion:
+
+```tsx
+import * as React from 'react';
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
+import { prefixer } from 'stylis';
+import rtlPlugin from '@mui/stylis-plugin-rtl';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+
+// Create RTL cache
+const rtlCache = createCache({
+  key: 'muirtl',
+  stylisPlugins: [prefixer, rtlPlugin],
+});
+
+// Create RTL theme
+const rtlTheme = createTheme({
+  direction: 'rtl',
+});
+
+function App() {
+  return (
+    <html dir="rtl">
+      <body>
+        <CacheProvider value={rtlCache}>
+          <ThemeProvider theme={rtlTheme}>
+            <Box sx={{ p: 3 }}>
+              <Button variant="contained">زر</Button>
+            </Box>
+          </ThemeProvider>
+        </CacheProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+## Opting Out of RTL
+
+To exclude specific styles from RTL transformation, use the `/* @noflip */` directive:
+
+```tsx
+import { styled } from '@mui/material/styles';
+
+const LTRText = styled('div')`
+  /* @noflip */
+  text-align: left;
+`;
+
+function MixedDirectionContent() {
+  return (
+    <div>
+      <div>This text follows RTL</div>
+      <LTRText>This text is always left-to-right</LTRText>
+    </div>
+  );
+}
+```
+
+The `@noflip` directive tells cssjanus to skip that CSS property.
+
+## How RTL Transforms CSS
+
+The plugin automatically flips directional properties:
+
+```css
+/* Input (LTR) */
+.element {
+  margin-left: 10px;
+  padding-right: 20px;
+  text-align: left;
+  border-radius: 4px 0 0 4px;
+}
+
+/* Output (RTL) */
+.element {
+  margin-right: 10px;
+  padding-left: 20px;
+  text-align: right;
+  border-radius: 0 4px 4px 0;
+}
+```
+
+Flipped properties include:
+- `left` ↔ `right`
+- `margin-left` ↔ `margin-right`
+- `padding-left` ↔ `padding-right`
+- `border-left` ↔ `border-right`
+- `text-align: left` ↔ `text-align: right`
+- `float: left` ↔ `float: right`
+- Border radius corners
+- Transform translate values
+- Background position
+
+## Dynamic Direction Switching
+
+To support both LTR and RTL in the same app:
+
+```tsx
+import * as React from 'react';
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
+import { prefixer } from 'stylis';
+import rtlPlugin from '@mui/stylis-plugin-rtl';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const ltrCache = createCache({ key: 'muiltr' });
+const rtlCache = createCache({
+  key: 'muirtl',
+  stylisPlugins: [prefixer, rtlPlugin],
+});
+
+function App() {
+  const [direction, setDirection] = React.useState<'ltr' | 'rtl'>('ltr');
+
+  const theme = React.useMemo(
+    () => createTheme({ direction }),
+    [direction]
+  );
+
+  const cache = direction === 'rtl' ? rtlCache : ltrCache;
+
+  React.useEffect(() => {
+    document.documentElement.setAttribute('dir', direction);
+  }, [direction]);
+
+  return (
+    <CacheProvider value={cache}>
+      <ThemeProvider theme={theme}>
+        <button onClick={() => setDirection(d => d === 'ltr' ? 'rtl' : 'ltr')}>
+          Toggle Direction
+        </button>
+        {/* Your app */}
+      </ThemeProvider>
+    </CacheProvider>
+  );
+}
+```
+
+## Next.js Integration
+
+For Next.js App Router:
+
+```tsx
+// app/layout.tsx
+import { AppRouterCacheProvider } from '@mui/material-nextjs/v16-appRouter';
+import { ThemeProvider } from '@mui/material/styles';
+import createCache from '@emotion/cache';
+import { prefixer } from 'stylis';
+import rtlPlugin from '@mui/stylis-plugin-rtl';
+
+const rtlCache = createCache({
+  key: 'muirtl',
+  stylisPlugins: [prefixer, rtlPlugin],
+});
+
+const rtlTheme = createTheme({
+  direction: 'rtl',
+});
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html dir="rtl">
+      <body>
+        <AppRouterCacheProvider options={{ cache: rtlCache }}>
+          <ThemeProvider theme={rtlTheme}>
+            {children}
+          </ThemeProvider>
+        </AppRouterCacheProvider>
+      </body>
+    </html>
+  );
+}
+```
+
+## Testing RTL
+
+When testing RTL components:
+
+```tsx
+import { render } from '@testing-library/react';
+import { CacheProvider } from '@emotion/react';
+import createCache from '@emotion/cache';
+import { prefixer } from 'stylis';
+import rtlPlugin from '@mui/stylis-plugin-rtl';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+const rtlCache = createCache({
+  key: 'muirtl',
+  stylisPlugins: [prefixer, rtlPlugin],
+});
+
+const rtlTheme = createTheme({ direction: 'rtl' });
+
+function renderWithRTL(component: React.ReactElement) {
+  return render(
+    <CacheProvider value={rtlCache}>
+      <ThemeProvider theme={rtlTheme}>
+        {component}
+      </ThemeProvider>
+    </CacheProvider>
+  );
+}
+
+// Usage
+test('renders button in RTL', () => {
+  const { getByRole } = renderWithRTL(<Button>زر</Button>);
+  expect(getByRole('button')).toBeInTheDocument();
+});
+```
+
+## Resources
+
+- [cssjanus documentation](https://github.com/cssjanus/cssjanus)
+- [@mui/stylis-plugin-rtl on npm](https://www.npmjs.com/package/@mui/stylis-plugin-rtl)
+- [stylis documentation](https://github.com/thysultan/stylis)

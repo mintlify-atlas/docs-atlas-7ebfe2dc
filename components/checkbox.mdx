@@ -1,0 +1,94 @@
+---
+title: Checkbox
+description: Material UI Checkbox component allows users to select one or more items from a set.
+---
+
+Checkboxes allow the user to select one or more items from a set.
+
+## Import
+
+```tsx
+import Checkbox from '@mui/material/Checkbox';
+```
+
+## Basic Usage
+
+```tsx
+import Checkbox from '@mui/material/Checkbox';
+
+const label = { slotProps: { input: { 'aria-label': 'Checkbox demo' } } };
+
+export default function Checkboxes() {
+  return (
+    <div>
+      <Checkbox {...label} defaultChecked />
+      <Checkbox {...label} />
+      <Checkbox {...label} disabled />
+      <Checkbox {...label} disabled checked />
+    </div>
+  );
+}
+```
+
+## Props
+
+<ParamField path="checked" type="boolean">
+  If `true`, the component is checked.
+</ParamField>
+
+<ParamField path="defaultChecked" type="boolean">
+  The default checked state. Use when the component is not controlled.
+</ParamField>
+
+<ParamField path="color" type="'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | 'default'" default="'primary'">
+  The color of the component. Supports both default and custom theme colors.
+</ParamField>
+
+<ParamField path="size" type="'small' | 'medium' | 'large'" default="'medium'">
+  The size of the component. `small` is equivalent to the dense checkbox styling.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  If `true`, the component is disabled.
+</ParamField>
+
+<ParamField path="indeterminate" type="boolean" default="false">
+  If `true`, the component appears indeterminate. This does not set the native input element to indeterminate due to inconsistent behavior across browsers. However, we set a `data-indeterminate` attribute on the `input`.
+</ParamField>
+
+<ParamField path="disableRipple" type="boolean" default="false">
+  If `true`, the ripple effect is disabled.
+</ParamField>
+
+<ParamField path="checkedIcon" type="ReactNode">
+  The icon to display when the component is checked. Defaults to `<CheckBoxIcon />`.
+</ParamField>
+
+<ParamField path="icon" type="ReactNode">
+  The icon to display when the component is unchecked. Defaults to `<CheckBoxOutlineBlankIcon />`.
+</ParamField>
+
+<ParamField path="indeterminateIcon" type="ReactNode">
+  The icon to display when the component is indeterminate. Defaults to `<IndeterminateCheckBoxIcon />`.
+</ParamField>
+
+<ParamField path="onChange" type="(event: React.ChangeEvent<HTMLInputElement>) => void">
+  Callback fired when the state is changed. You can pull out the new checked state by accessing `event.target.checked` (boolean).
+</ParamField>
+
+<ParamField path="required" type="boolean" default="false">
+  If `true`, the `input` element is required.
+</ParamField>
+
+<ParamField path="value" type="unknown">
+  The value of the component. The DOM API casts this to a string. The browser uses "on" as the default value.
+</ParamField>
+
+<ParamField path="sx" type="SxProps<Theme>">
+  The system prop that allows defining system overrides as well as additional CSS styles.
+</ParamField>
+
+## API Reference
+
+- [Checkbox API](https://next.mui.com/material-ui/api/checkbox/)
+- Inherits [ButtonBase API](https://next.mui.com/material-ui/api/button-base/)

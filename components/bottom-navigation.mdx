@@ -1,0 +1,149 @@
+---
+title: Bottom Navigation
+description: Bottom navigation bars allow movement between primary destinations in an app.
+---
+
+# Bottom Navigation
+
+Bottom navigation bars make it easy to explore and switch between top-level views in a single tap. They are primarily used on mobile applications.
+
+## Basic Bottom Navigation
+
+The `BottomNavigation` component displays a set of actions at the bottom of the screen. It uses the `BottomNavigationAction` component for each navigation item.
+
+```tsx
+import * as React from 'react';
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+import RestoreIcon from '@mui/icons-material/Restore';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
+
+export default function BasicBottomNavigation() {
+  const [value, setValue] = React.useState(0);
+
+  return (
+    <BottomNavigation
+      value={value}
+      onChange={(event, newValue) => {
+        setValue(newValue);
+      }}
+      showLabels
+    >
+      <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+      <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+      <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+    </BottomNavigation>
+  );
+}
+```
+
+## Without Labels
+
+By default, only the selected `BottomNavigationAction` shows its label. Set `showLabels` to `false` to hide all labels.
+
+```tsx
+import BottomNavigation from '@mui/material/BottomNavigation';
+import BottomNavigationAction from '@mui/material/BottomNavigationAction';
+
+<BottomNavigation value={value} onChange={handleChange}>
+  <BottomNavigationAction icon={<RestoreIcon />} />
+  <BottomNavigationAction icon={<FavoriteIcon />} />
+  <BottomNavigationAction icon={<LocationOnIcon />} />
+</BottomNavigation>
+```
+
+## Always Show Labels
+
+Set `showLabels` to `true` to always display labels for all actions.
+
+```tsx
+<BottomNavigation 
+  value={value} 
+  onChange={handleChange}
+  showLabels
+>
+  <BottomNavigationAction label="Recents" icon={<RestoreIcon />} />
+  <BottomNavigationAction label="Favorites" icon={<FavoriteIcon />} />
+  <BottomNavigationAction label="Nearby" icon={<LocationOnIcon />} />
+</BottomNavigation>
+```
+
+## Controlled Component
+
+The component is controlled when the `value` prop is provided. The `onChange` callback is triggered when the value changes.
+
+```tsx
+const [value, setValue] = React.useState(0);
+
+<BottomNavigation
+  value={value}
+  onChange={(event, newValue) => {
+    setValue(newValue);
+  }}
+>
+  {/* Navigation actions */}
+</BottomNavigation>
+```
+
+## BottomNavigation Props
+
+### value
+
+- **Type:** `any`
+- **Description:** The value of the currently selected `BottomNavigationAction`
+
+### onChange
+
+- **Type:** `(event: React.SyntheticEvent, value: any) => void`
+- **Description:** Callback fired when the value changes. The second parameter is the new value
+
+### showLabels
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** If `true`, all `BottomNavigationAction`s will show their labels. By default, only the selected action shows its label
+
+### component
+
+- **Type:** `React.ElementType`
+- **Default:** `'div'`
+- **Description:** The component used for the root node
+
+### sx
+
+- **Type:** `SxProps<Theme>`
+- **Description:** System prop for defining CSS styles
+
+## BottomNavigationAction Props
+
+### label
+
+- **Type:** `React.ReactNode`
+- **Description:** The label element
+
+### icon
+
+- **Type:** `React.ReactNode`
+- **Description:** The icon to display
+
+### showLabel
+
+- **Type:** `boolean`
+- **Description:** If `true`, the `BottomNavigationAction` will show its label. Defaults to the value inherited from the parent `BottomNavigation` component
+
+### value
+
+- **Type:** `any`
+- **Description:** You can provide your own value. Otherwise, it falls back to the child position index
+
+## Accessibility
+
+- Each `BottomNavigationAction` inherits from `ButtonBase`, providing full keyboard navigation support
+- Use meaningful labels for screen readers
+- The selected state is automatically communicated to assistive technologies
+
+## API Reference
+
+- [BottomNavigation API](https://mui.com/material-ui/api/bottom-navigation/)
+- [BottomNavigationAction API](https://mui.com/material-ui/api/bottom-navigation-action/)

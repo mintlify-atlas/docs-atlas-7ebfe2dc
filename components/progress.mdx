@@ -1,0 +1,245 @@
+---
+title: Progress
+description: Progress indicators (CircularProgress and LinearProgress) communicate an app's loading state
+---
+
+# Progress
+
+Progress indicators inform users about the status of ongoing processes, such as loading an app, submitting a form, or saving updates.
+
+## Overview
+
+Material UI provides two types of progress indicators:
+
+- **CircularProgress** - Circular spinners
+- **LinearProgress** - Horizontal progress bars
+
+Both support determinate and indeterminate variants.
+
+## CircularProgress
+
+### Basic Usage
+
+```tsx
+import CircularProgress from '@mui/material/CircularProgress';
+import Box from '@mui/material/Box';
+
+function CircularIndeterminate() {
+  return (
+    <Box sx={{ display: 'flex' }}>
+      <CircularProgress />
+    </Box>
+  );
+}
+```
+
+### Determinate Progress
+
+Show specific progress value:
+
+```tsx
+import * as React from 'react';
+import CircularProgress from '@mui/material/CircularProgress';
+
+function CircularDeterminate() {
+  const [progress, setProgress] = React.useState(0);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((prevProgress) => 
+        prevProgress >= 100 ? 0 : prevProgress + 10
+      );
+    }, 800);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  return <CircularProgress variant="determinate" value={progress} />;
+}
+```
+
+### CircularProgress Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'determinate' \| 'indeterminate'` | `'indeterminate'` | The variant to use. Use indeterminate when there is no progress value. |
+| `value` | `number` | `0` | The value of the progress indicator for determinate variant. Value between 0 and 100. |
+| `size` | `number \| string` | `40` | The size of the component. If using a number, pixel unit is assumed. |
+| `thickness` | `number` | `3.6` | The thickness of the circle. |
+| `color` | `'primary' \| 'secondary' \| 'error' \| 'info' \| 'success' \| 'warning' \| 'inherit'` | `'primary'` | The color of the component. |
+| `disableShrink` | `boolean` | `false` | If `true`, the shrink animation is disabled (indeterminate only). |
+| `enableTrackSlot` | `boolean` | `false` | If `true`, a track circle slot is mounted to show a subtle background. |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS overrides. |
+
+### Color Variants
+
+```tsx
+<CircularProgress color="secondary" />
+<CircularProgress color="success" />
+<CircularProgress color="inherit" />
+```
+
+### Custom Size
+
+```tsx
+<CircularProgress size={20} />
+<CircularProgress size={60} />
+<CircularProgress size="3rem" />
+```
+
+## LinearProgress
+
+### Basic Usage
+
+```tsx
+import LinearProgress from '@mui/material/LinearProgress';
+import Box from '@mui/material/Box';
+
+function LinearIndeterminate() {
+  return (
+    <Box sx={{ width: '100%' }}>
+      <LinearProgress />
+    </Box>
+  );
+}
+```
+
+### Determinate Progress
+
+```tsx
+import * as React from 'react';
+import LinearProgress from '@mui/material/LinearProgress';
+import Box from '@mui/material/Box';
+
+function LinearDeterminate() {
+  const [progress, setProgress] = React.useState(0);
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      setProgress((oldProgress) => {
+        if (oldProgress === 100) {
+          return 0;
+        }
+        const diff = Math.random() * 10;
+        return Math.min(oldProgress + diff, 100);
+      });
+    }, 500);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  return (
+    <Box sx={{ width: '100%' }}>
+      <LinearProgress variant="determinate" value={progress} />
+    </Box>
+  );
+}
+```
+
+### Buffer Variant
+
+Show both value and buffer progress:
+
+```tsx
+import * as React from 'react';
+import LinearProgress from '@mui/material/LinearProgress';
+
+function LinearBuffer() {
+  const [progress, setProgress] = React.useState(0);
+  const [buffer, setBuffer] = React.useState(10);
+
+  const progressRef = React.useRef(() => {});
+  React.useEffect(() => {
+    progressRef.current = () => {
+      if (progress > 100) {
+        setProgress(0);
+        setBuffer(10);
+      } else {
+        const diff = Math.random() * 10;
+        const diff2 = Math.random() * 10;
+        setProgress(progress + diff);
+        setBuffer(progress + diff + diff2);
+      }
+    };
+  });
+
+  React.useEffect(() => {
+    const timer = setInterval(() => {
+      progressRef.current();
+    }, 500);
+
+    return () => {
+      clearInterval(timer);
+    };
+  }, []);
+
+  return (
+    <LinearProgress 
+      variant="buffer" 
+      value={progress} 
+      valueBuffer={buffer} 
+    />
+  );
+}
+```
+
+### LinearProgress Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'determinate' \| 'indeterminate' \| 'buffer' \| 'query'` | `'indeterminate'` | The variant to use. Use indeterminate or query when there is no progress value. |
+| `value` | `number` | - | The value of progress indicator for determinate and buffer variants. Value between 0 and 100. |
+| `valueBuffer` | `number` | - | The value for the buffer variant. Value between 0 and 100. |
+| `color` | `'primary' \| 'secondary' \| 'error' \| 'info' \| 'success' \| 'warning' \| 'inherit'` | `'primary'` | The color of the component. |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS overrides. |
+
+## ARIA
+
+If the progress bar is describing the loading progress of a particular region of a page, you should use `aria-describedby` to point to the progress bar, and set the `aria-busy` attribute to `true` on that region until it has finished loading.
+
+```tsx
+<div aria-busy="true" aria-describedby="loading-progress">
+  {/* content being loaded */}
+</div>
+<CircularProgress id="loading-progress" />
+```
+
+## CSS Classes
+
+### CircularProgress Classes
+
+- `.MuiCircularProgress-root` - Root element
+- `.MuiCircularProgress-svg` - SVG element
+- `.MuiCircularProgress-circle` - Circle element
+- `.MuiCircularProgress-circleDeterminate` - Circle when variant='determinate'
+- `.MuiCircularProgress-circleIndeterminate` - Circle when variant='indeterminate'
+- `.MuiCircularProgress-colorPrimary` - Applied for primary color
+- `.MuiCircularProgress-colorSecondary` - Applied for secondary color
+
+### LinearProgress Classes
+
+- `.MuiLinearProgress-root` - Root element
+- `.MuiLinearProgress-bar` - Bar element
+- `.MuiLinearProgress-barColorPrimary` - Bar with primary color
+- `.MuiLinearProgress-barColorSecondary` - Bar with secondary color
+- `.MuiLinearProgress-bar1Determinate` - Primary bar for determinate
+- `.MuiLinearProgress-bar1Indeterminate` - Primary bar for indeterminate
+- `.MuiLinearProgress-bar1Buffer` - Primary bar for buffer
+- `.MuiLinearProgress-bar2Buffer` - Secondary bar for buffer
+- `.MuiLinearProgress-dashed` - Dashed element for buffer variant
+
+## API Reference
+
+For complete API documentation, see:
+- [CircularProgress API](https://mui.com/material-ui/api/circular-progress/)
+- [LinearProgress API](https://mui.com/material-ui/api/linear-progress/)
+- [Progress Demos](https://mui.com/material-ui/react-progress/)
+
+## Source Locations
+
+- `~/workspace/source/packages/mui-material/src/CircularProgress/CircularProgress.d.ts:90`
+- `~/workspace/source/packages/mui-material/src/LinearProgress/LinearProgress.d.ts:73`

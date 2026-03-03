@@ -1,0 +1,319 @@
+---
+title: Snackbar
+description: Snackbar component provides brief notifications about app processes
+---
+
+# Snackbar
+
+Snackbars provide brief messages about app processes at the bottom of the screen.
+
+## Overview
+
+Snackbars inform users of a process that an app has performed or will perform. They appear temporarily, towards the bottom of the screen. They shouldn't interrupt the user experience, and they don't require user input to disappear.
+
+## Basic Usage
+
+```tsx
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Snackbar, { SnackbarCloseReason } from '@mui/material/Snackbar';
+import IconButton from '@mui/material/IconButton';
+import CloseIcon from '@mui/icons-material/Close';
+
+function SimpleSnackbar() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen(true);
+  };
+
+  const handleClose = (
+    event: React.SyntheticEvent | Event,
+    reason?: SnackbarCloseReason,
+  ) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const action = (
+    <React.Fragment>
+      <Button color="secondary" size="small" onClick={handleClose}>
+        UNDO
+      </Button>
+      <IconButton
+        size="small"
+        aria-label="close"
+        color="inherit"
+        onClick={handleClose}
+      >
+        <CloseIcon fontSize="small" />
+      </IconButton>
+    </React.Fragment>
+  );
+
+  return (
+    <div>
+      <Button onClick={handleClick}>Open Snackbar</Button>
+      <Snackbar
+        open={open}
+        autoHideDuration={6000}
+        onClose={handleClose}
+        message="Note archived"
+        action={action}
+      />
+    </div>
+  );
+}
+```
+
+## Auto-hide Duration
+
+Snackbars can automatically hide after a specified duration:
+
+```tsx
+<Snackbar
+  open={open}
+  autoHideDuration={6000}
+  onClose={handleClose}
+  message="This will auto-hide in 6 seconds"
+/>
+```
+
+Set to `null` to disable auto-hide:
+
+```tsx
+<Snackbar
+  open={open}
+  autoHideDuration={null}
+  onClose={handleClose}
+  message="This will not auto-hide"
+/>
+```
+
+## Positioning
+
+Control the position of the snackbar using `anchorOrigin`:
+
+```tsx
+<Snackbar
+  open={open}
+  anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+  message="Positioned at top center"
+/>
+
+<Snackbar
+  open={open}
+  anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+  message="Positioned at bottom right"
+/>
+```
+
+## With Alert
+
+For more complex notifications, combine Snackbar with Alert:
+
+```tsx
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
+
+function AlertSnackbar() {
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <Snackbar open={open} autoHideDuration={6000} onClose={handleClose}>
+      <Alert 
+        onClose={handleClose} 
+        severity="success" 
+        sx={{ width: '100%' }}
+      >
+        This is a success message!
+      </Alert>
+    </Snackbar>
+  );
+}
+```
+
+## Props
+
+### Main Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | - | If `true`, the component is shown. |
+| `message` | `ReactNode` | - | The message to display. |
+| `action` | `ReactNode` | - | The action to display. It renders after the message, at the end of the snackbar. |
+| `autoHideDuration` | `number \| null` | `null` | Number of milliseconds to wait before auto-calling `onClose`. Set to `null` to disable. |
+| `onClose` | `(event: SyntheticEvent \| Event, reason: SnackbarCloseReason) => void` | - | Callback fired when the component requests to be closed. |
+| `anchorOrigin` | `{ vertical: 'top' \| 'bottom', horizontal: 'left' \| 'center' \| 'right' }` | `{ vertical: 'bottom', horizontal: 'left' }` | The anchor of the Snackbar. |
+| `resumeHideDuration` | `number` | - | Number of milliseconds to wait before dismissing after user interaction. |
+| `disableWindowBlurListener` | `boolean` | `false` | If `true`, the `autoHideDuration` timer will expire even if the window is not focused. |
+| `transitionDuration` | `number \| { enter?: number, exit?: number }` | `{ enter: theme.transitions.duration.enteringScreen, exit: theme.transitions.duration.leavingScreen }` | The duration for the transition. |
+| `key` | `any` | - | When displaying multiple consecutive snackbars, add the `key` prop to ensure independent treatment. |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS overrides. |
+
+### Close Reasons
+
+The `onClose` callback receives a `reason` parameter:
+
+- `'timeout'` - `autoHideDuration` expired
+- `'clickaway'` - User clicked outside the snackbar
+- `'escapeKeyDown'` - User pressed Escape key
+
+```tsx
+const handleClose = (event, reason) => {
+  if (reason === 'clickaway') {
+    // Optionally ignore clickaway events
+    return;
+  }
+  setOpen(false);
+};
+```
+
+### Slot Props
+
+The Snackbar component supports slot-based customization:
+
+- `slots.root` - The root div element
+- `slots.content` - The SnackbarContent component
+- `slots.clickAwayListener` - The ClickAwayListener component
+- `slots.transition` - The transition component (default: Grow)
+
+Use `slotProps` to pass props to each slot:
+
+```tsx
+<Snackbar
+  open={open}
+  slotProps={{
+    content: {
+      sx: { backgroundColor: 'success.main' }
+    },
+    transition: { timeout: 500 }
+  }}
+>
+  Custom styled snackbar
+</Snackbar>
+```
+
+## Consecutive Snackbars
+
+When displaying multiple snackbars, use the `key` prop to ensure each is treated independently:
+
+```tsx
+import * as React from 'react';
+import Snackbar from '@mui/material/Snackbar';
+
+interface SnackbarMessage {
+  message: string;
+  key: number;
+}
+
+function ConsecutiveSnackbars() {
+  const [snackPack, setSnackPack] = React.useState<readonly SnackbarMessage[]>([]);
+  const [open, setOpen] = React.useState(false);
+  const [messageInfo, setMessageInfo] = React.useState<SnackbarMessage | undefined>();
+
+  React.useEffect(() => {
+    if (snackPack.length && !messageInfo) {
+      setMessageInfo({ ...snackPack[0] });
+      setSnackPack((prev) => prev.slice(1));
+      setOpen(true);
+    } else if (snackPack.length && messageInfo && open) {
+      setOpen(false);
+    }
+  }, [snackPack, messageInfo, open]);
+
+  const handleClose = (event: React.SyntheticEvent | Event, reason?: string) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setOpen(false);
+  };
+
+  const handleExited = () => {
+    setMessageInfo(undefined);
+  };
+
+  return (
+    <Snackbar
+      key={messageInfo ? messageInfo.key : undefined}
+      open={open}
+      autoHideDuration={6000}
+      onClose={handleClose}
+      TransitionProps={{ onExited: handleExited }}
+      message={messageInfo ? messageInfo.message : undefined}
+    />
+  );
+}
+```
+
+## Transitions
+
+Customize the transition component:
+
+```tsx
+import Slide from '@mui/material/Slide';
+import Fade from '@mui/material/Fade';
+
+// Slide transition
+<Snackbar
+  open={open}
+  slotProps={{ transition: { component: Slide, direction: 'up' } }}
+/>
+
+// Fade transition
+<Snackbar
+  open={open}
+  slotProps={{ transition: { component: Fade } }}
+/>
+```
+
+## Accessibility
+
+Snackbars should:
+
+- Use appropriate ARIA attributes
+- Not block critical UI elements
+- Provide sufficient time for users to read messages
+- Allow dismissal via Escape key
+
+```tsx
+<Snackbar
+  open={open}
+  message="Message sent"
+  aria-describedby="snackbar-message"
+/>
+```
+
+## CSS Classes
+
+The component has the following CSS classes available:
+
+- `.MuiSnackbar-root` - Root element
+- `.MuiSnackbar-anchorOriginTopCenter` - Applied when anchorOrigin={{ vertical: 'top', horizontal: 'center' }}
+- `.MuiSnackbar-anchorOriginBottomCenter` - Applied when anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+- `.MuiSnackbar-anchorOriginTopRight` - Applied when anchorOrigin={{ vertical: 'top', horizontal: 'right' }}
+- `.MuiSnackbar-anchorOriginBottomRight` - Applied when anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}
+- `.MuiSnackbar-anchorOriginTopLeft` - Applied when anchorOrigin={{ vertical: 'top', horizontal: 'left' }}
+- `.MuiSnackbar-anchorOriginBottomLeft` - Applied when anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}
+
+## Best Practices
+
+1. **Keep messages brief**: Snackbars should contain a single line of text
+2. **Use for confirmations**: Best for confirming actions like "Email sent"
+3. **Avoid critical information**: Don't use snackbars for critical errors
+4. **Limit actions**: Include at most one action button
+5. **Don't stack**: Show one snackbar at a time (queue multiple messages)
+6. **Auto-hide**: Set appropriate `autoHideDuration` (typically 4-10 seconds)
+
+## API Reference
+
+For complete API documentation, see:
+- [Snackbar API](https://mui.com/material-ui/api/snackbar/)
+- [Snackbar Demos](https://mui.com/material-ui/react-snackbar/)
+- [SnackbarContent API](https://mui.com/material-ui/api/snackbar-content/)
+
+## Source Location
+
+`~/workspace/source/packages/mui-material/src/Snackbar/Snackbar.d.ts:208`

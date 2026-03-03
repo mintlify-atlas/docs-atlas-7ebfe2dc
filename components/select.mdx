@@ -1,0 +1,134 @@
+---
+title: Select
+description: Material UI Select component allows users to choose from a list of options.
+---
+
+Select components are used for collecting user provided information from a list of options.
+
+## Import
+
+```tsx
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
+```
+
+## Basic Usage
+
+```tsx
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import InputLabel from '@mui/material/InputLabel';
+import MenuItem from '@mui/material/MenuItem';
+import FormControl from '@mui/material/FormControl';
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
+export default function BasicSelect() {
+  const [age, setAge] = React.useState('');
+
+  const handleChange = (event: SelectChangeEvent) => {
+    setAge(event.target.value as string);
+  };
+
+  return (
+    <Box sx={{ minWidth: 120 }}>
+      <FormControl fullWidth>
+        <InputLabel id="demo-simple-select-label">Age</InputLabel>
+        <Select
+          labelId="demo-simple-select-label"
+          id="demo-simple-select"
+          value={age}
+          label="Age"
+          onChange={handleChange}
+        >
+          <MenuItem value={10}>Ten</MenuItem>
+          <MenuItem value={20}>Twenty</MenuItem>
+          <MenuItem value={30}>Thirty</MenuItem>
+        </Select>
+      </FormControl>
+    </Box>
+  );
+}
+```
+
+## Props
+
+<ParamField path="value" type="Value | ''">
+  The `input` value. Providing an empty string will select no options. Set to an empty string `''` if you don't want any of the available options to be selected.
+</ParamField>
+
+<ParamField path="defaultValue" type="Value">
+  The default value. Use when the component is not controlled.
+</ParamField>
+
+<ParamField path="variant" type="'outlined' | 'standard' | 'filled'" default="'outlined'">
+  The variant to use.
+</ParamField>
+
+<ParamField path="multiple" type="boolean" default="false">
+  If `true`, `value` must be an array and the menu will support multiple selections.
+</ParamField>
+
+<ParamField path="native" type="boolean" default="false">
+  If `true`, the component uses a native `select` element.
+</ParamField>
+
+<ParamField path="autoWidth" type="boolean" default="false">
+  If `true`, the width of the popover will automatically be set according to the items inside the menu, otherwise it will be at least the width of the select input.
+</ParamField>
+
+<ParamField path="displayEmpty" type="boolean" default="false">
+  If `true`, a value is displayed even if no items are selected. When using this prop, make sure the label doesn't overlap with the empty displayed value.
+</ParamField>
+
+<ParamField path="defaultOpen" type="boolean" default="false">
+  If `true`, the component is initially open. Use when the component open state is not controlled (i.e. the `open` prop is not defined). You can only use it when the `native` prop is `false` (default).
+</ParamField>
+
+<ParamField path="open" type="boolean">
+  If `true`, the component is shown. You can only use it when the `native` prop is `false` (default).
+</ParamField>
+
+<ParamField path="label" type="ReactNode">
+  See [OutlinedInput#label](https://mui.com/material-ui/api/outlined-input/#props).
+</ParamField>
+
+<ParamField path="labelId" type="string">
+  The ID of an element that acts as an additional label. The Select will be labelled by the additional label and the selected value.
+</ParamField>
+
+<ParamField path="onChange" type="(event: SelectChangeEvent<Value>, child?: object) => void">
+  Callback fired when a menu item is selected. You can pull out the new value by accessing `event.target.value` (any).
+</ParamField>
+
+<ParamField path="onClose" type="(event: React.SyntheticEvent) => void">
+  Callback fired when the component requests to be closed. Use it in either controlled (see the `open` prop), or uncontrolled mode (to detect when the Select collapses).
+</ParamField>
+
+<ParamField path="onOpen" type="(event: React.SyntheticEvent) => void">
+  Callback fired when the component requests to be opened. Use it in either controlled (see the `open` prop), or uncontrolled mode (to detect when the Select expands).
+</ParamField>
+
+<ParamField path="renderValue" type="(value: Value) => ReactNode">
+  Render the selected value. You can only use it when the `native` prop is `false` (default).
+</ParamField>
+
+<ParamField path="IconComponent" type="React.ElementType">
+  The icon that displays the arrow. Defaults to `ArrowDropDownIcon`.
+</ParamField>
+
+<ParamField path="MenuProps" type="Partial<MenuProps>">
+  Props applied to the Menu element.
+</ParamField>
+
+<ParamField path="sx" type="SxProps<Theme>">
+  The system prop that allows defining system overrides as well as additional CSS styles.
+</ParamField>
+
+<ParamField path="children" type="ReactNode">
+  The option elements to populate the select with. Can be some `MenuItem` when `native` is false and `option` when `native` is true. The `MenuItem` elements must be direct descendants when `native` is false.
+</ParamField>
+
+## API Reference
+
+- [Select API](https://next.mui.com/material-ui/api/select/)
+- Inherits [OutlinedInput API](https://next.mui.com/material-ui/api/outlined-input/)

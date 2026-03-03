@@ -1,0 +1,299 @@
+---
+title: Pagination
+description: The Pagination component enables the user to select a specific page from a range of pages.
+---
+
+# Pagination
+
+The Pagination component enables users to navigate through pages of content.
+
+## Basic Pagination
+
+A basic pagination component.
+
+```tsx
+import * as React from 'react';
+import Pagination from '@mui/material/Pagination';
+import Stack from '@mui/material/Stack';
+
+export default function BasicPagination() {
+  return (
+    <Stack spacing={2}>
+      <Pagination count={10} />
+      <Pagination count={10} color="primary" />
+      <Pagination count={10} color="secondary" />
+      <Pagination count={10} disabled />
+    </Stack>
+  );
+}
+```
+
+## Outlined Pagination
+
+Use the `variant` prop for an outlined style.
+
+```tsx
+import Pagination from '@mui/material/Pagination';
+
+<Pagination count={10} variant="outlined" />
+<Pagination count={10} variant="outlined" color="primary" />
+<Pagination count={10} variant="outlined" color="secondary" />
+```
+
+## Rounded Pagination
+
+Change the shape using the `shape` prop.
+
+```tsx
+<Pagination count={10} shape="rounded" />
+<Pagination count={10} variant="outlined" shape="rounded" />
+```
+
+## Pagination Size
+
+Control the size with the `size` prop.
+
+```tsx
+<Pagination count={10} size="small" />
+<Pagination count={10} />
+<Pagination count={10} size="large" />
+```
+
+## Controlled Pagination
+
+Control the current page with the `page` prop.
+
+```tsx
+import * as React from 'react';
+import Pagination from '@mui/material/Pagination';
+
+function ControlledPagination() {
+  const [page, setPage] = React.useState(1);
+  
+  const handleChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value);
+  };
+
+  return (
+    <Pagination count={10} page={page} onChange={handleChange} />
+  );
+}
+```
+
+## Pagination Ranges
+
+You can customize the number of visible pages with props.
+
+```tsx
+// Show first, last, and 1 page on each side
+<Pagination count={11} defaultPage={6} siblingCount={1} />
+
+// Show first, last, and 0 pages on each side (only current)
+<Pagination count={11} defaultPage={6} siblingCount={0} />
+
+// Show first, last, and 2 pages on each side
+<Pagination count={11} defaultPage={6} siblingCount={2} />
+
+// Hide first and last buttons
+<Pagination count={11} hidePrevButton hideNextButton />
+
+// Show first and last page buttons
+<Pagination count={11} showFirstButton showLastButton />
+```
+
+## Boundary Count
+
+Control the number of always visible pages at the beginning and end.
+
+```tsx
+// 1 page at each end (default)
+<Pagination count={11} defaultPage={6} boundaryCount={1} />
+
+// 2 pages at each end
+<Pagination count={11} defaultPage={6} boundaryCount={2} />
+
+// 0 pages at each end
+<Pagination count={11} defaultPage={6} boundaryCount={0} />
+```
+
+## Custom Icons
+
+Customize the pagination item appearance.
+
+```tsx
+import PaginationItem from '@mui/material/PaginationItem';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
+
+<Pagination
+  count={10}
+  renderItem={(item) => (
+    <PaginationItem
+      slots={{ previous: ArrowBackIcon, next: ArrowForwardIcon }}
+      {...item}
+    />
+  )}
+/>
+```
+
+## Pagination with Links
+
+Integrate with routing libraries.
+
+```tsx
+import { Link, MemoryRouter, Route, Routes } from 'react-router-dom';
+import PaginationItem from '@mui/material/PaginationItem';
+
+function Content() {
+  const [page, setPage] = React.useState(1);
+  
+  return (
+    <Pagination
+      page={page}
+      count={10}
+      renderItem={(item) => (
+        <PaginationItem
+          component={Link}
+          to={`/page/${item.page}`}
+          {...item}
+        />
+      )}
+    />
+  );
+}
+```
+
+## Table Pagination
+
+For table pagination, use the TablePagination component instead.
+
+```tsx
+import TablePagination from '@mui/material/TablePagination';
+
+<TablePagination
+  component="div"
+  count={100}
+  page={page}
+  onPageChange={handleChangePage}
+  rowsPerPage={rowsPerPage}
+  onRowsPerPageChange={handleChangeRowsPerPage}
+/>
+```
+
+## Props
+
+### count
+
+- **Type:** `number`
+- **Default:** `1`
+- **Description:** The total number of pages
+
+### page
+
+- **Type:** `number`
+- **Description:** The current page. Unlike TablePagination, which starts numbering from 0, this pagination starts from 1
+
+### defaultPage
+
+- **Type:** `number`
+- **Default:** `1`
+- **Description:** The page selected by default when the component is uncontrolled
+
+### onChange
+
+- **Type:** `(event: React.ChangeEvent<unknown>, page: number) => void`
+- **Description:** Callback fired when the page is changed
+
+### color
+
+- **Type:** `'primary' | 'secondary' | 'standard'`
+- **Default:** `'standard'`
+- **Description:** The active color. It supports both default and custom theme colors
+
+### size
+
+- **Type:** `'small' | 'medium' | 'large'`
+- **Default:** `'medium'`
+- **Description:** The size of the component
+
+### variant
+
+- **Type:** `'text' | 'outlined'`
+- **Default:** `'text'`
+- **Description:** The variant to use
+
+### shape
+
+- **Type:** `'circular' | 'rounded'`
+- **Default:** `'circular'`
+- **Description:** The shape of the pagination items
+
+### boundaryCount
+
+- **Type:** `number`
+- **Default:** `1`
+- **Description:** Number of always visible pages at the beginning and end
+
+### siblingCount
+
+- **Type:** `number`
+- **Default:** `1`
+- **Description:** Number of always visible pages before and after the current page
+
+### showFirstButton
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** If `true`, show the first-page button
+
+### showLastButton
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** If `true`, show the last-page button
+
+### hideNextButton
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** If `true`, hide the next-page button
+
+### hidePrevButton
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** If `true`, hide the previous-page button
+
+### disabled
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** If `true`, the component is disabled
+
+### renderItem
+
+- **Type:** `(params: PaginationRenderItemParams) => React.ReactNode`
+- **Default:** `(item) => <PaginationItem {...item} />`
+- **Description:** Render the item
+
+### getItemAriaLabel
+
+- **Type:** `(type: string, page: number, selected: boolean) => string`
+- **Description:** Accepts a function which returns a string value that provides a user-friendly name for the current page. This is important for screen reader users
+
+### sx
+
+- **Type:** `SxProps<Theme>`
+- **Description:** System prop for defining CSS styles
+
+## Accessibility
+
+- The component is rendered as a navigation landmark
+- Each pagination item has appropriate ARIA labels
+- Keyboard navigation is fully supported
+- The current page is indicated to screen readers
+
+## API Reference
+
+- [Pagination API](https://mui.com/material-ui/api/pagination/)
+- [PaginationItem API](https://mui.com/material-ui/api/pagination-item/)

@@ -1,0 +1,337 @@
+---
+title: Card
+description: Cards contain content and actions about a single subject.
+---
+
+## Overview
+
+Cards are surfaces that display content and actions on a single topic. They should be easy to scan for relevant and actionable information. Elements like text and images should be placed on them in a way that clearly indicates hierarchy.
+
+Cards are commonly used for:
+- Displaying a collection of related information
+- Entry points to more detailed information
+- Containing different types of content (text, images, videos)
+- Product listings and portfolios
+- Dashboard widgets and summaries
+
+## Import
+
+```tsx
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import CardActions from '@mui/material/CardActions';
+import CardHeader from '@mui/material/CardHeader';
+import CardActionArea from '@mui/material/CardActionArea';
+```
+
+## Basic Card
+
+A simple card with content and actions.
+
+```tsx
+import Card from '@mui/material/Card';
+import CardActions from '@mui/material/CardActions';
+import CardContent from '@mui/material/CardContent';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
+export default function BasicCard() {
+  return (
+    <Card sx={{ minWidth: 275 }}>
+      <CardContent>
+        <Typography gutterBottom sx={{ color: 'text.secondary', fontSize: 14 }}>
+          Word of the Day
+        </Typography>
+        <Typography variant="h5" component="div">
+          benevolent
+        </Typography>
+        <Typography sx={{ color: 'text.secondary', mb: 1.5 }}>
+          adjective
+        </Typography>
+        <Typography variant="body2">
+          well meaning and kindly.
+          <br />
+          {'"a benevolent smile"'}
+        </Typography>
+      </CardContent>
+      <CardActions>
+        <Button size="small">Learn More</Button>
+      </CardActions>
+    </Card>
+  );
+}
+```
+
+## Card with Media
+
+Cards can include images, videos, or other media content.
+
+```tsx
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+
+export default function MediaCard() {
+  return (
+    <Card sx={{ maxWidth: 345 }}>
+      <CardMedia
+        component="img"
+        height="140"
+        image="/static/images/cards/contemplative-reptile.jpg"
+        alt="green iguana"
+      />
+      <CardContent>
+        <Typography gutterBottom variant="h5" component="div">
+          Lizard
+        </Typography>
+        <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+          Lizards are a widespread group of squamate reptiles, with over 6,000
+          species, ranging across all continents except Antarctica.
+        </Typography>
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+## Complex Interaction
+
+A more complex card with multiple interaction areas.
+
+```tsx
+import { useTheme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import IconButton from '@mui/material/IconButton';
+import Typography from '@mui/material/Typography';
+import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
+import SkipNextIcon from '@mui/icons-material/SkipNext';
+
+export default function MediaControlCard() {
+  const theme = useTheme();
+
+  return (
+    <Card sx={{ display: 'flex' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'column' }}>
+        <CardContent sx={{ flex: '1 0 auto' }}>
+          <Typography component="div" variant="h5">
+            Live From Space
+          </Typography>
+          <Typography
+            variant="subtitle1"
+            component="div"
+            sx={{ color: 'text.secondary' }}
+          >
+            Mac Miller
+          </Typography>
+        </CardContent>
+        <Box sx={{ display: 'flex', alignItems: 'center', pl: 1, pb: 1 }}>
+          <IconButton aria-label="previous">
+            {theme.direction === 'rtl' ? <SkipNextIcon /> : <SkipPreviousIcon />}
+          </IconButton>
+          <IconButton aria-label="play/pause">
+            <PlayArrowIcon sx={{ height: 38, width: 38 }} />
+          </IconButton>
+          <IconButton aria-label="next">
+            {theme.direction === 'rtl' ? <SkipPreviousIcon /> : <SkipNextIcon />}
+          </IconButton>
+        </Box>
+      </Box>
+      <CardMedia
+        component="img"
+        sx={{ width: 151 }}
+        image="/static/images/cards/live-from-space.jpg"
+        alt="Live from space album cover"
+      />
+    </Card>
+  );
+}
+```
+
+## With Action Area
+
+Make the entire card clickable using CardActionArea.
+
+```tsx
+import Card from '@mui/material/Card';
+import CardActionArea from '@mui/material/CardActionArea';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+
+export default function ActionAreaCard() {
+  return (
+    <Card sx={{ maxWidth: 345 }}>
+      <CardActionArea>
+        <CardMedia
+          component="img"
+          height="140"
+          image="/static/images/cards/contemplative-reptile.jpg"
+          alt="green iguana"
+        />
+        <CardContent>
+          <Typography gutterBottom variant="h5" component="div">
+            Lizard
+          </Typography>
+          <Typography variant="body2" sx={{ color: 'text.secondary' }}>
+            Lizards are a widespread group of squamate reptiles.
+          </Typography>
+        </CardContent>
+      </CardActionArea>
+    </Card>
+  );
+}
+```
+
+## Props
+
+### Card Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | The content of the card |
+| `raised` | `boolean` | `false` | If `true`, the card will use raised styling |
+| `elevation` | `number` | `1` | Shadow depth, accepts values between 0 and 24 (inherited from Paper) |
+| `variant` | `'elevation' \| 'outlined'` | `'elevation'` | The variant to use (inherited from Paper) |
+| `square` | `boolean` | `false` | If `true`, rounded corners are disabled (inherited from Paper) |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS styles |
+| `component` | `ElementType` | `'div'` | The component used for the root node |
+
+### CardContent Props
+
+Wrapper for card content with appropriate padding.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | The content of the component |
+| `component` | `ElementType` | `'div'` | The component used for the root node |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS styles |
+
+### CardMedia Props
+
+Display media (images, videos) within a card.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `component` | `ElementType` | - | The component used (e.g., 'img', 'video', 'picture') |
+| `image` | `string` | - | The image source URL (used as background-image if component is not img) |
+| `src` | `string` | - | The media source URL (when component is img, video, etc.) |
+| `alt` | `string` | - | Alternative text for accessibility |
+| `height` | `number \| string` | - | The height of the media |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS styles |
+
+### CardActions Props
+
+Container for action buttons at the bottom of the card.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | The action buttons |
+| `disableSpacing` | `boolean` | `false` | If `true`, removes the default spacing between buttons |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS styles |
+
+### CardHeader Props
+
+Display a header section with avatar, title, and actions.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `avatar` | `ReactNode` | - | The Avatar element to display |
+| `title` | `ReactNode` | - | The main title |
+| `subheader` | `ReactNode` | - | The subheader text |
+| `action` | `ReactNode` | - | Action element (e.g., IconButton) |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS styles |
+
+### CardActionArea Props
+
+Makes the entire card area clickable.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | The content of the action area |
+| `onClick` | `function` | - | Click handler |
+| `href` | `string` | - | URL to navigate to when clicked |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS styles |
+
+## Elevation and Variants
+
+Cards support two variants:
+
+```tsx
+{/* Default elevation variant with shadow */}
+<Card elevation={3}>
+  <CardContent>Content</CardContent>
+</Card>
+
+{/* Outlined variant with border */}
+<Card variant="outlined">
+  <CardContent>Content</CardContent>
+</Card>
+
+{/* Raised styling (higher elevation on hover) */}
+<Card raised>
+  <CardContent>Content</CardContent>
+</Card>
+```
+
+## Accessibility
+
+- Use semantic HTML when setting the `component` prop (e.g., `<Card component="article">`)
+- Provide `alt` text for CardMedia images
+- When using CardActionArea, ensure the action is keyboard accessible
+- Use proper heading hierarchy in card titles
+- Ensure sufficient color contrast for text content
+
+## Best Practices
+
+1. **Content hierarchy** - Use clear visual hierarchy with typography variants
+2. **Consistent sizing** - Keep cards in a grid or list at consistent sizes
+3. **Limit actions** - Don't overwhelm users with too many actions per card
+4. **Meaningful media** - Use images that add value and context
+5. **Responsive design** - Adjust card layout for different screen sizes
+6. **Loading states** - Show skeleton or loading states for async content
+7. **White space** - Don't overcrowd cards; let content breathe
+
+## Common Patterns
+
+### Product Card
+
+```tsx
+<Card>
+  <CardMedia component="img" image="product.jpg" alt="Product" />
+  <CardContent>
+    <Typography variant="h6">Product Name</Typography>
+    <Typography variant="body2" color="text.secondary">$99.99</Typography>
+  </CardContent>
+  <CardActions>
+    <Button>Add to Cart</Button>
+  </CardActions>
+</Card>
+```
+
+### User Profile Card
+
+```tsx
+<Card>
+  <CardHeader
+    avatar={<Avatar>U</Avatar>}
+    title="User Name"
+    subheader="@username"
+    action={<IconButton><MoreVertIcon /></IconButton>}
+  />
+  <CardContent>
+    <Typography>User bio goes here</Typography>
+  </CardContent>
+</Card>
+```
+
+## API Reference
+
+- [Card API](https://next.mui.com/material-ui/api/card/) - Full API documentation
+- Inherits [Paper API](https://next.mui.com/material-ui/api/paper/)
+- Source: `packages/mui-material/src/Card/Card.d.ts:1`

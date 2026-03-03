@@ -1,0 +1,246 @@
+---
+title: CssBaseline
+description: Kickstart an elegant, consistent, and simple baseline to build upon. CssBaseline provides a consistent CSS reset across browsers.
+---
+
+## Introduction
+
+CssBaseline is a component that kickstarts an elegant, consistent, and simple baseline to build upon. It applies a set of opinionated CSS resets and normalizations to provide a solid foundation for your application.
+
+```jsx
+import CssBaseline from '@mui/material/CssBaseline';
+```
+
+## Basic Usage
+
+```jsx
+import * as React from 'react';
+import CssBaseline from '@mui/material/CssBaseline';
+import Container from '@mui/material/Container';
+
+export default function BasicCssBaseline() {
+  return (
+    <React.Fragment>
+      <CssBaseline />
+      <Container maxWidth="sm">
+        <h1>My Application</h1>
+        <p>With consistent baseline styles</p>
+      </Container>
+    </React.Fragment>
+  );
+}
+```
+
+## What It Does
+
+CssBaseline applies the following resets and normalizations:
+
+### HTML Element
+
+- Sets `box-sizing: border-box` globally
+- Removes default margin on the body
+- Applies antialiasing for smoother font rendering:
+  - `WebkitFontSmoothing: antialiased`
+  - `MozOsxFontSmoothing: grayscale`
+- Fixes font resize problem in iOS with `WebkitTextSizeAdjust: 100%`
+
+### Body Element
+
+- Sets default text color from theme: `theme.palette.text.primary`
+- Sets default background color: `theme.palette.background.default`
+- Applies default typography: `theme.typography.body1`
+- Sets background to white for print media
+- Adds `::backdrop` support for fullscreen mode
+
+### Typography
+
+- Sets `fontWeight: theme.typography.fontWeightBold` for `<strong>` and `<b>` elements
+- Ensures consistent box-sizing with `*, *::before, *::after { boxSizing: inherit }`
+
+## Props
+
+### children
+
+- Type: `React.ReactNode`
+- Default: `undefined`
+
+You can wrap a node with CssBaseline to apply the baseline styles to a specific subtree.
+
+```jsx
+<CssBaseline>
+  <App />
+</CssBaseline>
+```
+
+### enableColorScheme
+
+- Type: `boolean`
+- Default: `false`
+
+Enable `color-scheme` CSS property to use `theme.palette.mode`. This allows the browser to apply appropriate styles for light/dark modes.
+
+```jsx
+<CssBaseline enableColorScheme />
+```
+
+For browser support, check [caniuse.com](https://caniuse.com/?search=color-scheme).
+
+## Usage with Theme
+
+### Global Overrides
+
+You can customize the baseline styles using the theme:
+
+```jsx
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const theme = createTheme({
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+        h1 {
+          color: grey;
+        }
+        body {
+          font-family: 'Roboto', sans-serif;
+        }
+      `,
+    },
+  },
+});
+
+function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <h1>Custom baseline styles</h1>
+    </ThemeProvider>
+  );
+}
+```
+
+### With Custom Fonts
+
+```jsx
+const theme = createTheme({
+  components: {
+    MuiCssBaseline: {
+      styleOverrides: `
+        @font-face {
+          font-family: 'Roboto';
+          font-style: normal;
+          font-weight: 400;
+          src: local('Roboto'), local('Roboto-Regular'), url('/fonts/roboto.woff2') format('woff2');
+        }
+      `,
+    },
+  },
+  typography: {
+    fontFamily: 'Roboto, Arial, sans-serif',
+  },
+});
+```
+
+## Color Scheme Support
+
+When using the `enableColorScheme` prop with theme color schemes:
+
+```jsx
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const theme = createTheme({
+  palette: {
+    mode: 'dark',
+  },
+});
+
+function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline enableColorScheme />
+      <div>Dark mode with proper color scheme</div>
+    </ThemeProvider>
+  );
+}
+```
+
+This will set the CSS `color-scheme` property, which:
+
+- Tells the browser which color scheme the page is designed for
+- Allows native form controls and scrollbars to adapt to the color scheme
+- Ensures appropriate default colors for browser UI elements
+
+## Scoping to a Subtree
+
+You can scope the baseline to a specific part of your application:
+
+```jsx
+function ScopedBaseline() {
+  return (
+    <div>
+      <h1>Outside CssBaseline</h1>
+      <CssBaseline>
+        <div>
+          <h1>Inside CssBaseline</h1>
+          <p>These elements have baseline styles applied</p>
+        </div>
+      </CssBaseline>
+    </div>
+  );
+}
+```
+
+## Alternative: GlobalStyles
+
+If you need more control over global styles, consider using the `GlobalStyles` component instead:
+
+```jsx
+import { GlobalStyles } from '@mui/material';
+
+function App() {
+  return (
+    <>
+      <GlobalStyles
+        styles={{
+          body: { margin: 0, padding: 0 },
+          h1: { fontSize: '2rem' },
+        }}
+      />
+      <div>Content</div>
+    </>
+  );
+}
+```
+
+## Server-Side Rendering
+
+CssBaseline works seamlessly with server-side rendering. Place it at the root of your application:
+
+```jsx
+import * as React from 'react';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme';
+
+export default function MyApp({ Component, pageProps }) {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Component {...pageProps} />
+    </ThemeProvider>
+  );
+}
+```
+
+## Best Practices
+
+1. **Place at the root**: Include CssBaseline at the root of your component tree
+2. **Single instance**: You typically only need one CssBaseline component
+3. **Before content**: Render CssBaseline before your main content components
+4. **With ThemeProvider**: Always use within a ThemeProvider for consistent theming
+
+## Browser Compatibility
+
+CssBaseline provides styles that work across all modern browsers. The component handles vendor prefixes and browser-specific quirks automatically.

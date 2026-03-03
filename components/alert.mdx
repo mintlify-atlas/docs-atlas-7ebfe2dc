@@ -1,0 +1,132 @@
+---
+title: Alert
+description: Alert component displays brief messages for app states
+---
+
+# Alert
+
+Alerts provide contextual feedback messages for typical user actions with a handful of available and flexible alert messages.
+
+## Overview
+
+The Alert component can be used to display success, informational, warning, or error messages to users. It extends the Paper component and includes built-in icon mapping for each severity level.
+
+## Basic Usage
+
+```tsx
+import Alert from '@mui/material/Alert';
+import Stack from '@mui/material/Stack';
+
+function BasicAlerts() {
+  return (
+    <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="success">This is a success Alert.</Alert>
+      <Alert severity="info">This is an info Alert.</Alert>
+      <Alert severity="warning">This is a warning Alert.</Alert>
+      <Alert severity="error">This is an error Alert.</Alert>
+    </Stack>
+  );
+}
+```
+
+## With Actions
+
+Alerts can include action buttons or close icons:
+
+```tsx
+import Alert from '@mui/material/Alert';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+
+function ActionAlerts() {
+  return (
+    <Stack sx={{ width: '100%' }} spacing={2}>
+      <Alert severity="warning" onClose={() => {}}>
+        This Alert displays the default close icon.
+      </Alert>
+      <Alert
+        severity="success"
+        action={
+          <Button color="inherit" size="small">
+            UNDO
+          </Button>
+        }
+      >
+        This Alert uses a Button component for its action.
+      </Alert>
+    </Stack>
+  );
+}
+```
+
+## Props
+
+### Main Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `severity` | `'success' \| 'info' \| 'warning' \| 'error'` | `'success'` | The severity of the alert. Defines the color and icon used. |
+| `variant` | `'standard' \| 'filled' \| 'outlined'` | `'standard'` | The variant to use. |
+| `color` | `AlertColor` | - | The color of the component. Unless provided, taken from `severity`. |
+| `icon` | `ReactNode` | - | Override the icon displayed before the children. Set to `false` to remove the icon. |
+| `action` | `ReactNode` | - | The action to display at the end of the alert. |
+| `onClose` | `(event: SyntheticEvent) => void` | - | Callback fired when close is requested. When provided with no `action` prop, a close icon button is displayed. |
+| `closeText` | `string` | `'Close'` | Override the default label for the close popup icon button. |
+| `iconMapping` | `Partial<Record<AlertColor, ReactNode>>` | - | Custom mapping of severity to icon. |
+| `role` | `string` | `'alert'` | The ARIA role attribute of the element. |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS overrides. |
+
+### Slot Props
+
+The Alert component supports slot-based customization:
+
+- `slots.root` - The root Paper component
+- `slots.icon` - The icon container
+- `slots.message` - The message container
+- `slots.action` - The action container
+- `slots.closeButton` - The close button (IconButton)
+- `slots.closeIcon` - The close icon (SvgIcon)
+
+Use `slotProps` to pass props to each slot:
+
+```tsx
+<Alert
+  severity="info"
+  slotProps={{
+    closeButton: { size: 'small' },
+    icon: { className: 'custom-icon' }
+  }}
+>
+  Customized slots
+</Alert>
+```
+
+## CSS Classes
+
+The component has the following CSS classes available:
+
+- `.MuiAlert-root` - Root element
+- `.MuiAlert-icon` - Icon wrapper
+- `.MuiAlert-message` - Message wrapper
+- `.MuiAlert-action` - Action wrapper
+- `.MuiAlert-standard` - Standard variant
+- `.MuiAlert-filled` - Filled variant
+- `.MuiAlert-outlined` - Outlined variant
+- `.MuiAlert-standardSuccess` - Standard success
+- `.MuiAlert-standardInfo` - Standard info
+- `.MuiAlert-standardWarning` - Standard warning
+- `.MuiAlert-standardError` - Standard error
+
+## Inheritance
+
+Alert inherits from the [Paper](https://mui.com/material-ui/api/paper/) component.
+
+## API Reference
+
+For complete API documentation, see:
+- [Alert API](https://mui.com/material-ui/api/alert/)
+- [Alert Demos](https://mui.com/material-ui/react-alert/)
+
+## Source Location
+
+`~/workspace/source/packages/mui-material/src/Alert/Alert.d.ts:211`

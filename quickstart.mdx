@@ -1,80 +1,431 @@
 ---
-title: "Quickstart"
-description: "Start building awesome documentation in minutes"
+title: Quick Start
+description: Build your first Material UI component in under 5 minutes. A hands-on tutorial covering buttons, text fields, and cards.
 ---
 
-## Get started in three steps
+# Quick Start
 
-Get your documentation site running locally and make your first customization.
+Build your first Material UI component in under 5 minutes. This tutorial walks you through creating a simple user profile card.
 
-### Step 1: Set up your local environment
+## Prerequisites
 
-<AccordionGroup>
-  <Accordion icon="copy" title="Clone your docs locally">
-    During the onboarding process, you created a GitHub repository with your docs content if you didn't already have one. You can find a link to this repository in your [dashboard](https://dashboard.mintlify.com).
+Before you begin, make sure you have:
+
+- A React project set up (Create React App, Vite, or Next.js)
+- Material UI installed (see [Installation](/installation))
+- Basic knowledge of React and JSX
+
+## Step 1: Create Your First Component
+
+<Steps>
+  <Step title="Import Material UI Components">
+    Create a new file `ProfileCard.tsx` and import the components you'll need:
     
-    To clone the repository locally so that you can make and preview changes to your docs, follow the [Cloning a repository](https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository) guide in the GitHub docs.
-  </Accordion>
-  <Accordion icon="rectangle-terminal" title="Start the preview server">
-    1. Install the Mintlify CLI: `npm i -g mint`
-    2. Navigate to your docs directory and run: `mint dev`
-    3. Open `http://localhost:3000` to see your docs live!
+    ```tsx ProfileCard.tsx
+    import * as React from 'react';
+    import Card from '@mui/material/Card';
+    import CardContent from '@mui/material/CardContent';
+    import CardActions from '@mui/material/CardActions';
+    import Button from '@mui/material/Button';
+    import Typography from '@mui/material/Typography';
+    import Avatar from '@mui/material/Avatar';
+    import Box from '@mui/material/Box';
+    ```
     
-    <Tip>Your preview updates automatically as you edit files.</Tip>
-  </Accordion>
-</AccordionGroup>
+    These imports give you access to Material UI's Card, Button, Typography, and layout components.
+  </Step>
 
-### Step 2: Deploy your changes
-
-<AccordionGroup>
-  <Accordion icon="github" title="Install our GitHub app">
-    Install the Mintlify GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app).
+  <Step title="Build the Component Structure">
+    Create a profile card component with an avatar, name, description, and actions:
     
-    Our GitHub app automatically deploys your changes to your docs site, so you don't need to manage deployments yourself.
-</Accordion>
-<Accordion icon="palette" title="Update your site name and colors">
-    For a first change, let's update the name and colors of your docs site.
+    ```tsx ProfileCard.tsx
+    export default function ProfileCard() {
+      return (
+        <Card sx={{ maxWidth: 345, margin: 2 }}>
+          <CardContent>
+            <Box
+              sx={{
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                mb: 2,
+              }}
+            >
+              <Avatar
+                sx={{ width: 80, height: 80, mb: 2, bgcolor: 'primary.main' }}
+              >
+                MU
+              </Avatar>
+              <Typography variant="h5" component="div">
+                Material UI User
+              </Typography>
+              <Typography sx={{ color: 'text.secondary', mt: 1 }}>
+                React Developer
+              </Typography>
+            </Box>
+            <Typography variant="body2">
+              Building beautiful, accessible user interfaces with Material UI
+              and React. Passionate about creating great user experiences.
+            </Typography>
+          </CardContent>
+          <CardActions>
+            <Button size="small" variant="contained">
+              Follow
+            </Button>
+            <Button size="small" variant="outlined">
+              Message
+            </Button>
+          </CardActions>
+        </Card>
+      );
+    }
+    ```
+    
+    The `sx` prop provides powerful inline styling with theme access.
+  </Step>
 
-    1. Open `docs.json` in your editor.
-    2. Change the `"name"` field to your project name.
-    3. Update the `"colors"` to match your brand.
-    4. Save and see your changes instantly at `http://localhost:3000`.
+  <Step title="Use the Component">
+    Import and use your new component in your app:
+    
+    ```tsx App.tsx
+    import ProfileCard from './ProfileCard';
+    
+    function App() {
+      return (
+        <div>
+          <ProfileCard />
+        </div>
+      );
+    }
+    
+    export default App;
+    ```
+  </Step>
+</Steps>
 
-    <Tip>Try changing the primary color to see an immediate difference!</Tip>
-  </Accordion>
-</AccordionGroup>
+## Step 2: Add Interactivity
 
-### Step 3: Go live
+Let's make the buttons functional by adding state and event handlers:
 
-<Accordion icon="rocket" title="Publish your docs">
-  1. Commit and push your changes.
-  2. Your docs will update and be live in moments!
-</Accordion>
+```tsx ProfileCard.tsx
+import * as React from 'react';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardActions from '@mui/material/CardActions';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+import Avatar from '@mui/material/Avatar';
+import Box from '@mui/material/Box';
+import Snackbar from '@mui/material/Snackbar';
+import Alert from '@mui/material/Alert';
 
-## Next steps
+export default function ProfileCard() {
+  const [following, setFollowing] = React.useState(false);
+  const [showMessage, setShowMessage] = React.useState(false);
 
-Now that you have your docs running, explore these key features:
+  const handleFollow = () => {
+    setFollowing(!following);
+  };
+
+  const handleMessage = () => {
+    setShowMessage(true);
+  };
+
+  const handleCloseMessage = () => {
+    setShowMessage(false);
+  };
+
+  return (
+    <>
+      <Card sx={{ maxWidth: 345, margin: 2 }}>
+        <CardContent>
+          <Box
+            sx={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              mb: 2,
+            }}
+          >
+            <Avatar
+              sx={{ width: 80, height: 80, mb: 2, bgcolor: 'primary.main' }}
+            >
+              MU
+            </Avatar>
+            <Typography variant="h5" component="div">
+              Material UI User
+            </Typography>
+            <Typography sx={{ color: 'text.secondary', mt: 1 }}>
+              React Developer
+            </Typography>
+          </Box>
+          <Typography variant="body2">
+            Building beautiful, accessible user interfaces with Material UI
+            and React. Passionate about creating great user experiences.
+          </Typography>
+        </CardContent>
+        <CardActions>
+          <Button 
+            size="small" 
+            variant="contained"
+            onClick={handleFollow}
+          >
+            {following ? 'Unfollow' : 'Follow'}
+          </Button>
+          <Button 
+            size="small" 
+            variant="outlined"
+            onClick={handleMessage}
+          >
+            Message
+          </Button>
+        </CardActions>
+      </Card>
+      
+      <Snackbar
+        open={showMessage}
+        autoHideDuration={3000}
+        onClose={handleCloseMessage}
+      >
+        <Alert severity="success" onClose={handleCloseMessage}>
+          Message sent successfully!
+        </Alert>
+      </Snackbar>
+    </>
+  );
+}
+```
+
+## Step 3: Customize with Theme
+
+Material UI components use the theme for consistent styling. Customize colors, spacing, and more:
+
+```tsx main.tsx
+import * as React from 'react';
+import ReactDOM from 'react-dom/client';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import App from './App';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1976d2',
+    },
+    secondary: {
+      main: '#dc004e',
+    },
+  },
+  typography: {
+    fontFamily: 'Roboto, Arial, sans-serif',
+  },
+});
+
+ReactDOM.createRoot(document.getElementById('root')!).render(
+  <React.StrictMode>
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <App />
+    </ThemeProvider>
+  </React.StrictMode>
+);
+```
+
+The `CssBaseline` component normalizes styles across browsers and applies Material Design baseline styles.
+
+## Understanding Key Props
+
+### Button Props
+
+Buttons support multiple variants, colors, and sizes from the source code:
+
+```tsx
+import Button from '@mui/material/Button';
+
+// Variants: text, outlined, contained
+<Button variant="contained">Contained</Button>
+<Button variant="outlined">Outlined</Button>
+<Button variant="text">Text</Button>
+
+// Colors: primary, secondary, success, error, info, warning
+<Button color="primary">Primary</Button>
+<Button color="error">Error</Button>
+
+// Sizes: small, medium, large  
+<Button size="small">Small</Button>
+<Button size="large">Large</Button>
+
+// With icons
+import SendIcon from '@mui/icons-material/Send';
+<Button variant="contained" endIcon={<SendIcon />}>
+  Send
+</Button>
+
+// Loading state
+<Button loading>Loading</Button>
+
+// Full width
+<Button fullWidth>Full Width</Button>
+```
+
+### TextField Props
+
+Text fields are versatile input components with extensive customization:
+
+```tsx
+import TextField from '@mui/material/TextField';
+
+// Variants: outlined, filled, standard
+<TextField label="Name" variant="outlined" />
+<TextField label="Email" variant="filled" />
+<TextField label="Message" variant="standard" />
+
+// Types
+<TextField type="email" label="Email" />
+<TextField type="password" label="Password" />
+<TextField type="number" label="Age" />
+
+// Multiline
+<TextField
+  label="Description"
+  multiline
+  rows={4}
+  placeholder="Enter description..."
+/>
+
+// With helper text and validation
+<TextField
+  label="Email"
+  error
+  helperText="Please enter a valid email"
+/>
+
+// Sizes
+<TextField size="small" label="Small" />
+<TextField size="medium" label="Medium" />
+```
+
+### Card Props
+
+Cards are surfaces for displaying content and actions:
+
+```tsx
+import Card from '@mui/material/Card';
+
+// Raised elevation
+<Card raised>
+  <CardContent>Elevated card</CardContent>
+</Card>
+
+// Custom styling with sx prop
+<Card
+  sx={{
+    maxWidth: 345,
+    borderRadius: 2,
+    boxShadow: 3,
+  }}
+>
+  <CardContent>Custom styled card</CardContent>
+</Card>
+```
+
+## Common Patterns
+
+### Responsive Layout with Grid
+
+```tsx
+import Grid from '@mui/material/Grid2';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+
+function ResponsiveCards() {
+  return (
+    <Grid container spacing={2}>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <Card>
+          <CardContent>
+            <Typography variant="h5">Card 1</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <Card>
+          <CardContent>
+            <Typography variant="h5">Card 2</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <Card>
+          <CardContent>
+            <Typography variant="h5">Card 3</Typography>
+          </CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  );
+}
+```
+
+### Form with Validation
+
+```tsx
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+
+function ContactForm() {
+  const [email, setEmail] = React.useState('');
+  const [error, setError] = React.useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const isValid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+    setError(!isValid);
+    
+    if (isValid) {
+      console.log('Form submitted:', email);
+    }
+  };
+
+  return (
+    <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }}>
+      <TextField
+        fullWidth
+        label="Email"
+        type="email"
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        error={error}
+        helperText={error ? 'Please enter a valid email' : ''}
+        sx={{ mb: 2 }}
+      />
+      <Button type="submit" variant="contained" fullWidth>
+        Submit
+      </Button>
+    </Box>
+  );
+}
+```
+
+## Next Steps
 
 <CardGroup cols={2}>
-
-<Card title="Write Content" icon="pen-to-square" href="/essentials/markdown">
-  Learn MDX syntax and start writing your documentation.
-</Card>
-
-<Card title="Customize style" icon="palette" href="/essentials/settings">
-  Make your docs match your brand perfectly.
-</Card>
-
-<Card title="Add code examples" icon="square-code" href="/essentials/code">
-  Include syntax-highlighted code blocks.
-</Card>
-
-<Card title="API documentation" icon="code" href="/api-reference/introduction">
-  Auto-generate API docs from OpenAPI specs.
-</Card>
-
+  <Card title="Usage Patterns" icon="book" href="/usage">
+    Learn essential patterns and best practices for Material UI
+  </Card>
+  
+  <Card title="Component API" icon="code" href="https://mui.com/material-ui/api/button/">
+    Explore the complete API documentation for all components
+  </Card>
+  
+  <Card title="Templates" icon="layout" href="/templates">
+    Browse production-ready templates to kickstart your project
+  </Card>
+  
+  <Card title="Theming" icon="palette" href="https://mui.com/material-ui/customization/theming/">
+    Deep dive into customizing Material UI's theme system
+  </Card>
 </CardGroup>
-
-<Note>
-  **Need help?** See our [full documentation](https://mintlify.com/docs) or join our [community](https://mintlify.com/community).
-</Note>

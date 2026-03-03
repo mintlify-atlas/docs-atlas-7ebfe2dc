@@ -1,0 +1,97 @@
+---
+title: Radio Button
+description: Material UI Radio and RadioGroup components allow users to select one option from a set.
+---
+
+Radio buttons allow the user to select one option from a set. Use radio buttons when the user needs to see all available options.
+
+## Import
+
+```tsx
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+```
+
+## Basic Usage
+
+```tsx
+import * as React from 'react';
+import Radio from '@mui/material/Radio';
+import RadioGroup from '@mui/material/RadioGroup';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import FormControl from '@mui/material/FormControl';
+import FormLabel from '@mui/material/FormLabel';
+
+export default function ControlledRadioButtonsGroup() {
+  const [value, setValue] = React.useState('female');
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setValue((event.target as HTMLInputElement).value);
+  };
+
+  return (
+    <FormControl>
+      <FormLabel id="demo-controlled-radio-buttons-group">Gender</FormLabel>
+      <RadioGroup
+        aria-labelledby="demo-controlled-radio-buttons-group"
+        name="controlled-radio-buttons-group"
+        value={value}
+        onChange={handleChange}
+      >
+        <FormControlLabel value="female" control={<Radio />} label="Female" />
+        <FormControlLabel value="male" control={<Radio />} label="Male" />
+      </RadioGroup>
+    </FormControl>
+  );
+}
+```
+
+## Radio Props
+
+<ParamField path="color" type="'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | 'default'" default="'primary'">
+  The color of the component. Supports both default and custom theme colors.
+</ParamField>
+
+<ParamField path="size" type="'small' | 'medium'" default="'medium'">
+  The size of the component. `small` is equivalent to the dense radio styling.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  If `true`, the component is disabled.
+</ParamField>
+
+<ParamField path="checkedIcon" type="ReactNode">
+  The icon to display when the component is checked. Defaults to `<RadioButtonIcon checked />`.
+</ParamField>
+
+<ParamField path="icon" type="ReactNode">
+  The icon to display when the component is unchecked. Defaults to `<RadioButtonIcon />`.
+</ParamField>
+
+<ParamField path="sx" type="SxProps<Theme>">
+  The system prop that allows defining system overrides as well as additional CSS styles.
+</ParamField>
+
+## RadioGroup Props
+
+<ParamField path="value" type="any">
+  Value of the selected radio button. The DOM API casts this to a string.
+</ParamField>
+
+<ParamField path="defaultValue" type="any">
+  The default value. Use when the component is not controlled.
+</ParamField>
+
+<ParamField path="name" type="string">
+  The name used to reference the value of the control. If you don't provide this prop, it falls back to a randomly generated name.
+</ParamField>
+
+<ParamField path="onChange" type="(event: React.ChangeEvent<HTMLInputElement>, value: string) => void">
+  Callback fired when a radio button is selected. You can pull out the new value by accessing `event.target.value` (string).
+</ParamField>
+
+## API Reference
+
+- [Radio API](https://next.mui.com/material-ui/api/radio/)
+- [RadioGroup API](https://next.mui.com/material-ui/api/radio-group/)
+- Inherits [ButtonBase API](https://next.mui.com/material-ui/api/button-base/) and [FormGroup API](https://next.mui.com/material-ui/api/form-group/)

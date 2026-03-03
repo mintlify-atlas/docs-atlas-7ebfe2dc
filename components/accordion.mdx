@@ -1,0 +1,248 @@
+---
+title: Accordion
+description: The Accordion component allows users to show and hide sections of related content on a page.
+---
+
+## Overview
+
+The Accordion component is a vertically stacked set of expandable panels. Each Accordion panel consists of a summary and details section. When clicked, the panel expands to reveal the associated content.
+
+Accordions are useful for:
+- Organizing and hiding complex information
+- Reducing page clutter and cognitive load
+- Creating FAQs and progressive disclosure interfaces
+- Grouping related settings or options
+
+## Import
+
+```tsx
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionActions from '@mui/material/AccordionActions';
+```
+
+## Basic Usage
+
+The most basic accordion consists of an Accordion wrapper containing AccordionSummary and AccordionDetails components.
+
+```tsx
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+export default function BasicAccordion() {
+  return (
+    <div>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1-content"
+          id="panel1-header"
+        >
+          <Typography component="span">Accordion 1</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        </AccordionDetails>
+      </Accordion>
+      <Accordion>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel2-content"
+          id="panel2-header"
+        >
+          <Typography component="span">Accordion 2</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          Suspendisse malesuada lacus ex, sit amet blandit leo lobortis eget.
+        </AccordionDetails>
+      </Accordion>
+    </div>
+  );
+}
+```
+
+## Controlled Accordion
+
+Control the expanded state externally using the `expanded` and `onChange` props.
+
+```tsx
+import * as React from 'react';
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import Typography from '@mui/material/Typography';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+export default function ControlledAccordion() {
+  const [expanded, setExpanded] = React.useState<string | false>(false);
+
+  const handleChange =
+    (panel: string) => (event: React.SyntheticEvent, isExpanded: boolean) => {
+      setExpanded(isExpanded ? panel : false);
+    };
+
+  return (
+    <div>
+      <Accordion expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel1-content"
+          id="panel1-header"
+        >
+          <Typography component="span" sx={{ width: '33%', flexShrink: 0 }}>
+            General settings
+          </Typography>
+          <Typography component="span" sx={{ color: 'text.secondary' }}>
+            I am an accordion
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            Nulla facilisi. Phasellus sollicitudin nulla et quam mattis feugiat.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+      <Accordion expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+        <AccordionSummary
+          expandIcon={<ExpandMoreIcon />}
+          aria-controls="panel2-content"
+          id="panel2-header"
+        >
+          <Typography component="span" sx={{ width: '33%', flexShrink: 0 }}>
+            Users
+          </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            Donec placerat, lectus sed mattis semper, neque lectus feugiat lectus.
+          </Typography>
+        </AccordionDetails>
+      </Accordion>
+    </div>
+  );
+}
+```
+
+## With Actions
+
+Add action buttons to the bottom of an accordion panel using the AccordionActions component.
+
+```tsx
+import Accordion from '@mui/material/Accordion';
+import AccordionSummary from '@mui/material/AccordionSummary';
+import AccordionDetails from '@mui/material/AccordionDetails';
+import AccordionActions from '@mui/material/AccordionActions';
+import Button from '@mui/material/Button';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+
+export default function AccordionWithActions() {
+  return (
+    <Accordion defaultExpanded>
+      <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+        Accordion with actions
+      </AccordionSummary>
+      <AccordionDetails>
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+      </AccordionDetails>
+      <AccordionActions>
+        <Button>Cancel</Button>
+        <Button>Save</Button>
+      </AccordionActions>
+    </Accordion>
+  );
+}
+```
+
+## Props
+
+### Accordion Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | **Required.** The content of the accordion, typically AccordionSummary and AccordionDetails |
+| `defaultExpanded` | `boolean` | `false` | If `true`, expands the accordion by default |
+| `disabled` | `boolean` | `false` | If `true`, the accordion is disabled |
+| `disableGutters` | `boolean` | `false` | If `true`, removes the margin between two expanded accordion items |
+| `expanded` | `boolean` | - | If `true`, expands the accordion. Use with `onChange` for controlled behavior |
+| `onChange` | `(event: SyntheticEvent, expanded: boolean) => void` | - | Callback fired when the expand/collapse state changes |
+| `square` | `boolean` | `false` | If `true`, rounded corners are disabled (inherited from Paper) |
+| `elevation` | `number` | `1` | Shadow depth, accepts values between 0 and 24 (inherited from Paper) |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS styles |
+| `slotProps` | `object` | - | Props applied to internal slots (root, heading, transition, region) |
+| `slots` | `object` | - | Custom components for internal slots |
+
+### AccordionSummary Props
+
+The clickable header that expands/collapses the accordion.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | The content of the accordion summary |
+| `expandIcon` | `ReactNode` | - | The icon to display for the expand indicator |
+| `aria-controls` | `string` | - | The id of the corresponding AccordionDetails |
+| `id` | `string` | - | Unique identifier for the summary |
+
+### AccordionDetails Props
+
+The collapsible content area of the accordion.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | The content of the accordion details |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS styles |
+
+### AccordionActions Props
+
+Optional action buttons displayed at the bottom of the details section.
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | The action buttons |
+| `disableSpacing` | `boolean` | `false` | If `true`, removes the default spacing |
+
+## Slots
+
+The Accordion component supports customization through slots:
+
+- **root**: The root Paper component (default: `Paper`)
+- **heading**: The heading element wrapper (default: `'h3'`)
+- **transition**: The transition component (default: `Collapse`)
+- **region**: The content region wrapper (default: `'div'`)
+
+```tsx
+<Accordion 
+  slotProps={{ 
+    heading: { component: 'h4' } 
+  }}
+>
+  {/* ... */}
+</Accordion>
+```
+
+## Accessibility
+
+The Accordion component follows WAI-ARIA authoring practices:
+
+- The accordion header has `role="button"`
+- Use `aria-controls` to link the summary to its details section
+- Use `aria-expanded` to indicate the current state (automatically managed)
+- Use semantic heading levels through the `heading` slot
+- Ensure keyboard navigation is supported (automatically handled)
+
+## Best Practices
+
+1. **Don't nest accordions** - Avoid placing accordions inside other accordions as this creates confusing navigation
+2. **Use clear labels** - Make summary text descriptive so users know what content will be revealed
+3. **Consider default state** - Use `defaultExpanded` for critical information that should be visible initially
+4. **Limit the number** - Too many accordions can be overwhelming; consider alternative layouts for large amounts of content
+5. **Mobile friendly** - Accordions work well on mobile devices where screen space is limited
+
+## API Reference
+
+- [Accordion API](https://next.mui.com/material-ui/api/accordion/) - Full API documentation
+- Inherits [Paper API](https://next.mui.com/material-ui/api/paper/)
+- Source: `packages/mui-material/src/Accordion/Accordion.d.ts:1`

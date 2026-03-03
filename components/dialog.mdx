@@ -1,0 +1,214 @@
+---
+title: Dialog
+description: Dialog component displays content in a layer above the app
+---
+
+# Dialog
+
+Dialogs inform users about a task and can contain critical information, require decisions, or involve multiple tasks.
+
+## Overview
+
+Dialogs are overlaid modal paper-based components with a backdrop. They disable all app functionality when they appear and remain on screen until confirmed, dismissed, or a required action has been taken.
+
+## Basic Usage
+
+```tsx
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Dialog from '@mui/material/Dialog';
+import DialogActions from '@mui/material/DialogActions';
+import DialogContent from '@mui/material/DialogContent';
+import DialogContentText from '@mui/material/DialogContentText';
+import DialogTitle from '@mui/material/DialogTitle';
+
+function AlertDialog() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClickOpen = () => {
+    setOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(false);
+  };
+
+  return (
+    <React.Fragment>
+      <Button variant="outlined" onClick={handleClickOpen}>
+        Open alert dialog
+      </Button>
+      <Dialog
+        open={open}
+        onClose={handleClose}
+        aria-labelledby="alert-dialog-title"
+        aria-describedby="alert-dialog-description"
+      >
+        <DialogTitle id="alert-dialog-title">
+          {"Use Google's location service?"}
+        </DialogTitle>
+        <DialogContent>
+          <DialogContentText id="alert-dialog-description">
+            Let Google help apps determine location.
+          </DialogContentText>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleClose}>Disagree</Button>
+          <Button onClick={handleClose} autoFocus>
+            Agree
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </React.Fragment>
+  );
+}
+```
+
+## Full-Screen Dialog
+
+For mobile devices, dialogs can be displayed full-screen:
+
+```tsx
+<Dialog
+  fullScreen
+  open={open}
+  onClose={handleClose}
+>
+  {/* content */}
+</Dialog>
+```
+
+## Responsive Dialog
+
+Use the `fullScreen` prop with `useMediaQuery` for responsive behavior:
+
+```tsx
+import useMediaQuery from '@mui/material/useMediaQuery';
+import { useTheme } from '@mui/material/styles';
+
+function ResponsiveDialog() {
+  const theme = useTheme();
+  const fullScreen = useMediaQuery(theme.breakpoints.down('sm'));
+
+  return (
+    <Dialog
+      fullScreen={fullScreen}
+      open={open}
+      onClose={handleClose}
+    >
+      {/* content */}
+    </Dialog>
+  );
+}
+```
+
+## Props
+
+### Main Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | **required** | If `true`, the component is shown. |
+| `onClose` | `(event: object, reason: string) => void` | - | Callback fired when the dialog requests to be closed. |
+| `fullScreen` | `boolean` | `false` | If `true`, the dialog is full-screen. |
+| `fullWidth` | `boolean` | `false` | If `true`, the dialog stretches to `maxWidth`. |
+| `maxWidth` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| false` | `'sm'` | Determine the max-width of the dialog. Set to `false` to disable. |
+| `scroll` | `'body' \| 'paper'` | `'paper'` | Determine the container for scrolling the dialog. |
+| `aria-labelledby` | `string` | - | The id(s) of the element(s) that label the dialog. |
+| `aria-describedby` | `string` | - | The id(s) of the element(s) that describe the dialog. |
+| `aria-modal` | `boolean \| 'true' \| 'false'` | `true` | Informs assistive technologies that the element is modal. |
+| `transitionDuration` | `number \| { enter?: number, exit?: number }` | `{ enter: theme.transitions.duration.enteringScreen, exit: theme.transitions.duration.leavingScreen }` | The duration for the transition. |
+| `PaperComponent` | `ElementType` | `Paper` | The component used to render the body of the dialog. |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS overrides. |
+
+### Slot Props
+
+The Dialog component supports slot-based customization:
+
+- `slots.root` - The Modal component
+- `slots.backdrop` - The Backdrop component
+- `slots.container` - The container div
+- `slots.transition` - The transition component (default: Fade)
+- `slots.paper` - The Paper component
+
+Use `slotProps` to pass props to each slot:
+
+```tsx
+<Dialog
+  open={open}
+  slotProps={{
+    paper: { 
+      elevation: 8,
+      sx: { borderRadius: 2 } 
+    },
+    backdrop: { 
+      sx: { backgroundColor: 'rgba(0, 0, 0, 0.8)' } 
+    }
+  }}
+>
+  {/* content */}
+</Dialog>
+```
+
+## onClose Reason
+
+The `onClose` callback receives a `reason` parameter that indicates why the dialog is closing:
+
+- `'escapeKeyDown'` - User pressed Escape key
+- `'backdropClick'` - User clicked the backdrop
+
+```tsx
+const handleClose = (event, reason) => {
+  if (reason === 'backdropClick') {
+    console.log('Backdrop clicked');
+    return; // Optionally prevent closing
+  }
+  setOpen(false);
+};
+```
+
+## Accessibility
+
+Dialogs are built with accessibility in mind:
+
+- Use `aria-labelledby` to reference the DialogTitle
+- Use `aria-describedby` to reference the DialogContent
+- The `aria-modal` attribute is set to `true` by default
+- Focus is automatically managed
+
+## CSS Classes
+
+The component has the following CSS classes available:
+
+- `.MuiDialog-root` - Root element
+- `.MuiDialog-paper` - Paper element
+- `.MuiDialog-paperScrollPaper` - Paper when scroll='paper'
+- `.MuiDialog-paperScrollBody` - Paper when scroll='body'
+- `.MuiDialog-paperWidthXs` - Paper with maxWidth='xs'
+- `.MuiDialog-paperWidthSm` - Paper with maxWidth='sm'
+- `.MuiDialog-paperWidthMd` - Paper with maxWidth='md'
+- `.MuiDialog-paperWidthLg` - Paper with maxWidth='lg'
+- `.MuiDialog-paperWidthXl` - Paper with maxWidth='xl'
+- `.MuiDialog-paperFullScreen` - Paper when fullScreen={true}
+- `.MuiDialog-paperFullWidth` - Paper when fullWidth={true}
+
+## Inheritance
+
+Dialog inherits from the [Modal](https://mui.com/material-ui/api/modal/) component.
+
+## Related Components
+
+- DialogTitle - Display a dialog title
+- DialogContent - Display dialog content
+- DialogContentText - Display dialog text content
+- DialogActions - Display dialog actions
+
+## API Reference
+
+For complete API documentation, see:
+- [Dialog API](https://mui.com/material-ui/api/dialog/)
+- [Dialog Demos](https://mui.com/material-ui/react-dialog/)
+
+## Source Location
+
+`~/workspace/source/packages/mui-material/src/Dialog/Dialog.d.ts:201`

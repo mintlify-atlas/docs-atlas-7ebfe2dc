@@ -1,0 +1,170 @@
+---
+title: Transfer List
+description: Transfer List allows users to move items between two lists.
+---
+
+A transfer list (or "shuttle") enables the user to move one or more list items between lists.
+
+## Import
+
+Transfer List is built using multiple Material UI components:
+
+```tsx
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+```
+
+## Basic Usage
+
+```tsx
+import * as React from 'react';
+import Grid from '@mui/material/Grid';
+import List from '@mui/material/List';
+import ListItemButton from '@mui/material/ListItemButton';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+import Checkbox from '@mui/material/Checkbox';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+
+function not(a: readonly number[], b: readonly number[]) {
+  return a.filter((value) => !b.includes(value));
+}
+
+function intersection(a: readonly number[], b: readonly number[]) {
+  return a.filter((value) => b.includes(value));
+}
+
+export default function TransferList() {
+  const [checked, setChecked] = React.useState<readonly number[]>([]);
+  const [left, setLeft] = React.useState<readonly number[]>([0, 1, 2, 3]);
+  const [right, setRight] = React.useState<readonly number[]>([4, 5, 6, 7]);
+
+  const leftChecked = intersection(checked, left);
+  const rightChecked = intersection(checked, right);
+
+  const handleToggle = (value: number) => () => {
+    const currentIndex = checked.indexOf(value);
+    const newChecked = [...checked];
+
+    if (currentIndex === -1) {
+      newChecked.push(value);
+    } else {
+      newChecked.splice(currentIndex, 1);
+    }
+
+    setChecked(newChecked);
+  };
+
+  const handleCheckedRight = () => {
+    setRight(right.concat(leftChecked));
+    setLeft(not(left, leftChecked));
+    setChecked(not(checked, leftChecked));
+  };
+
+  const handleCheckedLeft = () => {
+    setLeft(left.concat(rightChecked));
+    setRight(not(right, rightChecked));
+    setChecked(not(checked, rightChecked));
+  };
+
+  const customList = (items: readonly number[]) => (
+    <Paper sx={{ width: 200, height: 230, overflow: 'auto' }}>
+      <List dense component="div" role="list">
+        {items.map((value: number) => {
+          const labelId = `transfer-list-item-${value}-label`;
+
+          return (
+            <ListItemButton
+              key={value}
+              role="listitem"
+              onClick={handleToggle(value)}
+            >
+              <ListItemIcon>
+                <Checkbox
+                  checked={checked.includes(value)}
+                  tabIndex={-1}
+                  disableRipple
+                  inputProps={{
+                    'aria-labelledby': labelId,
+                  }}
+                />
+              </ListItemIcon>
+              <ListItemText id={labelId} primary={`List item ${value + 1}`} />
+            </ListItemButton>
+          );
+        })}
+      </List>
+    </Paper>
+  );
+
+  return (
+    <Grid container spacing={2} sx={{ justifyContent: 'center', alignItems: 'center' }}>
+      <Grid item>{customList(left)}</Grid>
+      <Grid item>
+        <Grid container direction="column" sx={{ alignItems: 'center' }}>
+          <Button
+            sx={{ my: 0.5 }}
+            variant="outlined"
+            size="small"
+            onClick={handleCheckedRight}
+            disabled={leftChecked.length === 0}
+            aria-label="move selected right"
+          >
+            &gt;
+          </Button>
+          <Button
+            sx={{ my: 0.5 }}
+            variant="outlined"
+            size="small"
+            onClick={handleCheckedLeft}
+            disabled={rightChecked.length === 0}
+            aria-label="move selected left"
+          >
+            &lt;
+          </Button>
+        </Grid>
+      </Grid>
+      <Grid item>{customList(right)}</Grid>
+    </Grid>
+  );
+}
+```
+
+## Key Components
+
+### List
+Contains the list items. Set `dense` prop for compact spacing.
+
+### ListItemButton
+Makes list items interactive and clickable.
+
+### Checkbox
+Allows users to select items to transfer. See [Checkbox](/components/checkbox) documentation.
+
+### Button
+Controls for transferring items between lists. See [Button](/components/button) documentation.
+
+## Implementation Notes
+
+The Transfer List pattern typically includes:
+
+- Two Paper-wrapped List components representing source and destination
+- Checkbox components for item selection
+- Button controls for moving items between lists
+- Helper functions for managing state (`not`, `intersection`, `union`)
+- Proper ARIA labels for accessibility
+
+## API References
+
+- [List API](https://next.mui.com/material-ui/api/list/)
+- [ListItemButton API](https://next.mui.com/material-ui/api/list-item-button/)
+- [ListItemIcon API](https://next.mui.com/material-ui/api/list-item-icon/)
+- [ListItemText API](https://next.mui.com/material-ui/api/list-item-text/)
+- [Checkbox API](https://next.mui.com/material-ui/api/checkbox/)
+- [Button API](https://next.mui.com/material-ui/api/button/)

@@ -1,0 +1,465 @@
+---
+title: Popover
+description: A Popover can be used to display some content on top of another. It's an alternative to inline popups and modals.
+---
+
+## Introduction
+
+A Popover can be used to display some content on top of another. The component is built on top of the Modal component and uses the Grow transition by default.
+
+```jsx
+import Popover from '@mui/material/Popover';
+```
+
+## Basic Usage
+
+```jsx
+import * as React from 'react';
+import Popover from '@mui/material/Popover';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
+
+export default function BasicPopover() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popover' : undefined;
+
+  return (
+    <div>
+      <Button aria-describedby={id} onClick={handleClick}>
+        Open Popover
+      </Button>
+      <Popover
+        id={id}
+        open={open}
+        anchorEl={anchorEl}
+        onClose={handleClose}
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <Typography sx={{ p: 2 }}>The content of the Popover.</Typography>
+      </Popover>
+    </div>
+  );
+}
+```
+
+## Props
+
+### open
+
+- Type: `boolean`
+- Required: Yes
+
+If `true`, the component is shown.
+
+### anchorEl
+
+- Type: `HTMLElement | (() => HTMLElement) | PopoverVirtualElement`
+- Default: `null`
+
+An HTML element, PopoverVirtualElement, or a function that returns either. It's used to set the position of the popover.
+
+### onClose
+
+- Type: `(event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void`
+- Default: `undefined`
+
+Callback fired when the component requests to be closed.
+
+### anchorOrigin
+
+- Type: `{ vertical: 'top' | 'center' | 'bottom' | number, horizontal: 'left' | 'center' | 'right' | number }`
+- Default: `{ vertical: 'top', horizontal: 'left' }`
+
+This is the point on the anchor where the popover's anchorEl will attach to.
+
+```jsx
+<Popover
+  anchorOrigin={{
+    vertical: 'bottom',
+    horizontal: 'center',
+  }}
+  // ...
+/>
+```
+
+### transformOrigin
+
+- Type: `{ vertical: 'top' | 'center' | 'bottom' | number, horizontal: 'left' | 'center' | 'right' | number }`
+- Default: `{ vertical: 'top', horizontal: 'left' }`
+
+This is the point on the popover which will attach to the anchor's origin.
+
+```jsx
+<Popover
+  transformOrigin={{
+    vertical: 'top',
+    horizontal: 'center',
+  }}
+  // ...
+/>
+```
+
+### anchorReference
+
+- Type: `'anchorEl' | 'anchorPosition' | 'none'`
+- Default: `'anchorEl'`
+
+This determines which anchor prop to refer to when setting the position of the popover.
+
+### anchorPosition
+
+- Type: `{ top: number, left: number }`
+- Default: `undefined`
+
+This is the position that may be used to set the position of the popover. The coordinates are relative to the application's client area.
+
+```jsx
+<Popover
+  anchorReference="anchorPosition"
+  anchorPosition={{ top: 200, left: 400 }}
+  // ...
+/>
+```
+
+### elevation
+
+- Type: `number`
+- Default: `8`
+
+The elevation of the popover.
+
+### marginThreshold
+
+- Type: `number`
+- Default: `16`
+
+Specifies how close to the edge of the window the popover can appear. If null, the popover will not be constrained by the window.
+
+### TransitionComponent
+
+- Type: `React.ElementType`
+- Default: `Grow`
+
+The component used for the transition.
+
+**Deprecated**: Use `slots.transition` instead.
+
+### transitionDuration
+
+- Type: `number | { appear?: number, enter?: number, exit?: number } | 'auto'`
+- Default: `'auto'`
+
+Set to 'auto' to automatically calculate transition time based on height.
+
+## Anchor Positioning
+
+### Using an Element
+
+```jsx
+function AnchorPlayground() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  return (
+    <>
+      <button
+        ref={(node) => setAnchorEl(node)}
+        onClick={() => setOpen(true)}
+      >
+        Click me
+      </button>
+      <Popover
+        open={open}
+        anchorEl={anchorEl}
+        onClose={() => setOpen(false)}
+      >
+        Content
+      </Popover>
+    </>
+  );
+}
+```
+
+### Using Coordinates
+
+```jsx
+function MousePopover() {
+  const [anchorPosition, setAnchorPosition] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorPosition({
+      top: event.clientY,
+      left: event.clientX,
+    });
+  };
+
+  return (
+    <>
+      <div onClick={handleClick}>Click anywhere</div>
+      <Popover
+        open={Boolean(anchorPosition)}
+        anchorReference="anchorPosition"
+        anchorPosition={anchorPosition}
+        onClose={() => setAnchorPosition(null)}
+      >
+        Popover content
+      </Popover>
+    </>
+  );
+}
+```
+
+### Virtual Element
+
+You can use a virtual element for positioning:
+
+```jsx
+function VirtualElementPopover() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const virtualElement = {
+    getBoundingClientRect: () => ({
+      top: 100,
+      left: 100,
+      bottom: 100,
+      right: 100,
+      width: 0,
+      height: 0,
+    }),
+  };
+
+  return (
+    <Popover
+      open={open}
+      anchorEl={virtualElement}
+      onClose={handleClose}
+    >
+      Content
+    </Popover>
+  );
+}
+```
+
+## Positioning Examples
+
+### Center Alignment
+
+```jsx
+<Popover
+  anchorOrigin={{
+    vertical: 'bottom',
+    horizontal: 'center',
+  }}
+  transformOrigin={{
+    vertical: 'top',
+    horizontal: 'center',
+  }}
+>
+  Centered content
+</Popover>
+```
+
+### Custom Offset
+
+```jsx
+<Popover
+  anchorOrigin={{
+    vertical: 'bottom',
+    horizontal: 'left',
+  }}
+  transformOrigin={{
+    vertical: -20,  // 20px offset from top
+    horizontal: 'left',
+  }}
+>
+  Offset content
+</Popover>
+```
+
+## Imperative Actions
+
+You can imperatively update the popover position:
+
+```jsx
+function ImperativePopover() {
+  const popoverRef = React.useRef();
+
+  const updatePosition = () => {
+    if (popoverRef.current) {
+      popoverRef.current.updatePosition();
+    }
+  };
+
+  return (
+    <Popover
+      action={popoverRef}
+      // ...
+    >
+      Content
+    </Popover>
+  );
+}
+```
+
+## Custom Transition
+
+```jsx
+import Fade from '@mui/material/Fade';
+
+<Popover
+  slots={{
+    transition: Fade,
+  }}
+  slotProps={{
+    transition: { timeout: 500 },
+  }}
+>
+  Fading content
+</Popover>
+```
+
+## Paper Props
+
+Customize the Paper component:
+
+```jsx
+<Popover
+  slotProps={{
+    paper: {
+      sx: {
+        width: 300,
+        maxHeight: 400,
+        overflow: 'auto',
+      },
+    },
+  }}
+>
+  Content
+</Popover>
+```
+
+## Context Menu
+
+```jsx
+function ContextMenu() {
+  const [contextMenu, setContextMenu] = React.useState(null);
+
+  const handleContextMenu = (event) => {
+    event.preventDefault();
+    setContextMenu(
+      contextMenu === null
+        ? { mouseX: event.clientX, mouseY: event.clientY }
+        : null
+    );
+  };
+
+  const handleClose = () => {
+    setContextMenu(null);
+  };
+
+  return (
+    <div onContextMenu={handleContextMenu} style={{ cursor: 'context-menu' }}>
+      Right click here
+      <Popover
+        open={contextMenu !== null}
+        onClose={handleClose}
+        anchorReference="anchorPosition"
+        anchorPosition={
+          contextMenu !== null
+            ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+            : undefined
+        }
+      >
+        <MenuItem onClick={handleClose}>Copy</MenuItem>
+        <MenuItem onClick={handleClose}>Paste</MenuItem>
+        <MenuItem onClick={handleClose}>Delete</MenuItem>
+      </Popover>
+    </div>
+  );
+}
+```
+
+## Accessibility
+
+Ensure proper ARIA attributes:
+
+```jsx
+<Button
+  aria-describedby={id}
+  onClick={handleClick}
+>
+  Open
+</Button>
+<Popover
+  id={id}
+  open={open}
+  anchorEl={anchorEl}
+  onClose={handleClose}
+  aria-labelledby="popover-title"
+>
+  <Typography id="popover-title" variant="h6">
+    Popover Title
+  </Typography>
+  <Typography>Content</Typography>
+</Popover>
+```
+
+## Performance
+
+### Disable Scroll Lock
+
+```jsx
+<Popover
+  disableScrollLock
+  // ...
+>
+  Content
+</Popover>
+```
+
+## Common Patterns
+
+### Tooltip-like Popover
+
+```jsx
+function TooltipPopover() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  return (
+    <>
+      <IconButton
+        onMouseEnter={(e) => setAnchorEl(e.currentTarget)}
+        onMouseLeave={() => setAnchorEl(null)}
+      >
+        <InfoIcon />
+      </IconButton>
+      <Popover
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        onClose={() => setAnchorEl(null)}
+        disableRestoreFocus
+        slotProps={{
+          paper: {
+            onMouseEnter: () => {},
+            onMouseLeave: () => setAnchorEl(null),
+          },
+        }}
+      >
+        <Typography sx={{ p: 1 }}>Helpful information</Typography>
+      </Popover>
+    </>
+  );
+}
+```

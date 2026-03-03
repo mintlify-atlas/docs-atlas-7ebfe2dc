@@ -1,0 +1,296 @@
+---
+title: Upgrade to v6
+description: This guide explains why and how to upgrade from Material UI v5 to v6.
+---
+
+## Why you should upgrade to Material UI v6
+
+### React Server Component support
+
+Material UI v6 introduces Pigment CSS, a zero-runtime CSS-in-JS styling engine to replace Emotion and styled-components as a more future-proof solution for writing styles in React 19 and beyond. With Pigment CSS, styles are extracted at build time rather than runtime, avoiding client-side recalculations and unlocking React Server Component (RSC) compatibility. This also leads to significant reductions in bundle sizes for Material UI apps.
+
+**In v6, Pigment CSS is opt-in.** Future major versions of Material UI will likely use Pigment CSS as the default styling solution. Though optional, it's encouraged to try Pigment CSS out in your Material UI app.
+
+### Quality-of-life improvements
+
+Material UI v6 features several other quality-of-life improvements, including:
+
+- `ThemeProvider` now supports all of the `CssVarsProvider` features
+- Support for container queries
+- A new theme utility for adding styles to specific color modes
+
+## Supported browsers and versions
+
+The default bundle targets have changed in v6.
+
+The exact versions are pinned from the browserslist query: `"> 0.5%, last 2 versions, Firefox ESR, not dead, safari >= 15.4, iOS >= 15.4"`.
+
+- **Node.js** 14 (up from 12)
+- **Chrome** 109 (up from 90)
+- **Edge** 121 (up from 91)
+- **Firefox** 115 (up from 78)
+- **Safari** 15.4 in both macOS and iOS (up from 14 in macOS and 12.5 in iOS)
+
+### Removed support for IE 11
+
+Support for IE 11—the legacy bundle and all IE 11-related code—has been completely removed in v6. This decreases Material UI's bundle size and eases future development.
+
+If you need to support IE 11, you can use v5's legacy bundle. Note that it will not receive updates or bug fixes in the future.
+
+### Minimum React version
+
+The minimum supported version of React is v17.0.0 (the same as v5).
+
+### React 18 and below
+
+If you are using React 18 or below, you need to set up a resolution of `react-is` package to the same version as the `react` you are using.
+
+For example, if you are using `react@18.3.1`, install `react-is@18.3.1` and set the resolutions or overrides in your `package.json`:
+
+```json
+{
+  "overrides": {
+    "react-is": "^18.3.1"
+  }
+}
+```
+
+#### Why is this needed?
+
+Material UI v6 uses `react-is@19`, which changed how React elements are identified. If you're on React 18 or below, mismatched versions of `react-is` can cause runtime errors in prop type checks. Forcing `react-is` to match your React version prevents these errors.
+
+### Minimum TypeScript version
+
+The minimum supported version of TypeScript has been increased from v3.5 to 4.7.
+
+## Breaking changes
+
+Material UI v6 was designed to introduce minimal breaking changes when upgrading from v5. These include browser support updates, a Node.js version bump, and the removal of the UMD bundle. These updates reduce the Material UI package size by 2.5MB—nearly 25% of the total size in v5.
+
+Codemods are provided to handle the majority of these breaking changes.
+
+### UMD bundle removed
+
+To align with React 19's removal of UMD builds, Material UI has also removed its UMD bundle. This results in a reduction of the `@mui/material` package size by 2.5MB, or 25% of the total package size.
+
+Instead, we recommend using ESM-based CDNs such as [esm.sh](https://esm.sh/).
+
+### Accordion
+
+#### Summary wrapped in a heading
+
+To meet the W3C Accordion Pattern standard, the Accordion Summary is now wrapped with a default `<h3>` heading element. This change may affect customizations relying on the previous DOM structure and CSS specificity.
+
+If your styles or DOM manipulations depend on the old structure, you will need to update them to accommodate the new heading element. If the default heading element conflicts with your existing structure, you can change it using the `slotProps.heading.component` prop:
+
+```jsx
+<Accordion slotProps={{ heading: { component: 'h4' } }}>
+  <AccordionSummary
+    expandIcon={<ExpandMoreIcon />}
+    aria-controls="panel1-content"
+    id="panel1-header"
+  >
+    Accordion
+  </AccordionSummary>
+  <AccordionDetails>
+    Content goes here
+  </AccordionDetails>
+</Accordion>
+```
+
+#### Summary as a button (from v6.3.0)
+
+The Accordion Summary HTML structure has been updated:
+- The root element is now a `button`
+- Summary content and the icon wrapper are rendered as `span`
+
+Developers using the previous `div` element for styling should update their styling. Additionally, those using `Typography` for text should replace it with a `span`.
+
+### Autocomplete
+
+Three new values have been introduced to the `reason` argument in the `onInputChange` callback:
+
+- `"blur"`: similar to `"reset"` but triggered when the focus moves away from the input. `clearOnBlur` must be `true`.
+- `"selectOption"`: triggered when the input value changes after an option is selected.
+- `"removeOption"`: triggered in multiple selection mode when a chip is removed.
+
+These are available in addition to the existing `"input"`, `"reset"`, and `"clear"` values.
+
+### Chip
+
+In earlier versions, the Chip component would lose focus when the user pressed the <kbd>esc</kbd> key, which differs from how other button-like components work. In v6, the Chip now retains focus as expected.
+
+To preserve the previous behavior, add a custom `onKeyUp` handler:
+
+```js
+import * as React from 'react';
+import Chip from '@mui/material/Chip';
+
+export default function ChipExample() {
+  const chipRef = React.useRef(null);
+  const keyUpHandler = (event) => {
+    if (event.key === 'Escape' && chipRef.current) {
+      chipRef.current.blur();
+    }
+  };
+  return (
+    <Chip
+      label="Chip Outlined"
+      variant="outlined"
+      ref={chipRef}
+      onKeyUp={keyUpHandler}
+    />
+  );
+}
+```
+
+### Divider
+
+When using vertical orientation, the Divider now renders a `<div>` with the corresponding accessibility attributes instead of `<hr>` to adhere to the WAI-ARIA spec. You might need to adjust your styles accordingly if you are targeting `hr` tags in your CSS.
+
+```diff
+-import Divider from '@mui/material/Divider';
++import Divider, { dividerClasses } from '@mui/material/Divider';
+
+ const Main = styled.main({
+-  '& hr': {
++  [`& .${dividerClasses.root}`]: {
+     marginTop: '16px',
+   },
+ });
+```
+
+### Grid2
+
+The `Grid2` (previously `Unstable_Grid2`) was updated and stabilized:
+
+- The previous size and offset props were replaced with the `size` and `offset` props.
+- The spacing mechanism was reworked to use the `gap` CSS property.
+
+#### Unstable prefix removed
+
+The `Grid2` component API was stabilized, so its import no longer contains the `Unstable_` prefix:
+
+```diff
+-import { Unstable_Grid2 as Grid2 } from '@mui/material';
++import { Grid2 } from '@mui/material';
+```
+
+#### Size and offset props renamed
+
+In v5, the size and offset props were named to correspond with the theme's breakpoints. In v6, these props are renamed to `size` and `offset`:
+
+```diff
+ <Grid
+-  xs={12}
+-  sm={6}
+-  xsOffset={2}
+-  smOffset={3}
++  size={{ xs: 12, sm: 6 }}
++  offset={{ xs: 2, sm: 3 }}
+ >
+```
+
+If the size or offset is the same for all breakpoints, then you can use a single value:
+
+```diff
+-<Grid xs={6} xsOffset={2}>
++<Grid size={6} offset={2}>
+```
+
+Additionally, the `true` value for the `size` prop was renamed to `"grow"`:
+
+```diff
+-<Grid xs>
++<Grid size="grow">
+```
+
+Use this codemod to migrate your project:
+
+```bash
+npx @mui/codemod@latest v6.0.0/grid-v2-props <path/to/folder>
+```
+
+### ListItem
+
+`ListItem`'s props `autoFocus`, `button`, `disabled`, and `selected`, deprecated in v5, have been removed. To replace the `button` prop, use `ListItemButton` instead:
+
+```diff
+-<ListItem button />
++<ListItemButton />
+```
+
+Use this codemod to migrate your project:
+
+```bash
+npx @mui/codemod@latest v6.0.0/list-item-button-prop <path/to/folder>
+```
+
+### Button with Loading State
+
+As of `@mui/material` v6.4.0, the `LoadingButton` from Lab has been removed. Loading functionality is now part of the standard `Button` component:
+
+```diff
+-import { LoadingButton } from '@mui/lab';
++import { Button } from '@mui/material';
+```
+
+### Typography
+
+The `color` prop in the `Typography` component is not a system prop anymore. You can use the `sx` prop instead:
+
+```diff
+-<Typography color={(theme) => theme.palette.primary.main}>
++<Typography sx={{ color: (theme) => theme.palette.primary.main }}>
+```
+
+You still can access some theme colors directly using the `color` prop:
+
+```jsx
+<Typography color="textSecondary">Secondary text</Typography>
+```
+
+## Stabilized APIs
+
+### CssVarsProvider and extendTheme
+
+The `CssVarsProvider` and `extendTheme` APIs are now stable. If you're already using them in v5 you can now drop the experimental prefix:
+
+```diff
+-import { experimental_extendTheme as extendTheme, Experimental_CssVarsProvider as CssVarsProvider } from '@mui/material/styles';
++import { extendTheme, CssVarsProvider } from '@mui/material/styles';
+```
+
+### Color mode theme utility
+
+Material UI v6 introduces a new utility for adding styles to specific color modes called `theme.applyStyles()`, designed to replace `theme.palette.mode`:
+
+```diff
+ const MyComponent = styled('button')(({ theme }) => ({
+   padding: '0.5rem 1rem',
+   border: '1px solid',
+-  borderColor: theme.palette.mode === 'dark' ? '#fff' : '#000',
++  borderColor: '#000',
++  ...theme.applyStyles('dark', {
++    borderColor: '#fff',
++  })
+ }))
+```
+
+Use these codemods to migrate your project:
+
+```bash
+npx @mui/codemod@latest v6.0.0/styled <path/to/folder-or-file>
+npx @mui/codemod@latest v6.0.0/sx-prop <path/to/folder-or-file>
+npx @mui/codemod@latest v6.0.0/theme-v6 <path/to/theme-file>
+```
+
+## Deprecations
+
+It is not required to immediately go through the deprecations in order to use Material UI v6.
+
+You can do it at your own pace by checking out the deprecations page. Those deprecations will be removed in the next major version.
+
+## Pigment CSS integration (optional)
+
+Once you've finished upgrading your app to v6, you'll be ready to start migrating to Pigment CSS for RSC support and a smaller bundle size.

@@ -1,0 +1,146 @@
+---
+title: Backdrop
+description: Backdrop component provides emphasis on a particular element or parts of it
+---
+
+# Backdrop
+
+The Backdrop component narrows the user's focus to a particular element on the screen, typically used with modals and loading states.
+
+## Overview
+
+Backdrop is a simple full-screen overlay that can contain loading indicators or be used to block user interaction during asynchronous operations. It uses the Fade transition by default.
+
+## Basic Usage
+
+```tsx
+import * as React from 'react';
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
+import Button from '@mui/material/Button';
+
+function SimpleBackdrop() {
+  const [open, setOpen] = React.useState(false);
+  
+  const handleClose = () => {
+    setOpen(false);
+  };
+  
+  const handleOpen = () => {
+    setOpen(true);
+  };
+
+  return (
+    <div>
+      <Button onClick={handleOpen}>Show backdrop</Button>
+      <Backdrop
+        sx={(theme) => ({ color: '#fff', zIndex: theme.zIndex.drawer + 1 })}
+        open={open}
+        onClick={handleClose}
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
+    </div>
+  );
+}
+```
+
+## Invisible Backdrop
+
+The backdrop can be made invisible while still blocking user interaction:
+
+```tsx
+<Backdrop
+  invisible
+  open={open}
+  onClick={handleClose}
+>
+  <CircularProgress />
+</Backdrop>
+```
+
+## Props
+
+### Main Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `open` | `boolean` | **required** | If `true`, the component is shown. |
+| `invisible` | `boolean` | `false` | If `true`, the backdrop is invisible. Can be used when rendering a popover or custom select. |
+| `transitionDuration` | `number \| { enter?: number, exit?: number }` | - | The duration for the transition, in milliseconds. |
+| `slots.transition` | `ElementType` | `Fade` | The component used for the transition. |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS overrides. |
+
+### Inherited Props
+
+Backdrop also accepts all props from the Fade component:
+
+| Prop | Type | Description |
+|------|------|-------------|
+| `in` | `boolean` | If `true`, the component is shown (controlled by `open` prop). |
+| `timeout` | `number \| { enter?: number, exit?: number }` | Transition timeout. |
+| `easing` | `string \| { enter?: string, exit?: string }` | Transition easing. |
+
+### Slot Props
+
+The Backdrop component supports slot-based customization:
+
+- `slots.root` - The root div element
+- `slots.transition` - The transition component (default: Fade)
+
+Use `slotProps` to pass props to each slot:
+
+```tsx
+<Backdrop
+  open={open}
+  slotProps={{
+    root: { 
+      onClick: handleClose,
+      'aria-label': 'loading backdrop' 
+    },
+    transition: { timeout: 500 }
+  }}
+>
+  <CircularProgress />
+</Backdrop>
+```
+
+## CSS Classes
+
+The component has the following CSS classes available:
+
+- `.MuiBackdrop-root` - Root element
+- `.MuiBackdrop-invisible` - Applied when `invisible={true}`
+
+## Z-Index
+
+Backdrop uses a z-index to position itself above other content. The default z-index can be accessed via:
+
+```tsx
+theme.zIndex.modal // 1300
+```
+
+You can customize the z-index using the `sx` prop:
+
+```tsx
+<Backdrop
+  sx={{ zIndex: (theme) => theme.zIndex.drawer + 1 }}
+  open={open}
+>
+  {/* content */}
+</Backdrop>
+```
+
+## Inheritance
+
+Backdrop inherits from the [Fade](https://mui.com/material-ui/api/fade/) component.
+
+## API Reference
+
+For complete API documentation, see:
+- [Backdrop API](https://mui.com/material-ui/api/backdrop/)
+- [Backdrop Demos](https://mui.com/material-ui/react-backdrop/)
+
+## Source Location
+
+`~/workspace/source/packages/mui-material/src/Backdrop/Backdrop.d.ts:141`

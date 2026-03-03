@@ -1,0 +1,385 @@
+---
+title: Typography
+description: Use typography to present your design and content as clearly and efficiently as possible.
+---
+
+## Introduction
+
+The Typography component helps you apply the Material Design type scale to your text. It provides a set of pre-defined text styles that follow Material Design guidelines, making it easy to maintain consistent typography throughout your application.
+
+## Basic Usage
+
+```tsx
+import Typography from '@mui/material/Typography';
+
+function Demo() {
+  return <Typography>Body text</Typography>;
+}
+```
+
+## Variants
+
+The Typography component uses the `variant` prop to apply different text styles. Each variant maps to a specific HTML element and typographic style.
+
+```tsx
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+
+function TypographyVariants() {
+  return (
+    <Stack spacing={2}>
+      <Typography variant="h1">h1. Heading</Typography>
+      <Typography variant="h2">h2. Heading</Typography>
+      <Typography variant="h3">h3. Heading</Typography>
+      <Typography variant="h4">h4. Heading</Typography>
+      <Typography variant="h5">h5. Heading</Typography>
+      <Typography variant="h6">h6. Heading</Typography>
+      <Typography variant="subtitle1">subtitle1. Lorem ipsum dolor sit amet</Typography>
+      <Typography variant="subtitle2">subtitle2. Lorem ipsum dolor sit amet</Typography>
+      <Typography variant="body1">body1. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</Typography>
+      <Typography variant="body2">body2. Lorem ipsum dolor sit amet, consectetur adipisicing elit.</Typography>
+      <Typography variant="button">button text</Typography>
+      <Typography variant="caption">caption text</Typography>
+      <Typography variant="overline">overline text</Typography>
+    </Stack>
+  );
+}
+```
+
+## Component
+
+The Typography component uses the `variantMapping` to associate a UI variant with a semantic element. However, you can override this mapping using the `component` prop.
+
+```tsx
+import Typography from '@mui/material/Typography';
+
+function TypographyComponent() {
+  return (
+    <>
+      {/* Renders h1, but uses h2 styles */}
+      <Typography variant="h2" component="h1">
+        h1. Main heading (h2 style)
+      </Typography>
+      
+      {/* Renders div, but uses h6 styles */}
+      <Typography variant="h6" component="div">
+        h6 style on a div element
+      </Typography>
+    </>
+  );
+}
+```
+
+## Color
+
+The `color` prop supports theme palette colors and custom colors.
+
+```tsx
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+
+function TypographyColor() {
+  return (
+    <Stack spacing={2}>
+      <Typography color="primary">Primary color</Typography>
+      <Typography color="secondary">Secondary color</Typography>
+      <Typography color="error">Error color</Typography>
+      <Typography color="warning">Warning color</Typography>
+      <Typography color="info">Info color</Typography>
+      <Typography color="success">Success color</Typography>
+      <Typography color="text.primary">Text primary</Typography>
+      <Typography color="text.secondary">Text secondary</Typography>
+      <Typography color="text.disabled">Text disabled</Typography>
+      <Typography sx={{ color: '#ff5722' }}>Custom color</Typography>
+    </Stack>
+  );
+}
+```
+
+## Alignment
+
+Use the `align` prop to control text alignment.
+
+```tsx
+import Typography from '@mui/material/Typography';
+import Stack from '@mui/material/Stack';
+
+function TypographyAlign() {
+  return (
+    <Stack spacing={2}>
+      <Typography align="left">Left aligned text (default)</Typography>
+      <Typography align="center">Center aligned text</Typography>
+      <Typography align="right">Right aligned text</Typography>
+      <Typography align="justify">Justified text. Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quos blanditiis tenetur unde suscipit.</Typography>
+    </Stack>
+  );
+}
+```
+
+## Gutters
+
+Use the `gutterBottom` prop to add bottom margin.
+
+```tsx
+import Typography from '@mui/material/Typography';
+
+function TypographyGutter() {
+  return (
+    <>
+      <Typography variant="h4" gutterBottom>
+        Heading with gutter
+      </Typography>
+      <Typography variant="body1">
+        This paragraph follows a heading with gutterBottom prop.
+      </Typography>
+    </>
+  );
+}
+```
+
+## No Wrap
+
+Use the `noWrap` prop to prevent text wrapping and show ellipsis for overflow.
+
+```tsx
+import Typography from '@mui/material/Typography';
+import Box from '@mui/material/Box';
+
+function TypographyNoWrap() {
+  return (
+    <Box sx={{ width: 200 }}>
+      <Typography noWrap>
+        This is a very long text that will be truncated with an ellipsis when it overflows the container width.
+      </Typography>
+    </Box>
+  );
+}
+```
+
+## System Props
+
+Typography supports all system props for quick customization.
+
+```tsx
+import Typography from '@mui/material/Typography';
+
+function TypographySystem() {
+  return (
+    <Typography
+      sx={{
+        fontWeight: 'bold',
+        fontStyle: 'italic',
+        letterSpacing: 2,
+        textTransform: 'uppercase',
+      }}
+    >
+      Customized typography
+    </Typography>
+  );
+}
+```
+
+## Responsive Typography
+
+You can make typography responsive using theme breakpoints.
+
+```tsx
+import Typography from '@mui/material/Typography';
+
+function ResponsiveTypography() {
+  return (
+    <Typography
+      variant="h3"
+      sx={{
+        fontSize: {
+          xs: '1.5rem',
+          sm: '2rem',
+          md: '2.5rem',
+          lg: '3rem',
+        },
+      }}
+    >
+      Responsive heading
+    </Typography>
+  );
+}
+```
+
+## Theme Typography
+
+You can customize the typography system in your theme:
+
+```tsx
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+
+const theme = createTheme({
+  typography: {
+    fontFamily: [
+      'Roboto',
+      '"Helvetica Neue"',
+      'Arial',
+      'sans-serif',
+    ].join(','),
+    h1: {
+      fontSize: '3rem',
+      fontWeight: 500,
+    },
+    body1: {
+      fontSize: '1rem',
+      lineHeight: 1.6,
+    },
+  },
+});
+
+function ThemedTypography() {
+  return (
+    <ThemeProvider theme={theme}>
+      <Typography variant="h1">Custom themed heading</Typography>
+      <Typography variant="body1">Custom themed body text</Typography>
+    </ThemeProvider>
+  );
+}
+```
+
+## Adding Custom Variants
+
+You can add custom typography variants to your theme:
+
+```tsx
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import Typography from '@mui/material/Typography';
+
+declare module '@mui/material/styles' {
+  interface TypographyVariants {
+    poster: React.CSSProperties;
+  }
+
+  interface TypographyVariantsOptions {
+    poster?: React.CSSProperties;
+  }
+}
+
+declare module '@mui/material/Typography' {
+  interface TypographyPropsVariantOverrides {
+    poster: true;
+  }
+}
+
+const theme = createTheme({
+  typography: {
+    poster: {
+      fontSize: '4rem',
+      fontWeight: 700,
+      color: 'red',
+    },
+  },
+});
+
+function CustomVariantTypography() {
+  return (
+    <ThemeProvider theme={theme}>
+      <Typography variant="poster">Custom poster variant</Typography>
+    </ThemeProvider>
+  );
+}
+```
+
+## Props
+
+### Typography Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `align` | `'inherit'` \| `'left'` \| `'center'` \| `'right'` \| `'justify'` | `'inherit'` | Set the text-align on the component. |
+| `children` | `node` | - | The content of the component. |
+| `classes` | `object` | - | Override or extend the styles applied to the component. |
+| `color` | `'primary'` \| `'secondary'` \| `'success'` \| `'error'` \| `'info'` \| `'warning'` \| `'textPrimary'` \| `'textSecondary'` \| `'textDisabled'` \| string | - | The color of the component. Supports theme colors. |
+| `gutterBottom` | `boolean` | `false` | If true, the text will have a bottom margin. |
+| `noWrap` | `boolean` | `false` | If true, text will not wrap and will truncate with ellipsis. |
+| `paragraph` | `boolean` | `false` | **Deprecated.** If true, element will be a paragraph. Use `component="p"` instead. |
+| `sx` | `SxProps<Theme>` | - | The system prop for defining CSS overrides and additional styles. |
+| `variant` | `'h1'` \| `'h2'` \| `'h3'` \| `'h4'` \| `'h5'` \| `'h6'` \| `'subtitle1'` \| `'subtitle2'` \| `'body1'` \| `'body2'` \| `'caption'` \| `'button'` \| `'overline'` \| `'inherit'` | `'body1'` | Applies the theme typography styles. |
+| `variantMapping` | `object` | See default mapping | The component maps the variant prop to a range of different HTML elements. Override with this prop. |
+
+### Default Variant Mapping
+
+```tsx
+{
+  h1: 'h1',
+  h2: 'h2',
+  h3: 'h3',
+  h4: 'h4',
+  h5: 'h5',
+  h6: 'h6',
+  subtitle1: 'h6',
+  subtitle2: 'h6',
+  body1: 'p',
+  body2: 'p',
+  inherit: 'p',
+}
+```
+
+## CSS Classes
+
+The following CSS classes are available for customization:
+
+- `.MuiTypography-root` - Styles applied to the root element.
+- `.MuiTypography-h1` - Styles applied if `variant="h1"`.
+- `.MuiTypography-h2` - Styles applied if `variant="h2"`.
+- `.MuiTypography-h3` - Styles applied if `variant="h3"`.
+- `.MuiTypography-h4` - Styles applied if `variant="h4"`.
+- `.MuiTypography-h5` - Styles applied if `variant="h5"`.
+- `.MuiTypography-h6` - Styles applied if `variant="h6"`.
+- `.MuiTypography-subtitle1` - Styles applied if `variant="subtitle1"`.
+- `.MuiTypography-subtitle2` - Styles applied if `variant="subtitle2"`.
+- `.MuiTypography-body1` - Styles applied if `variant="body1"`.
+- `.MuiTypography-body2` - Styles applied if `variant="body2"`.
+- `.MuiTypography-caption` - Styles applied if `variant="caption"`.
+- `.MuiTypography-button` - Styles applied if `variant="button"`.
+- `.MuiTypography-overline` - Styles applied if `variant="overline"`.
+- `.MuiTypography-inherit` - Styles applied if `variant="inherit"`.
+- `.MuiTypography-alignLeft` - Styles applied if `align="left"`.
+- `.MuiTypography-alignCenter` - Styles applied if `align="center"`.
+- `.MuiTypography-alignRight` - Styles applied if `align="right"`.
+- `.MuiTypography-alignJustify` - Styles applied if `align="justify"`.
+- `.MuiTypography-noWrap` - Styles applied if `noWrap={true}`.
+- `.MuiTypography-gutterBottom` - Styles applied if `gutterBottom={true}`.
+- `.MuiTypography-paragraph` - Styles applied if `paragraph={true}`.
+
+## Accessibility
+
+### Semantic HTML
+
+Always use the appropriate HTML element for your content's semantic meaning:
+
+```tsx
+<Typography variant="h1" component="h1">
+  Page Title
+</Typography>
+```
+
+### Heading Hierarchy
+
+Maintain proper heading hierarchy (h1, h2, h3, etc.) for screen readers:
+
+```tsx
+<Typography variant="h3" component="h1">
+  Main heading (looks like h3, but is h1 semantically)
+</Typography>
+<Typography variant="h4" component="h2">
+  Subheading
+</Typography>
+```
+
+### Color Contrast
+
+Ensure sufficient color contrast for text readability. Material UI theme colors are designed to meet WCAG 2.1 Level AA standards, but always verify custom colors:
+
+```tsx
+{/* Good contrast */}
+<Typography color="text.primary">Readable text</Typography>
+
+{/* Verify custom colors */}
+<Typography sx={{ color: '#custom-color' }}>Custom colored text</Typography>
+```

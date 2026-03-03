@@ -1,0 +1,180 @@
+---
+title: Loading Button
+description: The LoadingButton component has graduated from Lab to Material UI core
+---
+
+# Loading Button
+
+The LoadingButton functionality has graduated from `@mui/lab` and is now part of the core `@mui/material` package.
+
+## Migration Notice
+
+As of Material UI v9, LoadingButton is available directly in `@mui/material/Button`. The `@mui/lab/LoadingButton` export is deprecated and serves only as a wrapper that redirects to the core Button component.
+
+## Old Import (Deprecated)
+
+```jsx
+// Deprecated - will show console warning
+import LoadingButton from '@mui/lab/LoadingButton';
+```
+
+When using the Lab import, you'll see this warning:
+
+```
+MUI: The LoadingButton component functionality is now part of the Button component from Material UI.
+
+You should use `import Button from '@mui/material/Button'`
+or `import { Button } from '@mui/material'`
+```
+
+## New Import (Recommended)
+
+```jsx
+// Recommended - use Button from @mui/material
+import Button from '@mui/material/Button';
+
+// or
+import { Button } from '@mui/material';
+```
+
+## Basic Usage
+
+The Button component now includes the `loading` prop:
+
+```jsx
+import Button from '@mui/material/Button';
+import { useState } from 'react';
+
+function LoadingButtonExample() {
+  const [loading, setLoading] = useState(false);
+
+  const handleClick = () => {
+    setLoading(true);
+    // Simulate API call
+    setTimeout(() => setLoading(false), 2000);
+  };
+
+  return (
+    <Button
+      loading={loading}
+      onClick={handleClick}
+      variant="contained"
+    >
+      Submit
+    </Button>
+  );
+}
+```
+
+## Loading with Start Icon
+
+```jsx
+import Button from '@mui/material/Button';
+import SaveIcon from '@mui/icons-material/Save';
+
+<Button
+  loading={loading}
+  loadingPosition="start"
+  startIcon={<SaveIcon />}
+  variant="outlined"
+>
+  Save
+</Button>
+```
+
+## Loading with End Icon
+
+```jsx
+import Button from '@mui/material/Button';
+import SendIcon from '@mui/icons-material/Send';
+
+<Button
+  loading={loading}
+  loadingPosition="end"
+  endIcon={<SendIcon />}
+  variant="contained"
+>
+  Send
+</Button>
+```
+
+## Custom Loading Indicator
+
+```jsx
+import Button from '@mui/material/Button';
+import CircularProgress from '@mui/material/CircularProgress';
+
+<Button
+  loading={loading}
+  loadingIndicator={
+    <CircularProgress color="inherit" size={16} />
+  }
+  variant="outlined"
+>
+  Custom Loading
+</Button>
+```
+
+## API Reference
+
+The LoadingButton functionality is now part of the [Button API](https://mui.com/material-ui/api/button/).
+
+### Additional Button Props for Loading State
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `loading` | `boolean` | `false` | If `true`, the button will show a loading indicator |
+| `loadingIndicator` | `node` | `<CircularProgress />` | Element to display when loading |
+| `loadingPosition` | `'start'` \| `'end'` \| `'center'` | `'center'` | Position of the loading indicator |
+
+## Migration Steps
+
+To migrate from Lab's LoadingButton to Material UI's Button:
+
+1. Update imports:
+   ```jsx
+   // Before
+   import LoadingButton from '@mui/lab/LoadingButton';
+   
+   // After
+   import Button from '@mui/material/Button';
+   ```
+
+2. Update component usage:
+   ```jsx
+   // Before
+   <LoadingButton loading={loading}>
+     Submit
+   </LoadingButton>
+   
+   // After - same API, just different import
+   <Button loading={loading}>
+     Submit
+   </Button>
+   ```
+
+3. The API is identical - all props work the same way
+
+4. Remove `@mui/lab` from dependencies if not using other Lab components:
+   ```bash
+   npm uninstall @mui/lab
+   ```
+
+## Benefits of Graduation
+
+- **Stable API**: No more breaking changes
+- **Better Performance**: Optimized as part of core package
+- **Smaller Bundle**: No need for separate Lab package
+- **Better Support**: Full documentation in core Material UI docs
+- **Long-term Maintenance**: Guaranteed support as core component
+
+## Full Button Documentation
+
+For complete documentation on the Button component including loading states, visit:
+
+- [Button Component](https://mui.com/material-ui/react-button/)
+- [Button API Reference](https://mui.com/material-ui/api/button/)
+
+## Implementation Details
+
+The Lab's LoadingButton component (at `/home/daytona/workspace/source/packages/mui-lab/src/LoadingButton/LoadingButton.js:25`) now simply wraps and forwards all props to `@mui/material/Button`, showing a deprecation warning on first use.

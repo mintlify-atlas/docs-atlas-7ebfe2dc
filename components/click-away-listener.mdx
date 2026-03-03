@@ -1,0 +1,217 @@
+---
+title: ClickAwayListener
+description: Detect clicks outside an element. Listen for click events that occur somewhere in the document, outside of the element itself.
+---
+
+## Introduction
+
+ClickAwayListener is a utility component that listens for click events that occur somewhere in the document, outside of the element itself. This is useful for closing menus, dialogs, or other components when the user clicks outside of them.
+
+```jsx
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+```
+
+## Basic Usage
+
+```jsx
+import * as React from 'react';
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Box from '@mui/material/Box';
+
+export default function BasicClickAwayListener() {
+  const [open, setOpen] = React.useState(false);
+
+  const handleClick = () => {
+    setOpen((prev) => !prev);
+  };
+
+  const handleClickAway = () => {
+    setOpen(false);
+  };
+
+  return (
+    <ClickAwayListener onClickAway={handleClickAway}>
+      <Box sx={{ position: 'relative' }}>
+        <button type="button" onClick={handleClick}>
+          Open menu dropdown
+        </button>
+        {open ? (
+          <Box
+            sx={{
+              position: 'absolute',
+              top: 28,
+              right: 0,
+              left: 0,
+              zIndex: 1,
+              border: '1px solid',
+              p: 1,
+              bgcolor: 'background.paper',
+            }}
+          >
+            Click me, I will stay visible until you click outside.
+          </Box>
+        ) : null}
+      </Box>
+    </ClickAwayListener>
+  );
+}
+```
+
+## Props
+
+### children
+
+- Type: `React.ReactElement`
+- Required: Yes
+
+The wrapped element. Must be a single child that accepts a ref.
+
+### onClickAway
+
+- Type: `(event: MouseEvent | TouchEvent) => void`
+- Required: Yes
+
+Callback fired when a "click away" event is detected.
+
+### disableReactTree
+
+- Type: `boolean`
+- Default: `false`
+
+If `true`, the React tree is ignored and only the DOM tree is considered. This prop changes how portaled elements are handled.
+
+```jsx
+<ClickAwayListener
+  onClickAway={handleClickAway}
+  disableReactTree
+>
+  <div>Content</div>
+</ClickAwayListener>
+```
+
+### mouseEvent
+
+- Type: `'onClick' | 'onMouseDown' | 'onMouseUp' | 'onPointerDown' | 'onPointerUp' | false`
+- Default: `'onClick'`
+
+The mouse event to listen to. You can disable the listener by providing `false`.
+
+```jsx
+<ClickAwayListener
+  onClickAway={handleClickAway}
+  mouseEvent="onMouseDown"
+>
+  <div>Content</div>
+</ClickAwayListener>
+```
+
+### touchEvent
+
+- Type: `'onTouchStart' | 'onTouchEnd' | false`
+- Default: `'onTouchEnd'`
+
+The touch event to listen to. You can disable the listener by providing `false`.
+
+```jsx
+<ClickAwayListener
+  onClickAway={handleClickAway}
+  touchEvent="onTouchStart"
+>
+  <div>Content</div>
+</ClickAwayListener>
+```
+
+## Usage with Portal
+
+When using ClickAwayListener with portaled content (like with Portal or Modal), you may need to use the `disableReactTree` prop:
+
+```jsx
+import ClickAwayListener from '@mui/material/ClickAwayListener';
+import Portal from '@mui/material/Portal';
+
+function PortalExample() {
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <ClickAwayListener
+      onClickAway={() => setOpen(false)}
+      disableReactTree
+    >
+      <div>
+        <button onClick={() => setOpen(true)}>Open</button>
+        {open && (
+          <Portal>
+            <div>Portaled content</div>
+          </Portal>
+        )}
+      </div>
+    </ClickAwayListener>
+  );
+}
+```
+
+## Leading Edge
+
+By default, the component responds to the trailing edge of the click event (mouseup or touchend). You can make it respond to the leading edge by setting the `mouseEvent` and `touchEvent` props:
+
+```jsx
+<ClickAwayListener
+  onClickAway={handleClickAway}
+  mouseEvent="onMouseDown"
+  touchEvent="onTouchStart"
+>
+  <div>Content</div>
+</ClickAwayListener>
+```
+
+## Accessibility
+
+By default, ClickAwayListener will add an `onClick` handler to its child. This may conflict with existing event handlers. Make sure to handle this appropriately in your implementation.
+
+## Common Patterns
+
+### Closing a Menu
+
+```jsx
+function MenuExample() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  const handleClick = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <div>
+      <button onClick={handleClick}>Open Menu</button>
+      {open && (
+        <ClickAwayListener onClickAway={handleClose}>
+          <div>
+            <MenuItem onClick={handleClose}>Profile</MenuItem>
+            <MenuItem onClick={handleClose}>Settings</MenuItem>
+            <MenuItem onClick={handleClose}>Logout</MenuItem>
+          </div>
+        </ClickAwayListener>
+      )}
+    </div>
+  );
+}
+```
+
+### Disabling the Listener
+
+You can disable both mouse and touch listeners:
+
+```jsx
+<ClickAwayListener
+  onClickAway={handleClickAway}
+  mouseEvent={false}
+  touchEvent={false}
+>
+  <div>No click away detection</div>
+</ClickAwayListener>
+```

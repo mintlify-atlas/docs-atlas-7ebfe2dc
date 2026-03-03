@@ -1,0 +1,393 @@
+---
+title: TypeScript Integration
+description: Learn how to use Material UI with TypeScript for enhanced type safety and developer experience.
+---
+
+## Minimum Requirements
+
+Material UI requires **TypeScript 4.9 or later**. This ensures compatibility with the advanced type features used throughout the library.
+
+### Recommended tsconfig.json
+
+For optimal type checking, configure your `tsconfig.json` with these minimum options:
+
+```json
+{
+  "compilerOptions": {
+    "lib": ["es6", "dom"],
+    "noImplicitAny": true,
+    "noImplicitThis": true,
+    "strictNullChecks": true,
+    "allowSyntheticDefaultImports": true
+  }
+}
+```
+
+For the best type experience, we recommend enabling strict mode:
+
+```json
+{
+  "compilerOptions": {
+    "strict": true
+  }
+}
+```
+
+## Component Props
+
+All Material UI components export their prop types for use in your application.
+
+### Basic Usage
+
+```tsx
+import Button from '@mui/material/Button';
+import type { ButtonProps } from '@mui/material/Button';
+
+function MyButton(props: ButtonProps) {
+  return <Button {...props} />;
+}
+```
+
+### Extending Props
+
+```tsx
+import type { ButtonProps } from '@mui/material/Button';
+
+interface CustomButtonProps extends ButtonProps {
+  customProp?: string;
+}
+
+function CustomButton({ customProp, ...buttonProps }: CustomButtonProps) {
+  return <Button {...buttonProps}>{customProp}</Button>;
+}
+```
+
+### Component Prop Type Structure
+
+From the Button component type definition:
+
+```tsx
+export interface ButtonOwnProps {
+  children?: React.ReactNode;
+  classes?: Partial<ButtonClasses> | undefined;
+  color?: OverridableStringUnion<
+    'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning',
+    ButtonPropsColorOverrides
+  > | undefined;
+  disabled?: boolean | undefined;
+  disableElevation?: boolean | undefined;
+  fullWidth?: boolean | undefined;
+  href?: string | undefined;
+  loading?: boolean | null | undefined;
+  loadingIndicator?: React.ReactNode;
+  size?: OverridableStringUnion<
+    'small' | 'medium' | 'large',
+    ButtonPropsSizeOverrides
+  > | undefined;
+  variant?: OverridableStringUnion<
+    'text' | 'outlined' | 'contained',
+    ButtonPropsVariantOverrides
+  > | undefined;
+  sx?: SxProps<Theme> | undefined;
+}
+```
+
+## Theme Customization
+
+Extend the theme interface to add custom properties with full type safety.
+
+### Augmenting Theme
+
+Create a type definition file (e.g., `theme.d.ts`):
+
+```tsx
+import '@mui/material/styles';
+
+declare module '@mui/material/styles' {
+  interface Theme {
+    status: {
+      danger: string;
+    };
+  }
+  interface ThemeOptions {
+    status?: {
+      danger?: string;
+    };
+  }
+}
+```
+
+Then use it in your theme:
+
+```tsx
+import { createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  status: {
+    danger: '#e53e3e',
+  },
+});
+
+// Now available with type safety
+const dangerColor = theme.status.danger;
+```
+
+### Custom Palette Colors
+
+```tsx
+declare module '@mui/material/styles' {
+  interface Palette {
+    tertiary: Palette['primary'];
+  }
+  interface PaletteOptions {
+    tertiary?: PaletteOptions['primary'];
+  }
+}
+
+declare module '@mui/material/Button' {
+  interface ButtonPropsColorOverrides {
+    tertiary: true;
+  }
+}
+
+const theme = createTheme({
+  palette: {
+    tertiary: {
+      main: '#ff6b6b',
+      light: '#ff8787',
+      dark: '#ee5a52',
+      contrastText: '#fff',
+    },
+  },
+});
+
+// Now you can use it
+<Button color="tertiary">Tertiary</Button>
+```
+
+### Custom Variants
+
+```tsx
+declare module '@mui/material/Button' {
+  interface ButtonPropsVariantOverrides {
+    dashed: true;
+  }
+}
+
+const theme = createTheme({
+  components: {
+    MuiButton: {
+      variants: [
+        {
+          props: { variant: 'dashed' },
+          style: {
+            border: '2px dashed grey',
+          },
+        },
+      ],
+    },
+  },
+});
+
+<Button variant="dashed">Dashed</Button>
+```
+
+## Handling Event Values
+
+Components like `Select` and `RadioGroup` use `unknown` for their `value` type to maintain type safety.
+
+### Type Assertion
+
+```tsx
+import Select, { SelectChangeEvent } from '@mui/material/Select';
+
+function MySelect() {
+  const [value, setValue] = React.useState<string>('');
+
+  const handleChange = (event: SelectChangeEvent<string>) => {
+    setValue(event.target.value);
+  };
+
+  return (
+    <Select value={value} onChange={handleChange}>
+      {/* options */}
+    </Select>
+  );
+}
+```
+
+This approach is similar to how React handles event.target which is not generic for [the same reasons](https://github.com/DefinitelyTyped/DefinitelyTyped/issues/11508#issuecomment-256045682).
+
+## The component Prop
+
+Using the `component` prop can be complex due to TypeScript limitations.
+
+### With styled()
+
+When using the `styled()` utility, cast the result to preserve the original component's types:
+
+```tsx
+import Button from '@mui/material/Button';
+import { styled } from '@mui/material/styles';
+
+const CustomButton = styled(Button)({
+  backgroundColor: '#1976d2',
+}) as typeof Button;
+```
+
+Without the cast, TypeScript may lose the knowledge of available props.
+
+### Component Polymorphism
+
+For components that accept a `component` prop:
+
+```tsx
+import Button from '@mui/material/Button';
+import { Link as RouterLink } from 'react-router-dom';
+
+function MyButton() {
+  return (
+    <Button component={RouterLink} to="/about">
+      About
+    </Button>
+  );
+}
+```
+
+The types automatically infer that `to` is available because `component={RouterLink}`.
+
+## SxProps Type
+
+The `sx` prop accepts style objects with theme-aware values:
+
+```tsx
+import type { SxProps, Theme } from '@mui/material/styles';
+import Box from '@mui/material/Box';
+
+const styles: SxProps<Theme> = {
+  bgcolor: 'primary.main',
+  color: 'primary.contrastText',
+  p: 2,
+  borderRadius: 1,
+};
+
+function MyBox() {
+  return <Box sx={styles}>Styled Box</Box>;
+}
+```
+
+## Generic Components
+
+### Creating Generic Components
+
+```tsx
+import Box from '@mui/material/Box';
+
+interface DataDisplayProps<T> {
+  data: T[];
+  renderItem: (item: T) => React.ReactNode;
+}
+
+function DataDisplay<T>({ data, renderItem }: DataDisplayProps<T>) {
+  return (
+    <Box>
+      {data.map((item, index) => (
+        <div key={index}>{renderItem(item)}</div>
+      ))}
+    </Box>
+  );
+}
+
+// Usage with full type inference
+interface User {
+  id: number;
+  name: string;
+}
+
+const users: User[] = [{ id: 1, name: 'Alice' }];
+
+<DataDisplay
+  data={users}
+  renderItem={(user) => <div>{user.name}</div>} // user is typed as User
+/>;
+```
+
+## Theme TypeScript Interface
+
+The theme object has a comprehensive type structure:
+
+```tsx
+import type { Theme } from '@mui/material/styles';
+
+// Theme includes:
+interface Theme {
+  palette: Palette;
+  typography: Typography;
+  spacing: Spacing;
+  breakpoints: Breakpoints;
+  zIndex: ZIndex;
+  transitions: Transitions;
+  components?: Components;
+  mixins: Mixins;
+  shadows: Shadows;
+  direction: 'ltr' | 'rtl';
+  shape: Shape;
+}
+```
+
+## Import Paths
+
+For best development performance, use direct imports:
+
+```tsx
+// Preferred - faster in development
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+
+// Slower in development (barrel import)
+import { Button, TextField } from '@mui/material';
+```
+
+Both are tree-shaken equally in production, but direct imports improve development rebuild times.
+
+## Common Patterns
+
+### Ref Forwarding
+
+```tsx
+import Button from '@mui/material/Button';
+import type { ButtonProps } from '@mui/material/Button';
+
+const CustomButton = React.forwardRef<HTMLButtonElement, ButtonProps>(
+  (props, ref) => {
+    return <Button ref={ref} {...props} />;
+  }
+);
+```
+
+### Component with Children
+
+```tsx
+import Box from '@mui/material/Box';
+import type { BoxProps } from '@mui/material/Box';
+
+interface CardProps extends BoxProps {
+  title: string;
+  children: React.ReactNode;
+}
+
+function Card({ title, children, ...boxProps }: CardProps) {
+  return (
+    <Box {...boxProps}>
+      <h2>{title}</h2>
+      {children}
+    </Box>
+  );
+}
+```
+
+## Resources
+
+- [TypeScript Deep Dive](https://basarat.gitbook.io/typescript/)
+- [React TypeScript Cheatsheet](https://react-typescript-cheatsheet.netlify.app/)
+- [Material UI TypeScript examples](https://github.com/mui/material-ui/tree/master/examples/material-ui-vite-ts)

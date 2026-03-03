@@ -1,0 +1,102 @@
+---
+title: Introduction to Material UI
+description: Material UI is an open-source React component library that implements Google's Material Design. Comprehensive and production-ready.
+---
+
+# Material UI
+
+Material UI is an open-source React component library that implements Google's [Material Design](https://m2.material.io/design/introduction/). It's comprehensive and can be used in production out of the box.
+
+## Why Material UI?
+
+<CardGroup cols={2}>
+  <Card title="Production Ready" icon="check-circle">
+    Battle-tested components used by thousands of organizations worldwide. Comprehensive accessibility support and fully TypeScript compatible.
+  </Card>
+  
+  <Card title="Customizable Theme" icon="palette">
+    Deep customization through the `sx` prop and theme configuration. Override any design token to match your brand identity.
+  </Card>
+  
+  <Card title="Rich Component Library" icon="grid">
+    Over 50+ ready-to-use components including Buttons, Cards, Forms, Navigation, Data Display, and more. All implementing Material Design.
+  </Card>
+  
+  <Card title="Developer Experience" icon="code">
+    Excellent TypeScript support with full prop type definitions. Extensive documentation and real-world examples for every component.
+  </Card>
+</CardGroup>
+
+## Key Features
+
+### Complete Component Suite
+
+Material UI provides 50+ React components covering all common UI needs:
+
+- **Inputs**: Button, TextField, Checkbox, Radio, Select, Autocomplete, Switch
+- **Navigation**: AppBar, Drawer, Menu, Breadcrumbs, Tabs, BottomNavigation
+- **Data Display**: Card, Table, List, Chip, Badge, Avatar, Typography
+- **Feedback**: Alert, Dialog, Snackbar, Progress, Skeleton
+- **Layout**: Container, Grid, Box, Stack, Paper
+
+### Powerful Styling System
+
+The `sx` prop provides a shortcut for defining custom styles with access to the theme:
+
+```tsx
+<Box
+  sx={{
+    bgcolor: 'background.paper',
+    boxShadow: 1,
+    borderRadius: 2,
+    p: 2,
+    minWidth: 300,
+  }}
+>
+  Content
+</Box>
+```
+
+### TypeScript First
+
+Every component ships with comprehensive TypeScript definitions. Prop types are fully documented:
+
+```tsx
+import Button from '@mui/material/Button';
+import type { ButtonProps } from '@mui/material/Button';
+
+// Full type safety and IntelliSense
+const CustomButton = (props: ButtonProps) => {
+  return <Button variant="contained" color="primary" {...props} />;
+};
+```
+
+## License
+
+Material UI is available under the [MIT license](https://github.com/mui/material-ui/blob/HEAD/LICENSE).
+
+## Community
+
+- **GitHub**: [mui/material-ui](https://github.com/mui/material-ui) - Star the repo and contribute
+- **Stack Overflow**: Use the [material-ui](https://stackoverflow.com/questions/tagged/material-ui) tag for questions
+- **Open Collective**: [Support the project](https://opencollective.com/mui-org)
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Installation" icon="download" href="/installation">
+    Get started by installing Material UI in your React project
+  </Card>
+  
+  <Card title="Quick Start" icon="rocket" href="/quickstart">
+    Build your first component in under 5 minutes
+  </Card>
+  
+  <Card title="Usage Guide" icon="book" href="/usage">
+    Learn essential patterns and best practices
+  </Card>
+  
+  <Card title="Templates" icon="layout" href="/templates">
+    Explore production-ready application templates
+  </Card>
+</CardGroup>

@@ -1,0 +1,502 @@
+---
+title: Transitions
+description: Transitions help make a UI expressive and easy to use. Material-UI provides transitions for adding motion to your components.
+---
+
+## Introduction
+
+Material-UI provides several transition components to add motion to your UI. All transitions are built on top of [react-transition-group](https://reactcommunity.org/react-transition-group/).
+
+```jsx
+import Fade from '@mui/material/Fade';
+import Grow from '@mui/material/Grow';
+import Slide from '@mui/material/Slide';
+import Zoom from '@mui/material/Zoom';
+import Collapse from '@mui/material/Collapse';
+```
+
+## Available Transitions
+
+### Fade
+
+Fades in from transparent.
+
+```jsx
+import * as React from 'react';
+import Fade from '@mui/material/Fade';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+
+export default function FadeExample() {
+  const [checked, setChecked] = React.useState(false);
+
+  return (
+    <div>
+      <Button onClick={() => setChecked((prev) => !prev)}>Toggle</Button>
+      <Fade in={checked}>
+        <Box sx={{ mt: 2, p: 2, bgcolor: 'primary.main', color: 'white' }}>
+          Faded content
+        </Box>
+      </Fade>
+    </div>
+  );
+}
+```
+
+### Grow
+
+Expands outward from the center of the child element.
+
+```jsx
+import * as React from 'react';
+import Grow from '@mui/material/Grow';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+
+export default function GrowExample() {
+  const [checked, setChecked] = React.useState(false);
+
+  return (
+    <div>
+      <Button onClick={() => setChecked((prev) => !prev)}>Toggle</Button>
+      <Grow in={checked}>
+        <Box sx={{ mt: 2, p: 2, bgcolor: 'secondary.main', color: 'white' }}>
+          Growing content
+        </Box>
+      </Grow>
+    </div>
+  );
+}
+```
+
+### Slide
+
+Slides in from the edge of the screen.
+
+```jsx
+import * as React from 'react';
+import Slide from '@mui/material/Slide';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+
+export default function SlideExample() {
+  const [checked, setChecked] = React.useState(false);
+
+  return (
+    <div>
+      <Button onClick={() => setChecked((prev) => !prev)}>Toggle</Button>
+      <Slide direction="up" in={checked}>
+        <Box sx={{ mt: 2, p: 2, bgcolor: 'success.main', color: 'white' }}>
+          Sliding content
+        </Box>
+      </Slide>
+    </div>
+  );
+}
+```
+
+### Zoom
+
+Zooms in from a small scale.
+
+```jsx
+import * as React from 'react';
+import Zoom from '@mui/material/Zoom';
+import Button from '@mui/material/Button';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+
+export default function ZoomExample() {
+  const [checked, setChecked] = React.useState(false);
+
+  return (
+    <div>
+      <Button onClick={() => setChecked((prev) => !prev)}>Toggle</Button>
+      <Zoom in={checked}>
+        <Fab color="primary" sx={{ mt: 2 }}>
+          <AddIcon />
+        </Fab>
+      </Zoom>
+    </div>
+  );
+}
+```
+
+### Collapse
+
+Expands vertically from the top of the child element.
+
+```jsx
+import * as React from 'react';
+import Collapse from '@mui/material/Collapse';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+
+export default function CollapseExample() {
+  const [checked, setChecked] = React.useState(false);
+
+  return (
+    <div>
+      <Button onClick={() => setChecked((prev) => !prev)}>Toggle</Button>
+      <Collapse in={checked}>
+        <Box sx={{ mt: 2, p: 2, bgcolor: 'info.main', color: 'white' }}>
+          Collapsible content
+        </Box>
+      </Collapse>
+    </div>
+  );
+}
+```
+
+## Common Props
+
+All transition components share these common props:
+
+### in
+
+- Type: `boolean`
+- Default: `false`
+
+If `true`, the component will transition in.
+
+### timeout
+
+- Type: `number | { appear?: number, enter?: number, exit?: number }`
+- Default: varies by component
+
+The duration for the transition, in milliseconds.
+
+```jsx
+<Fade in={open} timeout={500}>
+  <div>Content</div>
+</Fade>
+
+// Or specify different durations
+<Fade
+  in={open}
+  timeout={{
+    enter: 500,
+    exit: 300,
+  }}
+>
+  <div>Content</div>
+</Fade>
+```
+
+### appear
+
+- Type: `boolean`
+- Default: `true`
+
+Perform the enter transition when it first mounts if `in` is also `true`.
+
+```jsx
+<Fade in={true} appear={false}>
+  <div>No entrance animation on mount</div>
+</Fade>
+```
+
+### easing
+
+- Type: `string | { enter?: string, exit?: string }`
+- Default: theme defaults
+
+The transition timing function.
+
+```jsx
+<Fade
+  in={open}
+  easing={{
+    enter: 'cubic-bezier(0.4, 0, 0.2, 1)',
+    exit: 'cubic-bezier(0.4, 0, 0.6, 1)',
+  }}
+>
+  <div>Content</div>
+</Fade>
+```
+
+## Component-Specific Props
+
+### Slide
+
+#### direction
+
+- Type: `'left' | 'right' | 'up' | 'down'`
+- Default: `'down'`
+
+Direction the child node will enter from.
+
+```jsx
+<Slide direction="left" in={checked}>
+  <div>Slides from right to left</div>
+</Slide>
+```
+
+#### container
+
+- Type: `HTMLElement | (() => HTMLElement)`
+- Default: `undefined`
+
+An HTML element, or a function that returns one. It's used to set the container the Slide is transitioning from.
+
+### Collapse
+
+#### orientation
+
+- Type: `'horizontal' | 'vertical'`
+- Default: `'vertical'`
+
+The transition orientation.
+
+```jsx
+<Collapse orientation="horizontal" in={checked}>
+  <div>Collapses horizontally</div>
+</Collapse>
+```
+
+#### collapsedSize
+
+- Type: `number | string`
+- Default: `'0px'`
+
+The width (horizontal) or height (vertical) of the container when collapsed.
+
+```jsx
+<Collapse collapsedSize={40} in={checked}>
+  <div>Collapses to 40px height</div>
+</Collapse>
+```
+
+### Grow
+
+#### timeout
+
+- Type: `number | { appear?: number, enter?: number, exit?: number } | 'auto'`
+- Default: `'auto'`
+
+Set to 'auto' to automatically calculate transition time based on height.
+
+```jsx
+<Grow in={checked} timeout="auto">
+  <div>Auto-calculated duration</div>
+</Grow>
+```
+
+## Transition Callbacks
+
+All transitions support lifecycle callbacks:
+
+```jsx
+<Fade
+  in={open}
+  onEnter={() => console.log('Starting to enter')}
+  onEntering={() => console.log('Entering')}
+  onEntered={() => console.log('Entered')}
+  onExit={() => console.log('Starting to exit')}
+  onExiting={() => console.log('Exiting')}
+  onExited={() => console.log('Exited')}
+>
+  <div>Content</div>
+</Fade>
+```
+
+## Practical Examples
+
+### Accordion with Collapse
+
+```jsx
+function Accordion() {
+  const [expanded, setExpanded] = React.useState(false);
+
+  return (
+    <div>
+      <Button onClick={() => setExpanded(!expanded)}>
+        {expanded ? 'Collapse' : 'Expand'}
+      </Button>
+      <Collapse in={expanded}>
+        <Box sx={{ p: 2, border: '1px solid', mt: 1 }}>
+          <Typography>
+            This is the accordion content that expands and collapses.
+            It can contain any content you want.
+          </Typography>
+        </Box>
+      </Collapse>
+    </div>
+  );
+}
+```
+
+### Notification with Slide
+
+```jsx
+function Notification() {
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <>
+      <Button onClick={() => setOpen(true)}>Show Notification</Button>
+      <Slide direction="down" in={open}>
+        <Alert
+          severity="success"
+          onClose={() => setOpen(false)}
+          sx={{ position: 'fixed', top: 16, right: 16 }}
+        >
+          Operation successful!
+        </Alert>
+      </Slide>
+    </>
+  );
+}
+```
+
+### Loading State with Fade
+
+```jsx
+function LoadingContent() {
+  const [loading, setLoading] = React.useState(true);
+
+  React.useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 2000);
+    return () => clearTimeout(timer);
+  }, []);
+
+  return (
+    <div>
+      <Fade in={loading}>
+        <CircularProgress />
+      </Fade>
+      <Fade in={!loading}>
+        <Typography>Content loaded!</Typography>
+      </Fade>
+    </div>
+  );
+}
+```
+
+### FAB with Zoom
+
+```jsx
+function ScrollFab() {
+  const [showFab, setShowFab] = React.useState(false);
+
+  React.useEffect(() => {
+    const handleScroll = () => {
+      setShowFab(window.scrollY > 300);
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, []);
+
+  return (
+    <Zoom in={showFab}>
+      <Fab
+        color="primary"
+        sx={{ position: 'fixed', bottom: 16, right: 16 }}
+        onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+      >
+        <KeyboardArrowUpIcon />
+      </Fab>
+    </Zoom>
+  );
+}
+```
+
+### Menu with Grow
+
+```jsx
+function GrowingMenu() {
+  const [open, setOpen] = React.useState(false);
+  const anchorRef = React.useRef(null);
+
+  return (
+    <>
+      <Button ref={anchorRef} onClick={() => setOpen(!open)}>
+        Menu
+      </Button>
+      <Popper open={open} anchorEl={anchorRef.current} transition>
+        {({ TransitionProps }) => (
+          <Grow {...TransitionProps}>
+            <Paper>
+              <MenuList>
+                <MenuItem onClick={() => setOpen(false)}>Profile</MenuItem>
+                <MenuItem onClick={() => setOpen(false)}>Settings</MenuItem>
+                <MenuItem onClick={() => setOpen(false)}>Logout</MenuItem>
+              </MenuList>
+            </Paper>
+          </Grow>
+        )}
+      </Popper>
+    </>
+  );
+}
+```
+
+## Multiple Transitions
+
+Combine multiple transitions:
+
+```jsx
+function MultiTransition() {
+  const [checked, setChecked] = React.useState(false);
+
+  return (
+    <div>
+      <Button onClick={() => setChecked((prev) => !prev)}>Toggle</Button>
+      <Slide direction="up" in={checked}>
+        <Fade in={checked}>
+          <Box sx={{ mt: 2, p: 2, bgcolor: 'primary.main' }}>
+            Combined slide and fade
+          </Box>
+        </Fade>
+      </Slide>
+    </div>
+  );
+}
+```
+
+## Accessibility
+
+Transitions should not interfere with accessibility:
+
+```jsx
+<Collapse
+  in={expanded}
+  timeout="auto"
+  unmountOnExit
+  aria-hidden={!expanded}
+>
+  <div role="region" aria-labelledby="section-title">
+    Content
+  </div>
+</Collapse>
+```
+
+## Performance Tips
+
+1. **Use unmountOnExit**: Remove DOM elements when not visible
+2. **Set explicit timeouts**: Avoid 'auto' for better performance
+3. **Memoize children**: Prevent unnecessary re-renders
+4. **Use CSS transforms**: Transitions use transform and opacity for better performance
+
+```jsx
+<Fade in={open} timeout={300} unmountOnExit>
+  <MemoizedComponent />
+</Fade>
+```
+
+## Best Practices
+
+1. **Be consistent**: Use the same transition types throughout your app
+2. **Keep it subtle**: Don't overuse transitions
+3. **Match the action**: Use appropriate transitions for the UI action
+4. **Consider motion preferences**: Respect prefers-reduced-motion
+5. **Test on slower devices**: Ensure smooth animations on all devices
+
+## Comparison Guide
+
+- **Fade**: Best for overlays, tooltips, and subtle appearances
+- **Grow**: Perfect for menus, popovers, and expanding content
+- **Slide**: Great for drawers, notifications, and directional content
+- **Zoom**: Ideal for floating action buttons and emphasis
+- **Collapse**: Best for accordions, expandable sections, and vertical content

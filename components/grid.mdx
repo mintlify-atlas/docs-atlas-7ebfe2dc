@@ -1,0 +1,320 @@
+---
+title: Grid
+description: The Grid component implements a responsive, 12-column layout system using CSS Flexbox.
+---
+
+# Grid
+
+The Grid component provides a flexible and powerful way to create responsive layouts using CSS Flexbox.
+
+## Basic usage
+
+```tsx
+import Grid from '@mui/material/Grid';
+
+function Demo() {
+  return (
+    <Grid container spacing={2}>
+      <Grid size={6}>
+        <Box sx={{ bgcolor: 'primary.light', p: 2 }}>size=6</Box>
+      </Grid>
+      <Grid size={6}>
+        <Box sx={{ bgcolor: 'primary.light', p: 2 }}>size=6</Box>
+      </Grid>
+    </Grid>
+  );
+}
+```
+
+## Container and items
+
+A Grid can be a `container` (wraps items) or an `item` (defines size):
+
+```tsx
+<Grid container spacing={2}>
+  <Grid size={12}>
+    <Paper>size=12</Paper>
+  </Grid>
+  <Grid size={6}>
+    <Paper>size=6</Paper>
+  </Grid>
+  <Grid size={6}>
+    <Paper>size=6</Paper>
+  </Grid>
+  <Grid size={4}>
+    <Paper>size=4</Paper>
+  </Grid>
+  <Grid size={4}>
+    <Paper>size=4</Paper>
+  </Grid>
+  <Grid size={4}>
+    <Paper>size=4</Paper>
+  </Grid>
+</Grid>
+```
+
+## Responsive values
+
+Specify different sizes for different breakpoints:
+
+```tsx
+<Grid container spacing={2}>
+  <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+    <Paper>Responsive grid item</Paper>
+  </Grid>
+  <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+    <Paper>Responsive grid item</Paper>
+  </Grid>
+  <Grid size={{ xs: 12, sm: 12, md: 4 }}>
+    <Paper>Responsive grid item</Paper>
+  </Grid>
+</Grid>
+```
+
+## Spacing
+
+Control spacing between items with the `spacing` prop:
+
+```tsx
+// Single value for all breakpoints
+<Grid container spacing={2}>
+  <Grid size={6}><Paper>Item 1</Paper></Grid>
+  <Grid size={6}><Paper>Item 2</Paper></Grid>
+</Grid>
+
+// Responsive spacing
+<Grid container spacing={{ xs: 1, sm: 2, md: 3 }}>
+  <Grid size={6}><Paper>Item 1</Paper></Grid>
+  <Grid size={6}><Paper>Item 2</Paper></Grid>
+</Grid>
+```
+
+### Row and column spacing
+
+Control row and column spacing independently:
+
+```tsx
+<Grid container rowSpacing={1} columnSpacing={2}>
+  <Grid size={6}><Paper>Item 1</Paper></Grid>
+  <Grid size={6}><Paper>Item 2</Paper></Grid>
+  <Grid size={6}><Paper>Item 3</Grid>
+  <Grid size={6}><Paper>Item 4</Paper></Grid>
+</Grid>
+```
+
+## Direction
+
+Change the flex direction:
+
+```tsx
+<Grid container direction="row">
+  <Grid><Paper>Item 1</Paper></Grid>
+  <Grid><Paper>Item 2</Paper></Grid>
+  <Grid><Paper>Item 3</Paper></Grid>
+</Grid>
+
+<Grid container direction="column">
+  <Grid><Paper>Item 1</Paper></Grid>
+  <Grid><Paper>Item 2</Paper></Grid>
+  <Grid><Paper>Item 3</Paper></Grid>
+</Grid>
+
+// Responsive direction
+<Grid container direction={{ xs: 'column', sm: 'row' }}>
+  <Grid size="grow"><Paper>Item 1</Paper></Grid>
+  <Grid size="grow"><Paper>Item 2</Paper></Grid>
+</Grid>
+```
+
+## Auto-layout
+
+Use `size="grow"` to fill available space:
+
+```tsx
+<Grid container spacing={2}>
+  <Grid size="grow">
+    <Paper>Grows to fill space</Paper>
+  </Grid>
+  <Grid size="grow">
+    <Paper>Grows to fill space</Paper>
+  </Grid>
+  <Grid size={6}>
+    <Paper>Fixed size=6</Paper>
+  </Grid>
+</Grid>
+```
+
+Use `size="auto"` for content-based width:
+
+```tsx
+<Grid container spacing={2}>
+  <Grid size="auto">
+    <Paper>Auto width</Paper>
+  </Grid>
+  <Grid size="grow">
+    <Paper>Fills remaining space</Paper>
+  </Grid>
+</Grid>
+```
+
+## Offset
+
+Push items with the `offset` prop:
+
+```tsx
+<Grid container spacing={2}>
+  <Grid size={6} offset={3}>
+    <Paper>Centered with offset</Paper>
+  </Grid>
+  <Grid size={4} offset={2}>
+    <Paper>Offset by 2 columns</Paper>
+  </Grid>
+</Grid>
+
+// Responsive offset
+<Grid container>
+  <Grid size={6} offset={{ xs: 0, sm: 2, md: 3 }}>
+    <Paper>Responsive offset</Paper>
+  </Grid>
+</Grid>
+```
+
+## Nested grids
+
+```tsx
+<Grid container spacing={2}>
+  <Grid size={12}>
+    <Paper>
+      <Grid container spacing={1}>
+        <Grid size={6}><Paper elevation={3}>Nested 1</Paper></Grid>
+        <Grid size={6}><Paper elevation={3}>Nested 2</Paper></Grid>
+      </Grid>
+    </Paper>
+  </Grid>
+</Grid>
+```
+
+## Columns
+
+Change the number of columns (default is 12):
+
+```tsx
+<Grid container spacing={2} columns={16}>
+  <Grid size={8}>
+    <Paper>8 of 16 columns</Paper>
+  </Grid>
+  <Grid size={8}>
+    <Paper>8 of 16 columns</Paper>
+  </Grid>
+</Grid>
+
+// Responsive columns
+<Grid container spacing={2} columns={{ xs: 4, sm: 8, md: 12 }}>
+  <Grid size={2}><Paper>Item</Paper></Grid>
+  <Grid size={2}><Paper>Item</Paper></Grid>
+  <Grid size={2}><Paper>Item</Paper></Grid>
+  <Grid size={2}><Paper>Item</Paper></Grid>
+</Grid>
+```
+
+## Props
+
+### GridProps
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `React.ReactNode` | - | The content of the component |
+| `columns` | `ResponsiveStyleValue<number>` | `12` | The number of columns |
+| `columnSpacing` | `ResponsiveStyleValue<GridSpacing>` | - | Horizontal space between items |
+| `container` | `boolean` | `false` | If true, the component will have flex container behavior |
+| `direction` | `ResponsiveStyleValue<GridDirection>` | `'row'` | Defines flex-direction: `'row'`, `'row-reverse'`, `'column'`, `'column-reverse'` |
+| `offset` | `ResponsiveStyleValue<GridOffset>` | - | Defines offset for item components: `'auto'` or number |
+| `rowSpacing` | `ResponsiveStyleValue<GridSpacing>` | - | Vertical space between items |
+| `size` | `ResponsiveStyleValue<GridSize>` | - | Size of item: `'auto'`, `'grow'`, number, or `false` |
+| `spacing` | `ResponsiveStyleValue<GridSpacing>` | `0` | Space between items (both row and column) |
+| `wrap` | `GridWrap` | `'wrap'` | Defines flex-wrap: `'nowrap'`, `'wrap'`, `'wrap-reverse'` |
+| `sx` | `SxProps<Theme>` | - | System prop for defining custom styles |
+
+### Type definitions
+
+```typescript
+type GridDirection = 'row' | 'row-reverse' | 'column' | 'column-reverse';
+type GridSpacing = number | string;
+type GridWrap = 'nowrap' | 'wrap' | 'wrap-reverse';
+type GridSize = 'auto' | 'grow' | number | false;
+type GridOffset = 'auto' | number;
+type ResponsiveStyleValue<T> = T | Array<T | null> | { [key in Breakpoint]?: T | null };
+```
+
+## Common patterns
+
+### Dashboard layout
+
+```tsx
+<Grid container spacing={3}>
+  <Grid size={{ xs: 12, md: 8, lg: 9 }}>
+    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 240 }}>
+      <Typography variant="h6">Chart</Typography>
+    </Paper>
+  </Grid>
+  <Grid size={{ xs: 12, md: 4, lg: 3 }}>
+    <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 240 }}>
+      <Typography variant="h6">Recent Activity</Typography>
+    </Paper>
+  </Grid>
+  <Grid size={12}>
+    <Paper sx={{ p: 2 }}>
+      <Typography variant="h6">Recent Orders</Typography>
+    </Paper>
+  </Grid>
+</Grid>
+```
+
+### Product grid
+
+```tsx
+<Grid container spacing={2}>
+  {products.map((product) => (
+    <Grid key={product.id} size={{ xs: 12, sm: 6, md: 4, lg: 3 }}>
+      <Card>
+        <CardMedia
+          component="img"
+          height="140"
+          image={product.image}
+          alt={product.name}
+        />
+        <CardContent>
+          <Typography variant="h6">{product.name}</Typography>
+          <Typography variant="body2" color="text.secondary">
+            ${product.price}
+          </Typography>
+        </CardContent>
+      </Card>
+    </Grid>
+  ))}
+</Grid>
+```
+
+### Form layout
+
+```tsx
+<Grid container spacing={2}>
+  <Grid size={{ xs: 12, sm: 6 }}>
+    <TextField fullWidth label="First Name" />
+  </Grid>
+  <Grid size={{ xs: 12, sm: 6 }}>
+    <TextField fullWidth label="Last Name" />
+  </Grid>
+  <Grid size={12}>
+    <TextField fullWidth label="Email" />
+  </Grid>
+  <Grid size={12}>
+    <TextField fullWidth multiline rows={4} label="Message" />
+  </Grid>
+  <Grid size={12}>
+    <Button variant="contained" type="submit">
+      Submit
+    </Button>
+  </Grid>
+</Grid>
+```

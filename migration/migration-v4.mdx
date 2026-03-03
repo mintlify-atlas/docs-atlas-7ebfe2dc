@@ -1,0 +1,336 @@
+---
+title: Migration from v3 to v4
+description: This guide explains how to migrate from Material UI v3 to v4.
+---
+
+## Introduction
+
+This is a reference for upgrading your site from Material UI v3 to v4. While there's a lot covered here, you probably won't need to do everything for your site.
+
+<Note>
+Looking for the v3 docs? You can [find the latest version here](https://mui.com/versions/).
+</Note>
+
+## Why you should migrate
+
+Material UI v4 introduced several improvements over v3:
+
+- **React Hooks support** - All components now support Hooks
+- **Improved performance** - Smaller bundle sizes and faster rendering
+- **Better TypeScript** - Enhanced type definitions
+- **New styling solution** - Improved JSS integration
+- **Accessibility improvements** - Better ARIA support
+
+## Updating your dependencies
+
+### Update Material UI version
+
+Update your `package.json` to use the latest version of Material UI:
+
+```json
+"dependencies": {
+  "@material-ui/core": "^4.0.0"
+}
+```
+
+Or run:
+
+```bash
+npm install @material-ui/core
+# or
+yarn add @material-ui/core
+```
+
+### Update React version
+
+The minimum required version of React was increased from `react@^16.3.0` to `react@^16.8.0`. This allows us to rely on [Hooks](https://react.dev/reference/react/hooks) (we no longer use the class API).
+
+### Update Material UI Styles version
+
+If you were previously using `@material-ui/styles` with v3 you need to update your `package.json`:
+
+```json
+"dependencies": {
+  "@material-ui/styles": "^4.0.0"
+}
+```
+
+## Breaking changes
+
+### Core
+
+- Every component forwards their ref using `React.forwardRef()`. This affects the internal component tree and display name.
+- The `innerRef` prop no longer returns a ref to the instance but a ref to its root component.
+
+### Styles
+
+- Material UI depends on JSS v10. JSS v10 is not backward compatible with v9. Make sure JSS v9 is not installed in your environment.
+- The `StylesProvider` component replaces the `JssProvider` one.
+- Remove the first option argument of `withTheme()`:
+
+```diff
+-const DeepChild = withTheme()(DeepChildRaw);
++const DeepChild = withTheme(DeepChildRaw);
+```
+
+- Rename `convertHexToRGB` to `hexToRgb`:
+
+```diff
+-import { convertHexToRgb } from '@material-ui/core/styles/colorManipulator';
++import { hexToRgb } from '@material-ui/core/styles';
+```
+
+### Theme
+
+- The `theme.palette.augmentColor()` method no longer performs a side effect on its input color. To use it correctly, you have to use the returned value:
+
+```diff
+-const background = { main: color };
+-theme.palette.augmentColor(background);
++const background = theme.palette.augmentColor({ main: color });
+```
+
+- You can safely remove the next variant from the theme creation:
+
+```diff
+ typography: {
+-  useNextVariants: true,
+ },
+```
+
+- `theme.spacing.unit` usage is deprecated. Use the new API:
+
+```diff
+ label: {
+   [theme.breakpoints.up('sm')]: {
+-    paddingTop: theme.spacing.unit * 12,
++    paddingTop: theme.spacing(12),
+   },
+ }
+```
+
+### Button
+
+- Remove the deprecated button variants (flat, raised and fab):
+
+```diff
+-<Button variant="raised" />
++<Button variant="contained" />
+```
+
+```diff
+-<Button variant="flat" />
++<Button variant="text" />
+```
+
+```diff
+-import Button from '@material-ui/core/Button';
+-<Button variant="fab" />
++import Fab from '@material-ui/core/Fab';
++<Fab />
+```
+
+### Card
+
+- Rename the `disableActionSpacing` prop to `disableSpacing`:
+
+```diff
+-<CardActions disableActionSpacing />
++<CardActions disableSpacing />
+```
+
+### Dialog
+
+- Rename the `disableActionSpacing` prop to `disableSpacing`:
+
+```diff
+-<DialogActions disableActionSpacing />
++<DialogActions disableSpacing />
+```
+
+- Use typography variant `body1` instead of `subtitle1` for `DialogContentText`:
+
+```diff
+-<DialogContentText variant="subtitle1" />
++<DialogContentText variant="body1" />
+```
+
+### Divider
+
+- Remove the deprecated `inset` prop:
+
+```diff
+-<Divider inset />
++<Divider variant="inset" />
+```
+
+### ExpansionPanel
+
+- Rename the `CollapseProps` prop to `TransitionProps`:
+
+```diff
+-<ExpansionPanel CollapseProps={{...}} />
++<ExpansionPanel TransitionProps={{...}} />
+```
+
+### Grid
+
+- In order to support arbitrary spacing values, the spacing API has changed:
+
+```diff
+ /**
+  * Defines the space between the type `item` component.
+  * It can only be used on a type `container` component.
+  */
+-  spacing: PropTypes.oneOf([0, 8, 16, 24, 32, 40]),
++  spacing: PropTypes.oneOf([0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10]),
+```
+
+### List
+
+- Rework the list components to match the specification:
+  - The `ListItemAvatar` component is required when using an avatar
+  - The `ListItemIcon` component is required when using a left checkbox
+  - The `edge` property should be set on the icon buttons
+- `dense` no longer reduces the top and bottom padding of the `List` element
+
+### Menu
+
+- Remove the fixed height of the MenuItem. The padding and line-height are used by the browser to compute the height.
+
+### Modal
+
+- The child needs to be able to hold a ref
+- Remove the classes customization API for the Modal component (-74% bundle size reduction when used standalone)
+- `event.defaultPrevented` is now ignored. The new logic closes the Modal even if `event.preventDefault()` is called on the key down escape event
+
+### Paper
+
+- Reduce the default elevation from 2 to 1:
+
+```diff
+-<Paper />
++<Paper elevation={2} />
+```
+
+### Tabs
+
+- Remove deprecated `fullWidth` and `scrollable` props:
+
+```diff
+-<Tabs fullWidth scrollable />
++<Tabs variant="fullWidth" />
++<Tabs variant="scrollable" />
+```
+
+### TextField
+
+- Remove the `InputLabelProps` `classes` property:
+
+```diff
+ <TextField
+   InputLabelProps={{
+-    classes: { root: 'label' },
++    className: 'label',
+   }}
+ />
+```
+
+### Tooltip
+
+- The child needs to be able to hold a ref
+- Rename `disableTriggerFocus` to `disableFocusListener`:
+
+```diff
+-<Tooltip disableTriggerFocus />
++<Tooltip disableFocusListener />
+```
+
+- Rename `disableTriggerHover` to `disableHoverListener`:
+
+```diff
+-<Tooltip disableTriggerHover />
++<Tooltip disableHoverListener />
+```
+
+- Rename `disableTriggerTouch` to `disableTouchListener`:
+
+```diff
+-<Tooltip disableTriggerTouch />
++<Tooltip disableTouchListener />
+```
+
+### Typography
+
+- Remove the deprecated typography variants:
+
+```diff
+-<Typography variant="display4" />
++<Typography variant="h1" />
+```
+
+```diff
+-<Typography variant="display3" />
++<Typography variant="h2" />
+```
+
+```diff
+-<Typography variant="display2" />
++<Typography variant="h3" />
+```
+
+```diff
+-<Typography variant="display1" />
++<Typography variant="h4" />
+```
+
+```diff
+-<Typography variant="headline" />
++<Typography variant="h5" />
+```
+
+```diff
+-<Typography variant="title" />
++<Typography variant="h6" />
+```
+
+```diff
+-<Typography variant="subheading" />
++<Typography variant="subtitle1" />
+```
+
+### Container
+
+Moved from `@material-ui/lab` to `@material-ui/core`:
+
+```diff
+-import Container from '@material-ui/lab/Container';
++import Container from '@material-ui/core/Container';
+```
+
+### TypeScript
+
+#### value type
+
+Normalized `value` prop type for input components to use `unknown`. This affects `InputBase`, `NativeSelect`, `OutlinedInput`, `Radio`, `RadioGroup`, `Select`, `SelectInput`, `Switch`, `TextArea`, and `TextField`:
+
+```diff
+ function MySelect({ children }) {
+-  const handleChange = (event: any, value: string) => {
++  const handleChange = (event: any, value: unknown) => {
+     // handle value
+   };
+
+   return <Select onChange={handleChange}>{children}</Select>
+ }
+```
+
+## Codemod
+
+We provide codemods to help with the migration:
+
+```bash
+npx @mui/codemod v4.0.0/theme-spacing-api <path>
+```
+
+This codemod will transform your code to use the new `theme.spacing()` API.

@@ -1,0 +1,324 @@
+---
+title: Masonry
+description: The Masonry component displays children in a responsive masonry layout
+---
+
+# Masonry
+
+Masonry is a layout component that arranges children into columns of varying heights, similar to Pinterest's grid layout. It automatically positions items to minimize empty space.
+
+## Basic Masonry
+
+A simple masonry layout with default settings:
+
+```jsx
+import Masonry from '@mui/lab/Masonry';
+import Box from '@mui/material/Box';
+
+function BasicMasonry() {
+  return (
+    <Masonry columns={3} spacing={2}>
+      <Box sx={{ height: 150, bgcolor: 'primary.main' }}>Item 1</Box>
+      <Box sx={{ height: 200, bgcolor: 'secondary.main' }}>Item 2</Box>
+      <Box sx={{ height: 180, bgcolor: 'error.main' }}>Item 3</Box>
+      <Box sx={{ height: 220, bgcolor: 'success.main' }}>Item 4</Box>
+      <Box sx={{ height: 160, bgcolor: 'warning.main' }}>Item 5</Box>
+      <Box sx={{ height: 190, bgcolor: 'info.main' }}>Item 6</Box>
+    </Masonry>
+  );
+}
+```
+
+## Responsive Columns
+
+Use responsive values to adjust columns at different breakpoints:
+
+```jsx
+import Masonry from '@mui/lab/Masonry';
+
+<Masonry
+  columns={{ xs: 1, sm: 2, md: 3, lg: 4 }}
+  spacing={2}
+>
+  {items.map((item, index) => (
+    <div key={index}>{item}</div>
+  ))}
+</Masonry>
+```
+
+## Image Masonry
+
+Perfect for displaying image galleries:
+
+```jsx
+import Masonry from '@mui/lab/Masonry';
+
+const images = [
+  { src: '/images/1.jpg', height: 150 },
+  { src: '/images/2.jpg', height: 200 },
+  { src: '/images/3.jpg', height: 180 },
+  { src: '/images/4.jpg', height: 220 },
+];
+
+function ImageMasonry() {
+  return (
+    <Masonry columns={4} spacing={1}>
+      {images.map((image, index) => (
+        <img
+          key={index}
+          src={image.src}
+          alt={`Image ${index + 1}`}
+          loading="lazy"
+          style={{
+            borderRadius: 4,
+            display: 'block',
+            width: '100%',
+          }}
+        />
+      ))}
+    </Masonry>
+  );
+}
+```
+
+## Responsive Spacing
+
+Adjust spacing at different breakpoints:
+
+```jsx
+<Masonry
+  columns={3}
+  spacing={{ xs: 1, sm: 2, md: 3 }}
+>
+  {/* children */}
+</Masonry>
+```
+
+## Sequential Order
+
+By default, Masonry adds items to the shortest column. Use `sequential` to maintain order:
+
+```jsx
+<Masonry columns={3} spacing={2} sequential>
+  {/* Items will be placed left-to-right, top-to-bottom */}
+</Masonry>
+```
+
+With `sequential={false}` (default):
+- Items are placed in the shortest column
+- Minimizes height but may change visual order
+
+With `sequential={true}`:
+- Items maintain left-to-right order within rows
+- More predictable layout but may create more empty space
+
+## Server-Side Rendering
+
+For SSR, provide default values to avoid layout shifts:
+
+```jsx
+<Masonry
+  columns={4}
+  spacing={2}
+  defaultColumns={4}
+  defaultHeight={450}
+  defaultSpacing={2}
+>
+  {/* children */}
+</Masonry>
+```
+
+These defaults are only used during server-side rendering and will be replaced by calculated values on the client.
+
+## Custom Component
+
+Render as a different element:
+
+```jsx
+<Masonry component="section" columns={3}>
+  {/* children */}
+</Masonry>
+```
+
+## With Cards
+
+Combine with Material UI cards:
+
+```jsx
+import Masonry from '@mui/lab/Masonry';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Typography from '@mui/material/Typography';
+
+function CardMasonry({ items }) {
+  return (
+    <Masonry columns={{ xs: 1, sm: 2, md: 3 }} spacing={2}>
+      {items.map((item) => (
+        <Card key={item.id}>
+          <CardMedia
+            component="img"
+            height={item.height}
+            image={item.image}
+            alt={item.title}
+          />
+          <CardContent>
+            <Typography variant="h6">{item.title}</Typography>
+            <Typography variant="body2" color="text.secondary">
+              {item.description}
+            </Typography>
+          </CardContent>
+        </Card>
+      ))}
+    </Masonry>
+  );
+}
+```
+
+## API Reference
+
+### Masonry Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `node` | **required** | The content of the component |
+| `columns` | `number` \| `string` \| `ResponsiveStyleValue` | `4` | Number of columns |
+| `spacing` | `number` \| `string` \| `ResponsiveStyleValue` | `1` | Space between children (theme spacing multiplier) |
+| `sequential` | `boolean` | `false` | Use sequential order instead of shortest column |
+| `defaultColumns` | `number` | - | Default columns for SSR |
+| `defaultHeight` | `number` | - | Default height in pixels for SSR |
+| `defaultSpacing` | `number` | - | Default spacing (theme spacing factor) for SSR |
+| `component` | `elementType` | `'div'` | The component used for the root node |
+| `classes` | `object` | - | Override or extend styles |
+| `sx` | `object` | - | System prop for CSS overrides |
+
+### ResponsiveStyleValue
+
+Both `columns` and `spacing` support responsive values:
+
+```typescript
+type ResponsiveStyleValue<T> = T | Array<T | null> | { [key: string]: T | null }
+```
+
+Examples:
+```jsx
+// Number
+columns={4}
+
+// Object with breakpoints
+columns={{ xs: 1, sm: 2, md: 3, lg: 4, xl: 5 }}
+
+// Array (corresponds to breakpoints: xs, sm, md, lg, xl)
+columns={[1, 2, 3, 4, 5]}
+
+// String (CSS value)
+columns="4"
+
+// Spacing as theme multiplier
+spacing={2} // 2 * theme.spacing(1) = 16px by default
+
+// Responsive spacing
+spacing={{ xs: 1, sm: 2, md: 3 }}
+```
+
+## How It Works
+
+The Masonry component uses CSS Flexbox with column wrapping:
+
+1. **Layout Calculation**: On mount and resize, Masonry:
+   - Measures the container width
+   - Calculates actual column count from breakpoints
+   - Measures each child's height
+   - Assigns `order` CSS property to position items
+
+2. **Column Assignment**:
+   - Default: Adds each item to the shortest column
+   - Sequential: Places items left-to-right in order
+
+3. **Dynamic Updates**: Uses ResizeObserver and MutationObserver to:
+   - Reflow on window resize
+   - Update when children are added/removed
+   - Recalculate when child dimensions change
+
+**Source location**: `/home/daytona/workspace/source/packages/mui-lab/src/Masonry/Masonry.js:168`
+
+## CSS Classes
+
+You can override styles using:
+
+- `.MuiMasonry-root` - Styles applied to the root element
+
+## Performance Considerations
+
+### Image Loading
+
+Use `loading="lazy"` for images to improve initial render:
+
+```jsx
+<img src={src} loading="lazy" />
+```
+
+### Large Lists
+
+For very large lists, consider:
+- Virtualization with react-window or react-virtualized
+- Pagination or infinite scroll
+- Limiting initial render count
+
+### Debouncing
+
+The component automatically debounces resize events (16ms, ~60fps) to optimize performance.
+
+## Browser Compatibility
+
+Masonry requires:
+- **ResizeObserver** - For detecting size changes
+- **MutationObserver** - For detecting DOM changes
+
+These are supported in all modern browsers. For older browsers, polyfills may be needed.
+
+## Common Patterns
+
+### Fixed Aspect Ratios
+
+Maintain aspect ratios using padding-bottom trick:
+
+```jsx
+<Masonry columns={3}>
+  {items.map((item) => (
+    <Box
+      key={item.id}
+      sx={{
+        position: 'relative',
+        paddingBottom: '75%', // 4:3 aspect ratio
+        overflow: 'hidden',
+      }}
+    >
+      <img
+        src={item.src}
+        style={{
+          position: 'absolute',
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+        }}
+      />
+    </Box>
+  ))}
+</Masonry>
+```
+
+### With Loading States
+
+```jsx
+import Skeleton from '@mui/material/Skeleton';
+
+<Masonry columns={3}>
+  {loading
+    ? Array.from({ length: 6 }).map((_, i) => (
+        <Skeleton key={i} variant="rectangular" height={200} />
+      ))
+    : items.map((item) => <div key={item.id}>{item.content}</div>)
+  }
+</Masonry>
+```

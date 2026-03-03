@@ -1,0 +1,275 @@
+---
+title: Menu
+description: Menus display a list of choices on temporary surfaces.
+---
+
+# Menu
+
+Menus display a list of choices on a temporary surface. They appear when users interact with a button, action, or other control.
+
+## Basic Menu
+
+A basic menu opens over the anchor element by default.
+
+```tsx
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import Menu from '@mui/material/Menu';
+import MenuItem from '@mui/material/MenuItem';
+
+export default function BasicMenu() {
+  const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
+  
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  return (
+    <div>
+      <Button
+        id="basic-button"
+        aria-controls={open ? 'basic-menu' : undefined}
+        aria-haspopup="true"
+        aria-expanded={open ? 'true' : undefined}
+        onClick={handleClick}
+      >
+        Open Menu
+      </Button>
+      <Menu
+        id="basic-menu"
+        anchorEl={anchorEl}
+        open={open}
+        onClose={handleClose}
+        MenuListProps={{
+          'aria-labelledby': 'basic-button',
+        }}
+      >
+        <MenuItem onClick={handleClose}>Profile</MenuItem>
+        <MenuItem onClick={handleClose}>My account</MenuItem>
+        <MenuItem onClick={handleClose}>Logout</MenuItem>
+      </Menu>
+    </div>
+  );
+}
+```
+
+## Icon Menu
+
+Menu with icons for each menu item.
+
+```tsx
+import IconButton from '@mui/material/IconButton';
+import MoreVertIcon from '@mui/icons-material/MoreVert';
+import ContentCut from '@mui/icons-material/ContentCut';
+import ContentCopy from '@mui/icons-material/ContentCopy';
+import ContentPaste from '@mui/icons-material/ContentPaste';
+import ListItemIcon from '@mui/material/ListItemIcon';
+import ListItemText from '@mui/material/ListItemText';
+
+<IconButton onClick={handleClick}>
+  <MoreVertIcon />
+</IconButton>
+<Menu anchorEl={anchorEl} open={open} onClose={handleClose}>
+  <MenuItem onClick={handleClose}>
+    <ListItemIcon>
+      <ContentCut fontSize="small" />
+    </ListItemIcon>
+    <ListItemText>Cut</ListItemText>
+  </MenuItem>
+  <MenuItem onClick={handleClose}>
+    <ListItemIcon>
+      <ContentCopy fontSize="small" />
+    </ListItemIcon>
+    <ListItemText>Copy</ListItemText>
+  </MenuItem>
+  <MenuItem onClick={handleClose}>
+    <ListItemIcon>
+      <ContentPaste fontSize="small" />
+    </ListItemIcon>
+    <ListItemText>Paste</ListItemText>
+  </MenuItem>
+</Menu>
+```
+
+## Selected Menu
+
+Use `variant="selectedMenu"` to highlight the selected item.
+
+```tsx
+const [selectedIndex, setSelectedIndex] = React.useState(1);
+
+const handleMenuItemClick = (
+  event: React.MouseEvent<HTMLElement>,
+  index: number,
+) => {
+  setSelectedIndex(index);
+  setAnchorEl(null);
+};
+
+<Menu
+  anchorEl={anchorEl}
+  open={open}
+  onClose={handleClose}
+  variant="selectedMenu"
+>
+  {options.map((option, index) => (
+    <MenuItem
+      key={option}
+      selected={index === selectedIndex}
+      onClick={(event) => handleMenuItemClick(event, index)}
+    >
+      {option}
+    </MenuItem>
+  ))}
+</Menu>
+```
+
+## Max Height Menu
+
+Limit menu height with scrolling.
+
+```tsx
+<Menu
+  anchorEl={anchorEl}
+  open={open}
+  onClose={handleClose}
+  slotProps={{
+    paper: {
+      style: {
+        maxHeight: 48 * 4.5,
+        width: '20ch',
+      },
+    },
+  }}
+>
+  {/* Many menu items */}
+</Menu>
+```
+
+## Context Menu
+
+Right-click context menu.
+
+```tsx
+const [contextMenu, setContextMenu] = React.useState<{
+  mouseX: number;
+  mouseY: number;
+} | null>(null);
+
+const handleContextMenu = (event: React.MouseEvent) => {
+  event.preventDefault();
+  setContextMenu(
+    contextMenu === null
+      ? {
+          mouseX: event.clientX + 2,
+          mouseY: event.clientY - 6,
+        }
+      : null,
+  );
+};
+
+const handleClose = () => {
+  setContextMenu(null);
+};
+
+<div onContextMenu={handleContextMenu} style={{ cursor: 'context-menu' }}>
+  Right click here
+</div>
+<Menu
+  open={contextMenu !== null}
+  onClose={handleClose}
+  anchorReference="anchorPosition"
+  anchorPosition={
+    contextMenu !== null
+      ? { top: contextMenu.mouseY, left: contextMenu.mouseX }
+      : undefined
+  }
+>
+  <MenuItem onClick={handleClose}>Copy</MenuItem>
+  <MenuItem onClick={handleClose}>Print</MenuItem>
+  <MenuItem onClick={handleClose}>Highlight</MenuItem>
+  <MenuItem onClick={handleClose}>Email</MenuItem>
+</Menu>
+```
+
+## Complementary Projects
+
+For more advanced use cases with nested menus, consider using [material-ui-popup-state](https://github.com/jcoreio/material-ui-popup-state).
+
+## Props
+
+### anchorEl
+
+- **Type:** `HTMLElement | ((element: HTMLElement) => HTMLElement) | null`
+- **Description:** An HTML element, or a function that returns one. It's used to set the position of the menu
+
+### open
+
+- **Type:** `boolean`
+- **Required:** Yes
+- **Description:** If `true`, the component is shown
+
+### onClose
+
+- **Type:** `(event: object, reason: string) => void`
+- **Description:** Callback fired when the component requests to be closed. The `reason` parameter can be: `"escapeKeyDown"`, `"backdropClick"`, `"tabKeyDown"`
+
+### autoFocus
+
+- **Type:** `boolean`
+- **Default:** `true`
+- **Description:** If `true`, will focus the `[role="menu"]` if no focusable child is found
+
+### disableAutoFocusItem
+
+- **Type:** `boolean`
+- **Default:** `false`
+- **Description:** When opening the menu will not focus the active item but the `[role="menu"]` unless `autoFocus` is also set to `false`
+
+### variant
+
+- **Type:** `'menu' | 'selectedMenu'`
+- **Default:** `'selectedMenu'`
+- **Description:** The variant to use. Use `menu` to prevent selected items from impacting the initial focus
+
+### transitionDuration
+
+- **Type:** `'auto' | number | { appear?: number, enter?: number, exit?: number }`
+- **Default:** `'auto'`
+- **Description:** The length of the transition in ms, or 'auto'
+
+### slots
+
+- **Type:** `{ root?: React.ElementType, paper?: React.ElementType, list?: React.ElementType, transition?: React.ElementType, backdrop?: React.ElementType }`
+- **Description:** The components used for each slot inside the menu
+
+### slotProps
+
+- **Type:** `{ root?: object, paper?: object, list?: object, transition?: object, backdrop?: object }`
+- **Description:** The props used for each slot inside the menu
+
+### sx
+
+- **Type:** `SxProps<Theme>`
+- **Description:** System prop for defining CSS styles
+
+## Accessibility
+
+- The menu is automatically associated with the button using `aria-controls` and `aria-haspopup`
+- Use `aria-labelledby` on the MenuList to reference the button
+- The menu automatically manages focus and keyboard navigation
+- Arrow keys navigate between menu items
+- Escape closes the menu
+- Tab key closes the menu and moves focus to the next focusable element
+
+## API Reference
+
+- [Menu API](https://mui.com/material-ui/api/menu/)
+- [MenuItem API](https://mui.com/material-ui/api/menu-item/)
+- [MenuList API](https://mui.com/material-ui/api/menu-list/)
+- [Popover API](https://mui.com/material-ui/api/popover/)

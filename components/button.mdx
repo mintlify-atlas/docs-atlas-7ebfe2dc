@@ -1,0 +1,96 @@
+---
+title: Button
+description: Material UI Button component allows users to take actions with a single click.
+---
+
+Buttons allow users to take actions and make choices with a single tap. They communicate actions that users can take.
+
+## Import
+
+```tsx
+import Button from '@mui/material/Button';
+```
+
+## Basic Usage
+
+```tsx
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+
+export default function BasicButtons() {
+  return (
+    <Stack spacing={2} direction="row">
+      <Button variant="text">Text</Button>
+      <Button variant="contained">Contained</Button>
+      <Button variant="outlined">Outlined</Button>
+    </Stack>
+  );
+}
+```
+
+## Props
+
+<ParamField path="variant" type="'text' | 'outlined' | 'contained'" default="'text'">
+  The variant to use. Determines the button's visual style.
+</ParamField>
+
+<ParamField path="color" type="'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'" default="'primary'">
+  The color of the component. Supports both default and custom theme colors.
+</ParamField>
+
+<ParamField path="size" type="'small' | 'medium' | 'large'" default="'medium'">
+  The size of the component. `small` is equivalent to the dense button styling.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  If `true`, the component is disabled.
+</ParamField>
+
+<ParamField path="disableElevation" type="boolean" default="false">
+  If `true`, no elevation is used.
+</ParamField>
+
+<ParamField path="disableFocusRipple" type="boolean" default="false">
+  If `true`, the keyboard focus ripple is disabled.
+</ParamField>
+
+<ParamField path="fullWidth" type="boolean" default="false">
+  If `true`, the button will take up the full width of its container.
+</ParamField>
+
+<ParamField path="href" type="string">
+  The URL to link to when the button is clicked. If defined, an `a` element will be used as the root node.
+</ParamField>
+
+<ParamField path="loading" type="boolean | null" default="null">
+  If `true`, the loading indicator is visible and the button is disabled.
+</ParamField>
+
+<ParamField path="loadingIndicator" type="ReactNode">
+  Element placed before the children if the button is in loading state. The node should contain an element with `role="progressbar"` with an accessible name. By default, it renders a `CircularProgress` that is labeled by the button itself.
+</ParamField>
+
+<ParamField path="loadingPosition" type="'start' | 'end' | 'center'" default="'center'">
+  The loading indicator can be positioned on the start, end, or the center of the button.
+</ParamField>
+
+<ParamField path="startIcon" type="ReactNode">
+  Element placed before the children.
+</ParamField>
+
+<ParamField path="endIcon" type="ReactNode">
+  Element placed after the children.
+</ParamField>
+
+<ParamField path="sx" type="SxProps<Theme>">
+  The system prop that allows defining system overrides as well as additional CSS styles.
+</ParamField>
+
+<ParamField path="children" type="ReactNode">
+  The content of the component.
+</ParamField>
+
+## API Reference
+
+- [Button API](https://next.mui.com/material-ui/api/button/)
+- Inherits [ButtonBase API](https://next.mui.com/material-ui/api/button-base/)

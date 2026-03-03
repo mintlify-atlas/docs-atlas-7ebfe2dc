@@ -1,0 +1,175 @@
+---
+title: Autocomplete
+description: Material UI Autocomplete component provides suggestions while users type.
+---
+
+The autocomplete is a normal text input enhanced by a panel of suggested options.
+
+## Import
+
+```tsx
+import Autocomplete from '@mui/material/Autocomplete';
+import TextField from '@mui/material/TextField';
+```
+
+## Basic Usage
+
+```tsx
+import * as React from 'react';
+import TextField from '@mui/material/TextField';
+import Autocomplete from '@mui/material/Autocomplete';
+
+const options = ['Option 1', 'Option 2'];
+
+export default function BasicAutocomplete() {
+  const [value, setValue] = React.useState<string | null>(options[0]);
+  const [inputValue, setInputValue] = React.useState('');
+
+  return (
+    <Autocomplete
+      value={value}
+      onChange={(event: any, newValue: string | null) => {
+        setValue(newValue);
+      }}
+      inputValue={inputValue}
+      onInputChange={(event, newInputValue) => {
+        setInputValue(newInputValue);
+      }}
+      options={options}
+      sx={{ width: 300 }}
+      renderInput={(params) => <TextField {...params} label="Controllable" />}
+    />
+  );
+}
+```
+
+## Props
+
+<ParamField path="options" type="T[]" required>
+  Array of options.
+</ParamField>
+
+<ParamField path="renderInput" type="(params: object) => ReactNode" required>
+  Render the input. Signature: `function(params: object) => ReactNode`. `params` contains props to apply to the input element.
+</ParamField>
+
+<ParamField path="value" type="T | T[] | null">
+  The value of the autocomplete. The value must have reference equality with the option in order to be selected. You can customize the equality behavior with the `isOptionEqualToValue` prop.
+</ParamField>
+
+<ParamField path="defaultValue" type="T | T[]">
+  The default value. Use when the component is not controlled.
+</ParamField>
+
+<ParamField path="inputValue" type="string">
+  The input value.
+</ParamField>
+
+<ParamField path="multiple" type="boolean" default="false">
+  If `true`, `value` must be an array and the menu will support multiple selections.
+</ParamField>
+
+<ParamField path="disableCloseOnSelect" type="boolean" default="false">
+  If `true`, the popup won't close when a value is selected.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  If `true`, the component is disabled.
+</ParamField>
+
+<ParamField path="disableClearable" type="boolean" default="false">
+  If `true`, the input can't be cleared.
+</ParamField>
+
+<ParamField path="freeSolo" type="boolean" default="false">
+  If `true`, the Autocomplete is free solo, meaning that the user input is not bound to provided options.
+</ParamField>
+
+<ParamField path="autoComplete" type="boolean" default="false">
+  If `true`, the portion of the selected suggestion that the user hasn't typed, if there is one, is automatically appended to the textbox.
+</ParamField>
+
+<ParamField path="autoHighlight" type="boolean" default="false">
+  If `true`, the first option is automatically highlighted.
+</ParamField>
+
+<ParamField path="autoSelect" type="boolean" default="false">
+  If `true`, the selected option becomes the value of the input when the Autocomplete loses focus unless the user chooses a different option or changes the character string in the input.
+</ParamField>
+
+<ParamField path="loading" type="boolean" default="false">
+  If `true`, the component is in a loading state. This shows the `loadingText` in place of suggestions (only if there are no suggestions to show, for example `options` are empty).
+</ParamField>
+
+<ParamField path="loadingText" type="ReactNode" default="'Loading…'">
+  Text to display when in a loading state.
+</ParamField>
+
+<ParamField path="noOptionsText" type="ReactNode" default="'No options'">
+  Text to display when there are no options.
+</ParamField>
+
+<ParamField path="open" type="boolean">
+  If `true`, the component is shown.
+</ParamField>
+
+<ParamField path="size" type="'small' | 'medium'" default="'medium'">
+  The size of the component.
+</ParamField>
+
+<ParamField path="getOptionLabel" type="(option: T) => string">
+  Used to determine the string value for a given option. It's used to fill the input (and the list box options if `renderOption` is not provided).
+</ParamField>
+
+<ParamField path="isOptionEqualToValue" type="(option: T, value: T) => boolean">
+  Used to determine if the option represents the given value. Uses strict equality by default. Both arguments need to be handled, an option can only match with one value.
+</ParamField>
+
+<ParamField path="filterOptions" type="(options: T[], state: object) => T[]">
+  A filter function that determines the options that are eligible. Signature: `function(options: Array<T>, state: object) => Array<T>`.
+</ParamField>
+
+<ParamField path="groupBy" type="(option: T) => string">
+  If provided, the options will be grouped under the returned string. The groupBy value is also used as the text for group headings when `renderGroup` is not provided.
+</ParamField>
+
+<ParamField path="onChange" type="(event: React.SyntheticEvent, value: T | T[] | null, reason: string, details?: object) => void">
+  Callback fired when the value changes.
+</ParamField>
+
+<ParamField path="onInputChange" type="(event: React.SyntheticEvent, value: string, reason: string) => void">
+  Callback fired when the input value changes.
+</ParamField>
+
+<ParamField path="onOpen" type="(event: React.SyntheticEvent) => void">
+  Callback fired when the popup requests to be opened. Use in controlled mode (see `open`).
+</ParamField>
+
+<ParamField path="onClose" type="(event: React.SyntheticEvent, reason: string) => void">
+  Callback fired when the popup requests to be closed. Use in controlled mode (see `open`).
+</ParamField>
+
+<ParamField path="renderOption" type="(props: object, option: T, state: object) => ReactNode">
+  Render the option, use `getOptionLabel` by default. Signature: `function(props: object, option: T, state: object) => ReactNode`.
+</ParamField>
+
+<ParamField path="renderGroup" type="(params: object) => ReactNode">
+  Render the group. Signature: `function(params: AutocompleteRenderGroupParams) => ReactNode`.
+</ParamField>
+
+<ParamField path="renderTags" type="(value: T[], getTagProps: function) => ReactNode">
+  Render the selected value.
+</ParamField>
+
+<ParamField path="ChipProps" type="ChipProps">
+  Props applied to the Chip element.
+</ParamField>
+
+<ParamField path="sx" type="SxProps<Theme>">
+  The system prop that allows defining system overrides as well as additional CSS styles.
+</ParamField>
+
+## API Reference
+
+- [Autocomplete API](https://next.mui.com/material-ui/api/autocomplete/)
+- Uses [useAutocomplete](https://next.mui.com/material-ui/api/use-autocomplete/) hook

@@ -1,0 +1,353 @@
+---
+title: Paper
+description: Paper is a basic surface component that provides elevation and background styling.
+---
+
+## Overview
+
+Paper is a fundamental Material Design surface component. It's a container that provides elevation through shadows and applies the theme's background color. Paper serves as the foundation for many other Material-UI components like Card, AppBar, and Dialog.
+
+Paper is used for:
+- Creating visual hierarchy with elevation levels
+- Grouping related content
+- Providing a surface for interactive elements
+- Building custom card-like components
+- Separating content sections
+
+## Import
+
+```tsx
+import Paper from '@mui/material/Paper';
+```
+
+## Basic Usage
+
+The simplest Paper component with default elevation.
+
+```tsx
+import Paper from '@mui/material/Paper';
+
+export default function BasicPaper() {
+  return (
+    <Paper>
+      <p>This is a Paper component with default styling</p>
+    </Paper>
+  );
+}
+```
+
+## Elevation Levels
+
+Control the shadow depth with the `elevation` prop (0-24).
+
+```tsx
+import Box from '@mui/material/Box';
+import Paper from '@mui/material/Paper';
+
+export default function PaperElevation() {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        flexWrap: 'wrap',
+        '& > :not(style)': {
+          m: 1,
+          width: 128,
+          height: 128,
+        },
+      }}
+    >
+      <Paper elevation={0} />
+      <Paper />           {/* Default elevation={1} */}
+      <Paper elevation={3} />
+      <Paper elevation={6} />
+      <Paper elevation={12} />
+      <Paper elevation={24} />
+    </Box>
+  );
+}
+```
+
+## Variants
+
+Paper supports two variants: elevation (default) and outlined.
+
+```tsx
+import Stack from '@mui/material/Stack';
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
+
+const DemoPaper = styled(Paper)(({ theme }) => ({
+  width: 120,
+  height: 120,
+  padding: theme.spacing(2),
+  textAlign: 'center',
+}));
+
+export default function PaperVariants() {
+  return (
+    <Stack direction="row" spacing={2}>
+      <DemoPaper variant="elevation">elevation</DemoPaper>
+      <DemoPaper variant="outlined">outlined</DemoPaper>
+    </Stack>
+  );
+}
+```
+
+## Square Corners
+
+Disable rounded corners with the `square` prop.
+
+```tsx
+import Paper from '@mui/material/Paper';
+import Stack from '@mui/material/Stack';
+
+export default function SquarePaper() {
+  return (
+    <Stack spacing={2}>
+      <Paper>Rounded corners (default)</Paper>
+      <Paper square>Square corners</Paper>
+    </Stack>
+  );
+}
+```
+
+## Dark and Light Themes
+
+Paper automatically adjusts its appearance based on the theme mode.
+
+```tsx
+import Grid from '@mui/material/Grid';
+import Paper from '@mui/material/Paper';
+import Box from '@mui/material/Box';
+import { createTheme, ThemeProvider, styled } from '@mui/material/styles';
+
+const Item = styled(Paper)(({ theme }) => ({
+  ...theme.typography.body2,
+  textAlign: 'center',
+  color: theme.palette.text.secondary,
+  height: 60,
+  lineHeight: '60px',
+}));
+
+const darkTheme = createTheme({ palette: { mode: 'dark' } });
+const lightTheme = createTheme({ palette: { mode: 'light' } });
+
+export default function ElevationDemo() {
+  return (
+    <Box sx={{ flexGrow: 1 }}>
+      <Grid container spacing={2}>
+        {[lightTheme, darkTheme].map((theme, index) => (
+          <Grid key={index} size={6}>
+            <ThemeProvider theme={theme}>
+              <Box
+                sx={{
+                  p: 2,
+                  borderRadius: 2,
+                  bgcolor: 'background.default',
+                  display: 'grid',
+                  gridTemplateColumns: { md: '1fr 1fr' },
+                  gap: 2,
+                }}
+              >
+                {[0, 1, 2, 3, 4, 6, 8, 12, 16, 24].map((elevation) => (
+                  <Item key={elevation} elevation={elevation}>
+                    {`elevation=${elevation}`}
+                  </Item>
+                ))}
+              </Box>
+            </ThemeProvider>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
+  );
+}
+```
+
+## Custom Component
+
+Change the underlying HTML element or React component.
+
+```tsx
+import Paper from '@mui/material/Paper';
+
+export default function CustomPaper() {
+  return (
+    <>
+      <Paper component="section">
+        Paper as a section element
+      </Paper>
+      
+      <Paper component="article">
+        Paper as an article element
+      </Paper>
+    </>
+  );
+}
+```
+
+## Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `ReactNode` | - | The content of the component |
+| `elevation` | `number` | `1` | Shadow depth, corresponds to dp in Material Design spec. Accepts values between 0 and 24 inclusive |
+| `square` | `boolean` | `false` | If `true`, rounded corners are disabled |
+| `variant` | `'elevation' \| 'outlined'` | `'elevation'` | The variant to use. Use 'elevation' for shadow or 'outlined' for border |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS styles |
+| `component` | `ElementType` | `'div'` | The component used for the root node (e.g., 'section', 'article', custom component) |
+
+## Elevation Scale
+
+The elevation prop follows Material Design's elevation system:
+
+- **0**: No elevation, flat surface
+- **1**: Default for most surfaces (cards, sheets)
+- **2**: Slightly raised elements
+- **3**: Raised elements like buttons
+- **4**: App bars, navigation
+- **6**: FABs, snackbars
+- **8**: Menus, sub-menus
+- **12**: Dialogs
+- **16**: Navigation drawers
+- **24**: Modal elements at maximum elevation
+
+```tsx
+<Paper elevation={0}>  {/* Flat, no shadow */}
+<Paper elevation={1}>  {/* Default card elevation */}
+<Paper elevation={4}>  {/* App bar elevation */}
+<Paper elevation={8}>  {/* Menu elevation */}
+<Paper elevation={16}> {/* Drawer elevation */}
+<Paper elevation={24}> {/* Maximum elevation */}
+```
+
+## Variants Explained
+
+### Elevation Variant
+
+The default variant uses box-shadow to create depth:
+
+```tsx
+<Paper variant="elevation" elevation={3}>
+  Uses shadow for elevation
+</Paper>
+```
+
+### Outlined Variant
+
+Uses a border instead of shadow:
+
+```tsx
+<Paper variant="outlined">
+  Uses border instead of shadow
+</Paper>
+```
+
+Note: When using `variant="outlined"`, the `elevation` prop has no effect.
+
+## Styling
+
+Paper can be styled using the `sx` prop or `styled` utility:
+
+```tsx
+import Paper from '@mui/material/Paper';
+import { styled } from '@mui/material/styles';
+
+// Using sx prop
+<Paper sx={{ p: 2, bgcolor: 'primary.main', color: 'white' }}>
+  Styled with sx
+</Paper>
+
+// Using styled utility
+const StyledPaper = styled(Paper)(({ theme }) => ({
+  padding: theme.spacing(2),
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.primary.contrastText,
+}));
+
+<StyledPaper>Styled Paper</StyledPaper>
+```
+
+## Common Use Cases
+
+### Content Containers
+
+```tsx
+<Paper sx={{ p: 3, mb: 2 }}>
+  <Typography variant="h6">Section Title</Typography>
+  <Typography variant="body1">
+    Section content goes here
+  </Typography>
+</Paper>
+```
+
+### Form Sections
+
+```tsx
+<Paper sx={{ p: 2 }} elevation={2}>
+  <form>
+    <TextField fullWidth label="Name" margin="normal" />
+    <TextField fullWidth label="Email" margin="normal" />
+    <Button variant="contained">Submit</Button>
+  </form>
+</Paper>
+```
+
+### Dashboard Widgets
+
+```tsx
+<Paper sx={{ p: 2, display: 'flex', flexDirection: 'column', height: 240 }}>
+  <Typography variant="h6" gutterBottom>
+    Statistics
+  </Typography>
+  <Box sx={{ flexGrow: 1 }}>
+    {/* Chart or content */}
+  </Box>
+</Paper>
+```
+
+## Accessibility
+
+- Use semantic HTML elements via the `component` prop when appropriate
+- Paper itself has no specific ARIA requirements
+- Ensure content within Paper follows accessibility best practices
+- When Paper contains interactive elements, ensure keyboard navigation works
+
+## Best Practices
+
+1. **Consistent elevation** - Use the same elevation for similar UI elements
+2. **Elevation hierarchy** - Higher elevations for elements that should appear "above" others
+3. **Don't overuse high elevations** - Reserve high values (16-24) for modal elements
+4. **Consider variants** - Use outlined variant for subtle separation without shadows
+5. **Responsive elevation** - You can change elevation responsively using `sx`
+6. **Theme integration** - Paper automatically uses theme colors; customize via theme for consistency
+
+## Relationship to Other Components
+
+Many Material-UI components extend Paper:
+
+- **Card**: Paper with specific content structure
+- **AppBar**: Paper with fixed positioning and specific styling
+- **Accordion**: Paper with expandable behavior
+- **Dialog**: Paper with modal behavior and high elevation
+
+```tsx
+// These all use Paper internally
+import Card from '@mui/material/Card';      // extends Paper
+import AppBar from '@mui/material/AppBar';  // extends Paper  
+import Dialog from '@mui/material/Dialog';  // extends Paper
+```
+
+## Performance
+
+Paper is a lightweight component with minimal performance impact. For very large lists of Paper components, consider:
+
+- Using CSS-only elevation classes instead of component props
+- Virtualizing lists of Paper elements
+- Memoizing Paper content if it's expensive to render
+
+## API Reference
+
+- [Paper API](https://next.mui.com/material-ui/api/paper/) - Full API documentation
+- Source: `packages/mui-material/src/Paper/Paper.d.ts:1`

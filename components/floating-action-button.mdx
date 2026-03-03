@@ -1,0 +1,86 @@
+---
+title: Floating Action Button
+description: Material UI Fab (Floating Action Button) component represents the primary action in an application.
+---
+
+A Floating Action Button (FAB) performs the primary, or most common, action on a screen.
+
+## Import
+
+```tsx
+import Fab from '@mui/material/Fab';
+```
+
+## Basic Usage
+
+```tsx
+import Box from '@mui/material/Box';
+import Fab from '@mui/material/Fab';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import FavoriteIcon from '@mui/icons-material/Favorite';
+import NavigationIcon from '@mui/icons-material/Navigation';
+
+export default function FloatingActionButtons() {
+  return (
+    <Box sx={{ '& > :not(style)': { m: 1 } }}>
+      <Fab color="primary" aria-label="add">
+        <AddIcon />
+      </Fab>
+      <Fab color="secondary" aria-label="edit">
+        <EditIcon />
+      </Fab>
+      <Fab variant="extended">
+        <NavigationIcon sx={{ mr: 1 }} />
+        Navigate
+      </Fab>
+      <Fab disabled aria-label="like">
+        <FavoriteIcon />
+      </Fab>
+    </Box>
+  );
+}
+```
+
+## Props
+
+<ParamField path="variant" type="'circular' | 'extended'" default="'circular'">
+  The variant to use. `extended` allows for text labels alongside icons.
+</ParamField>
+
+<ParamField path="color" type="'default' | 'inherit' | 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning'" default="'default'">
+  The color of the component. Supports both default and custom theme colors.
+</ParamField>
+
+<ParamField path="size" type="'small' | 'medium' | 'large'" default="'large'">
+  The size of the component. `small` is equivalent to the dense button styling.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  If `true`, the component is disabled.
+</ParamField>
+
+<ParamField path="disableFocusRipple" type="boolean" default="false">
+  If `true`, the keyboard focus ripple is disabled.
+</ParamField>
+
+<ParamField path="disableRipple" type="boolean">
+  If `true`, the ripple effect is disabled.
+</ParamField>
+
+<ParamField path="href" type="string">
+  The URL to link to when the button is clicked. If defined, an `a` element will be used as the root node.
+</ParamField>
+
+<ParamField path="sx" type="SxProps<Theme>">
+  The system prop that allows defining system overrides as well as additional CSS styles.
+</ParamField>
+
+<ParamField path="children" type="ReactNode">
+  The content of the component.
+</ParamField>
+
+## API Reference
+
+- [Fab API](https://next.mui.com/material-ui/api/fab/)
+- Inherits [ButtonBase API](https://next.mui.com/material-ui/api/button-base/)

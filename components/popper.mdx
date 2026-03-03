@@ -1,0 +1,520 @@
+---
+title: Popper
+description: A Popper can be used to display some content on top of another. It's an alternative to react-popper.
+---
+
+## Introduction
+
+Popper is a utility component for creating popovers, tooltips, and dropdowns. It's a wrapper around Popper.js that provides positioning logic without any styling.
+
+```jsx
+import Popper from '@mui/material/Popper';
+```
+
+## Basic Usage
+
+```jsx
+import * as React from 'react';
+import Popper from '@mui/material/Popper';
+import Button from '@mui/material/Button';
+import Box from '@mui/material/Box';
+
+export default function BasicPopper() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  const handleClick = (event) => {
+    setAnchorEl(anchorEl ? null : event.currentTarget);
+  };
+
+  const open = Boolean(anchorEl);
+  const id = open ? 'simple-popper' : undefined;
+
+  return (
+    <div>
+      <Button aria-describedby={id} onClick={handleClick}>
+        Toggle Popper
+      </Button>
+      <Popper id={id} open={open} anchorEl={anchorEl}>
+        <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
+          The content of the Popper.
+        </Box>
+      </Popper>
+    </div>
+  );
+}
+```
+
+## Props
+
+### open
+
+- Type: `boolean`
+- Required: Yes
+
+If `true`, the component is shown.
+
+### anchorEl
+
+- Type: `HTMLElement | VirtualElement | (() => HTMLElement | VirtualElement)`
+- Default: `null`
+
+An HTML element, virtualElement, or a function that returns either. It's used to set the position of the popper. The return value will be passed as the reference object of the Popper instance.
+
+### children
+
+- Type: `React.ReactNode | ((props: { placement: PopperPlacementType, TransitionProps?: object }) => React.ReactNode)`
+- Default: `undefined`
+
+Popper render function or node.
+
+```jsx
+<Popper open={open} anchorEl={anchorEl}>
+  {({ placement }) => (
+    <div>Placement: {placement}</div>
+  )}
+</Popper>
+```
+
+### placement
+
+- Type: `'auto' | 'auto-start' | 'auto-end' | 'top' | 'top-start' | 'top-end' | 'bottom' | 'bottom-start' | 'bottom-end' | 'right' | 'right-start' | 'right-end' | 'left' | 'left-start' | 'left-end'`
+- Default: `'bottom'`
+
+Popper placement.
+
+```jsx
+<Popper
+  placement="top-start"
+  open={open}
+  anchorEl={anchorEl}
+>
+  Content
+</Popper>
+```
+
+### modifiers
+
+- Type: `Array<Modifier>`
+- Default: `undefined`
+
+Popper.js modifiers. A modifier is a function that is called each time Popper.js needs to compute the position of the popper.
+
+```jsx
+<Popper
+  modifiers={[
+    {
+      name: 'offset',
+      options: {
+        offset: [0, 8],
+      },
+    },
+  ]}
+  // ...
+/>
+```
+
+### popperOptions
+
+- Type: `Partial<Options>`
+- Default: `{}`
+
+Options provided to the Popper.js instance.
+
+```jsx
+<Popper
+  popperOptions={{
+    strategy: 'fixed',
+    modifiers: [
+      {
+        name: 'preventOverflow',
+        options: {
+          boundary: 'viewport',
+        },
+      },
+    ],
+  }}
+  // ...
+/>
+```
+
+### popperRef
+
+- Type: `React.Ref<Instance>`
+- Default: `undefined`
+
+A ref that points to the used popper instance.
+
+### transition
+
+- Type: `boolean`
+- Default: `false`
+
+Help supporting a react-transition-group/Transition component.
+
+```jsx
+<Popper transition open={open} anchorEl={anchorEl}>
+  {({ TransitionProps }) => (
+    <Fade {...TransitionProps}>
+      <Paper>Content</Paper>
+    </Fade>
+  )}
+</Popper>
+```
+
+### disablePortal
+
+- Type: `boolean`
+- Default: `false`
+
+The `children` will be under the DOM hierarchy of the parent component.
+
+### keepMounted
+
+- Type: `boolean`
+- Default: `false`
+
+Always keep the children in the DOM. This prop can be useful in SEO situations or when you want to maximize the responsiveness of the Popper.
+
+### container
+
+- Type: `HTMLElement | (() => HTMLElement)`
+- Default: `document.body`
+
+An HTML element or function that returns one. The container will have the portal children appended to it.
+
+## Placement Examples
+
+```jsx
+function PlacementPopper() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const [placement, setPlacement] = React.useState('bottom');
+
+  return (
+    <>
+      <Button onClick={(e) => setAnchorEl(e.currentTarget)}>
+        Open
+      </Button>
+      <Popper
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        placement={placement}
+      >
+        <Box sx={{ border: 1, p: 1, bgcolor: 'background.paper' }}>
+          Placement: {placement}
+        </Box>
+      </Popper>
+    </>
+  );
+}
+```
+
+## Transitions
+
+```jsx
+import Fade from '@mui/material/Fade';
+import Paper from '@mui/material/Paper';
+
+function TransitionPopper() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+  const open = Boolean(anchorEl);
+
+  return (
+    <>
+      <Button onClick={(e) => setAnchorEl(e.currentTarget)}>
+        Toggle Popper
+      </Button>
+      <Popper
+        open={open}
+        anchorEl={anchorEl}
+        transition
+      >
+        {({ TransitionProps }) => (
+          <Fade {...TransitionProps} timeout={350}>
+            <Paper sx={{ p: 1 }}>
+              <Typography>The content of the Popper.</Typography>
+            </Paper>
+          </Fade>
+        )}
+      </Popper>
+    </>
+  );
+}
+```
+
+## Virtual Element
+
+You can use a virtual element for positioning:
+
+```jsx
+function VirtualPopper() {
+  const [open, setOpen] = React.useState(false);
+  const [virtualElement, setVirtualElement] = React.useState(null);
+
+  const handleMouseMove = (event) => {
+    setVirtualElement({
+      getBoundingClientRect: () => ({
+        width: 0,
+        height: 0,
+        top: event.clientY,
+        right: event.clientX,
+        bottom: event.clientY,
+        left: event.clientX,
+      }),
+    });
+  };
+
+  return (
+    <div
+      onMouseMove={handleMouseMove}
+      onMouseEnter={() => setOpen(true)}
+      onMouseLeave={() => setOpen(false)}
+    >
+      Move your mouse here
+      <Popper open={open} anchorEl={virtualElement}>
+        <Paper sx={{ p: 1 }}>Follows cursor</Paper>
+      </Popper>
+    </div>
+  );
+}
+```
+
+## Scroll Playground
+
+```jsx
+function ScrollPopper() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  return (
+    <Box sx={{ height: 200, overflow: 'auto' }}>
+      <Box sx={{ height: 400 }}>
+        <Button
+          onClick={(e) => setAnchorEl(e.currentTarget)}
+          sx={{ mt: 20 }}
+        >
+          Toggle Popper
+        </Button>
+        <Popper
+          open={Boolean(anchorEl)}
+          anchorEl={anchorEl}
+          modifiers={[
+            {
+              name: 'preventOverflow',
+              options: {
+                boundary: 'viewport',
+              },
+            },
+          ]}
+        >
+          <Paper sx={{ p: 1 }}>Stays in viewport</Paper>
+        </Popper>
+      </Box>
+    </Box>
+  );
+}
+```
+
+## Popper.js Modifiers
+
+### Offset Modifier
+
+```jsx
+<Popper
+  modifiers={[
+    {
+      name: 'offset',
+      options: {
+        offset: [0, 10], // [skidding, distance]
+      },
+    },
+  ]}
+  // ...
+/>
+```
+
+### Prevent Overflow
+
+```jsx
+<Popper
+  modifiers={[
+    {
+      name: 'preventOverflow',
+      options: {
+        padding: 8,
+        boundary: 'clippingParents',
+      },
+    },
+  ]}
+  // ...
+/>
+```
+
+### Flip Modifier
+
+```jsx
+<Popper
+  modifiers={[
+    {
+      name: 'flip',
+      enabled: true,
+      options: {
+        altBoundary: true,
+        rootBoundary: 'document',
+        padding: 8,
+      },
+    },
+  ]}
+  // ...
+/>
+```
+
+### Arrow Modifier
+
+```jsx
+function ArrowPopper() {
+  const [arrowRef, setArrowRef] = React.useState(null);
+
+  return (
+    <Popper
+      modifiers={[
+        {
+          name: 'arrow',
+          enabled: true,
+          options: {
+            element: arrowRef,
+          },
+        },
+      ]}
+      // ...
+    >
+      <Paper>
+        <Box
+          ref={setArrowRef}
+          sx={{
+            position: 'absolute',
+            width: 10,
+            height: 10,
+            '&::before': {
+              content: '""',
+              display: 'block',
+              width: 0,
+              height: 0,
+              borderStyle: 'solid',
+            },
+          }}
+        />
+        Content with arrow
+      </Paper>
+    </Popper>
+  );
+}
+```
+
+## Popper Reference
+
+Access the Popper.js instance:
+
+```jsx
+function PopperWithRef() {
+  const popperRef = React.useRef(null);
+
+  const forceUpdate = () => {
+    if (popperRef.current) {
+      popperRef.current.update();
+    }
+  };
+
+  return (
+    <Popper
+      popperRef={popperRef}
+      // ...
+    >
+      Content
+    </Popper>
+  );
+}
+```
+
+## Fixed Positioning
+
+```jsx
+<Popper
+  popperOptions={{
+    strategy: 'fixed',
+  }}
+  // ...
+>
+  Fixed positioned content
+</Popper>
+```
+
+## Accessibility
+
+Ensure proper ARIA attributes:
+
+```jsx
+<Button
+  aria-describedby={id}
+  onClick={handleClick}
+>
+  Toggle
+</Button>
+<Popper
+  id={id}
+  open={open}
+  anchorEl={anchorEl}
+  role="tooltip"
+>
+  Content
+</Popper>
+```
+
+## Performance Tips
+
+1. Use `keepMounted` for frequently toggled poppers
+2. Disable portal when not needed with `disablePortal`
+3. Memoize modifier configurations
+4. Use `popperRef` to manually control updates
+
+## Common Use Cases
+
+### Dropdown Menu
+
+```jsx
+function DropdownPopper() {
+  const [anchorEl, setAnchorEl] = React.useState(null);
+
+  return (
+    <>
+      <Button onClick={(e) => setAnchorEl(e.currentTarget)}>
+        Menu
+      </Button>
+      <Popper
+        open={Boolean(anchorEl)}
+        anchorEl={anchorEl}
+        placement="bottom-start"
+      >
+        <Paper>
+          <MenuItem>Profile</MenuItem>
+          <MenuItem>Settings</MenuItem>
+          <MenuItem>Logout</MenuItem>
+        </Paper>
+      </Popper>
+    </>
+  );
+}
+```
+
+## Comparison with Popover
+
+- **Popper**: Lightweight, no built-in styling, full Popper.js control
+- **Popover**: Includes Paper styling, elevation, and backdrop support
+
+Use Popper when you need:
+- Custom styling
+- Direct access to Popper.js features
+- Lightweight positioning logic
+
+Use Popover when you need:
+- Material Design styling
+- Backdrop and modal behavior
+- Elevation and shadow effects

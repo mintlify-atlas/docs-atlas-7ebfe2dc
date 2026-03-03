@@ -1,0 +1,375 @@
+---
+title: Modal
+description: The Modal component provides a solid foundation for creating dialogs, popovers, lightboxes, or whatever else.
+---
+
+## Introduction
+
+Modal is a lower-level construct that is leveraged by Dialog, Drawer, Menu, and Popover components. It provides a solid foundation for creating dialogs, popovers, lightboxes, or whatever else.
+
+```jsx
+import Modal from '@mui/material/Modal';
+```
+
+## Basic Usage
+
+```jsx
+import * as React from 'react';
+import Modal from '@mui/material/Modal';
+import Box from '@mui/material/Box';
+
+export default function BasicModal() {
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <div>
+      <button onClick={() => setOpen(true)}>Open Modal</button>
+      <Modal
+        open={open}
+        onClose={() => setOpen(false)}
+        aria-labelledby="modal-title"
+        aria-describedby="modal-description"
+      >
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'background.paper',
+            border: '2px solid #000',
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <h2 id="modal-title">Modal Title</h2>
+          <p id="modal-description">Modal description and content</p>
+        </Box>
+      </Modal>
+    </div>
+  );
+}
+```
+
+## Props
+
+### open
+
+- Type: `boolean`
+- Required: Yes
+
+If `true`, the component is shown.
+
+### onClose
+
+- Type: `(event: {}, reason: 'backdropClick' | 'escapeKeyDown') => void`
+- Default: `undefined`
+
+Callback fired when the component requests to be closed. The `reason` parameter indicates why the modal is closing.
+
+```jsx
+const handleClose = (event, reason) => {
+  if (reason === 'backdropClick') {
+    console.log('Clicked on backdrop');
+  }
+  setOpen(false);
+};
+
+<Modal open={open} onClose={handleClose}>
+  {/* content */}
+</Modal>
+```
+
+### children
+
+- Type: `React.ReactElement`
+- Required: Yes
+
+A single child content element.
+
+### BackdropComponent
+
+- Type: `React.ElementType`
+- Default: `styled(Backdrop)`
+
+A backdrop component. This prop enables custom backdrop rendering.
+
+**Deprecated**: Use `slots.backdrop` instead.
+
+### BackdropProps
+
+- Type: `Partial<BackdropProps>`
+- Default: `undefined`
+
+Props applied to the Backdrop element.
+
+**Deprecated**: Use `slotProps.backdrop` instead.
+
+### closeAfterTransition
+
+- Type: `boolean`
+- Default: `false`
+
+When set to true the Modal waits until a nested Transition is completed before closing.
+
+```jsx
+<Modal
+  open={open}
+  onClose={handleClose}
+  closeAfterTransition
+>
+  <Fade in={open}>
+    <Box>{/* content */}</Box>
+  </Fade>
+</Modal>
+```
+
+### container
+
+- Type: `HTMLElement | (() => HTMLElement)`
+- Default: `document.body`
+
+An HTML element or function that returns one. The container will have the portal children appended to it.
+
+### disableAutoFocus
+
+- Type: `boolean`
+- Default: `false`
+
+If `true`, the modal will not automatically shift focus to itself when it opens, and will not restore focus to previously focused element when it closes.
+
+### disableEnforceFocus
+
+- Type: `boolean`
+- Default: `false`
+
+If `true`, the modal will not prevent focus from leaving the modal while open.
+
+### disablePortal
+
+- Type: `boolean`
+- Default: `false`
+
+The `children` will be under the DOM hierarchy of the parent component.
+
+### disableRestoreFocus
+
+- Type: `boolean`
+- Default: `false`
+
+If `true`, the modal will not restore focus to previously focused element once modal is hidden or unmounted.
+
+### disableScrollLock
+
+- Type: `boolean`
+- Default: `false`
+
+Disable the scroll lock behavior.
+
+### hideBackdrop
+
+- Type: `boolean`
+- Default: `false`
+
+If `true`, the backdrop is not rendered.
+
+```jsx
+<Modal open={open} onClose={handleClose} hideBackdrop>
+  <Box>{/* content */}</Box>
+</Modal>
+```
+
+### keepMounted
+
+- Type: `boolean`
+- Default: `false`
+
+Always keep the children in the DOM. This prop can be useful in SEO situations or when you want to maximize the responsiveness of the Modal.
+
+### slots
+
+- Type: `{ root?: React.ElementType, backdrop?: React.ElementType }`
+- Default: `{}`
+
+The components used for each slot inside the Modal.
+
+```jsx
+<Modal
+  open={open}
+  onClose={handleClose}
+  slots={{
+    backdrop: CustomBackdrop,
+  }}
+>
+  <Box>{/* content */}</Box>
+</Modal>
+```
+
+### slotProps
+
+- Type: `{ root?: object | function, backdrop?: object | function }`
+- Default: `{}`
+
+The props used for each slot inside the Modal.
+
+## Focus Management
+
+The modal automatically manages focus:
+
+1. When opened, focus moves to the modal content
+2. While open, focus is trapped within the modal
+3. When closed, focus returns to the element that triggered the modal
+
+### Customizing Focus Behavior
+
+```jsx
+<Modal
+  open={open}
+  onClose={handleClose}
+  disableAutoFocus={false}
+  disableEnforceFocus={false}
+  disableRestoreFocus={false}
+>
+  <Box>{/* content */}</Box>
+</Modal>
+```
+
+## Transitions
+
+Use transitions to animate the modal entrance and exit:
+
+```jsx
+import Fade from '@mui/material/Fade';
+
+function TransitionModal() {
+  const [open, setOpen] = React.useState(false);
+
+  return (
+    <Modal
+      open={open}
+      onClose={() => setOpen(false)}
+      closeAfterTransition
+    >
+      <Fade in={open}>
+        <Box
+          sx={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            transform: 'translate(-50%, -50%)',
+            width: 400,
+            bgcolor: 'background.paper',
+            boxShadow: 24,
+            p: 4,
+          }}
+        >
+          <h2>Animated Modal</h2>
+        </Box>
+      </Fade>
+    </Modal>
+  );
+}
+```
+
+## Server-Side Rendering
+
+Modal supports server-side rendering. The `container` and `disablePortal` props can help manage portal behavior during SSR:
+
+```jsx
+<Modal
+  open={open}
+  onClose={handleClose}
+  container={() => document.getElementById('modal-root')}
+>
+  <Box>{/* content */}</Box>
+</Modal>
+```
+
+## Accessibility
+
+The modal should have:
+
+- An accessible name using `aria-labelledby` or `aria-label`
+- An accessible description using `aria-describedby`
+- Keyboard support for closing (ESC key)
+- Focus management
+
+```jsx
+<Modal
+  open={open}
+  onClose={handleClose}
+  aria-labelledby="modal-title"
+  aria-describedby="modal-description"
+>
+  <Box>
+    <h2 id="modal-title">Accessible Title</h2>
+    <p id="modal-description">Accessible description</p>
+  </Box>
+</Modal>
+```
+
+## Performance
+
+### Keep Mounted
+
+For better performance in scenarios where the modal opens/closes frequently:
+
+```jsx
+<Modal
+  open={open}
+  onClose={handleClose}
+  keepMounted
+>
+  <Box>{/* content */}</Box>
+</Modal>
+```
+
+### Disable Scroll Lock
+
+If you're experiencing performance issues with the scroll lock:
+
+```jsx
+<Modal
+  open={open}
+  onClose={handleClose}
+  disableScrollLock
+>
+  <Box>{/* content */}</Box>
+</Modal>
+```
+
+## Common Patterns
+
+### Nested Modals
+
+```jsx
+function NestedModals() {
+  const [parentOpen, setParentOpen] = React.useState(false);
+  const [childOpen, setChildOpen] = React.useState(false);
+
+  return (
+    <>
+      <button onClick={() => setParentOpen(true)}>Open Parent</button>
+      <Modal open={parentOpen} onClose={() => setParentOpen(false)}>
+        <Box>
+          <h2>Parent Modal</h2>
+          <button onClick={() => setChildOpen(true)}>Open Child</button>
+          <Modal open={childOpen} onClose={() => setChildOpen(false)}>
+            <Box>
+              <h2>Child Modal</h2>
+            </Box>
+          </Modal>
+        </Box>
+      </Modal>
+    </>
+  );
+}
+```
+
+## When to Use
+
+- **Use Modal** when you need low-level control over modal behavior
+- **Use Dialog** for standard dialog boxes with actions
+- **Use Drawer** for navigation panels
+- **Use Popover** for contextual content

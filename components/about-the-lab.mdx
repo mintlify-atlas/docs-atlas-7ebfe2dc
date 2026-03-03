@@ -1,0 +1,139 @@
+---
+title: About the Lab
+description: Learn about Material UI's Lab package for experimental components
+---
+
+# About the Lab
+
+The `@mui/lab` package hosts incubator components that are not yet ready to move to the core Material UI package. These are experimental components that are being tested and refined before graduating to `@mui/material`.
+
+## What is the Lab?
+
+The Lab is a testing ground for new Material UI components. Components in the Lab:
+
+- Are functional and ready to use in production
+- May have APIs that are still evolving
+- May undergo breaking changes between minor versions
+- Will eventually graduate to `@mui/material` once their APIs stabilize
+
+## Installation
+
+Install the Lab package in your project:
+
+```bash
+npm install @mui/lab@next
+```
+
+The Lab has peer dependencies on Material UI and Emotion. If you don't have them installed:
+
+```bash
+npm install @mui/material@next @emotion/react @emotion/styled
+```
+
+## Package Information
+
+- **Package Name**: `@mui/lab`
+- **Description**: Laboratory for new Material UI modules
+- **License**: MIT
+- **Repository**: [github.com/mui/material-ui](https://github.com/mui/material-ui)
+- **Homepage**: [mui.com/material-ui/about-the-lab](https://mui.com/material-ui/about-the-lab/)
+
+## Current Lab Components
+
+The Lab currently includes:
+
+### Layout Components
+- **Masonry** - A responsive masonry layout component
+
+### Navigation Components
+- **Timeline** - Display a list of events in chronological order
+- **TreeView** - Display hierarchical data
+- **TreeItem** - Individual items in a TreeView
+
+### Tab Components
+- **TabContext** - Context provider for tabs
+- **TabList** - Container for tab buttons
+- **TabPanel** - Tab panel content
+
+### Date/Time Pickers
+- **DatePicker** - Select dates
+- **TimePicker** - Select times
+- **DateTimePicker** - Select both date and time
+- **DateRangePicker** - Select a date range
+- And many more picker variants (Mobile, Desktop, Static)
+
+### Other Components
+- **LoadingButton** - Button with loading state (now graduated to `@mui/material`)
+
+## Versioning and Stability
+
+Lab components use **alpha versioning** (e.g., `9.0.0-alpha.1`). This signals that:
+
+- The API may change between releases
+- Breaking changes can occur in minor version updates
+- Components are production-ready but APIs are not finalized
+
+## Graduation to Core
+
+Components graduate from Lab to the core `@mui/material` package when:
+
+1. The API is stable and well-tested
+2. The component has been used in production by multiple teams
+3. Breaking changes are no longer anticipated
+4. Documentation is complete
+
+Recent graduations include LoadingButton, which is now available directly in `@mui/material`.
+
+## Usage Example
+
+```jsx
+import Timeline from '@mui/lab/Timeline';
+import TimelineItem from '@mui/lab/TimelineItem';
+import TimelineSeparator from '@mui/lab/TimelineSeparator';
+import TimelineConnector from '@mui/lab/TimelineConnector';
+import TimelineContent from '@mui/lab/TimelineContent';
+import TimelineDot from '@mui/lab/TimelineDot';
+
+function MyTimeline() {
+  return (
+    <Timeline>
+      <TimelineItem>
+        <TimelineSeparator>
+          <TimelineDot />
+          <TimelineConnector />
+        </TimelineSeparator>
+        <TimelineContent>Event 1</TimelineContent>
+      </TimelineItem>
+      <TimelineItem>
+        <TimelineSeparator>
+          <TimelineDot />
+        </TimelineSeparator>
+        <TimelineContent>Event 2</TimelineContent>
+      </TimelineItem>
+    </Timeline>
+  );
+}
+```
+
+## Import Strategy
+
+Use one-level deep imports to avoid bundling the entire Lab package:
+
+```jsx
+// Recommended - only bundles what you need
+import Timeline from '@mui/lab/Timeline';
+import Masonry from '@mui/lab/Masonry';
+
+// Avoid - bundles entire package
+import { Timeline, Masonry } from '@mui/lab';
+```
+
+## Feedback and Contributing
+
+Since Lab components are experimental, feedback is especially valuable:
+
+- Report issues on [GitHub](https://github.com/mui/material-ui/issues)
+- Share your use cases and API suggestions
+- Contribute improvements via pull requests
+
+Your feedback helps shape these components before they graduate to the core package.

@@ -1,0 +1,232 @@
+---
+title: Skeleton
+description: Skeleton component displays a placeholder preview of content before data loads
+---
+
+# Skeleton
+
+Display a placeholder preview of your content before the data gets loaded to reduce load-time frustration.
+
+## Overview
+
+Skeleton screens (also called ghost elements or content placeholders) are used to indicate that content is loading. They provide a better user experience than traditional loading spinners by showing the shape of the content that will appear.
+
+## Basic Usage
+
+```tsx
+import Skeleton from '@mui/material/Skeleton';
+import Stack from '@mui/material/Stack';
+
+function Variants() {
+  return (
+    <Stack spacing={1}>
+      {/* For variant="text", adjust the height via font-size */}
+      <Skeleton variant="text" sx={{ fontSize: '1rem' }} />
+
+      {/* For other variants, adjust the size with `width` and `height` */}
+      <Skeleton variant="circular" width={40} height={40} />
+      <Skeleton variant="rectangular" width={210} height={60} />
+      <Skeleton variant="rounded" width={210} height={60} />
+    </Stack>
+  );
+}
+```
+
+## Variants
+
+The component supports 4 shape variants:
+
+- `text` (default) - Represents a single line of text
+- `circular` - Represents a circular element like an avatar
+- `rectangular` - Represents a rectangular block
+- `rounded` - Represents a rectangular block with rounded corners
+
+## Animations
+
+The skeleton supports three animation types:
+
+```tsx
+// Pulse animation (default)
+<Skeleton animation="pulse" />
+
+// Wave animation
+<Skeleton animation="wave" />
+
+// No animation
+<Skeleton animation={false} />
+```
+
+## Inferring Dimensions
+
+The Skeleton can infer its width and height from its children:
+
+```tsx
+import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
+
+function SkeletonChildren() {
+  return (
+    <div>
+      <Typography variant="h1">
+        {loading ? <Skeleton /> : 'h1'}
+      </Typography>
+    </div>
+  );
+}
+```
+
+When used this way, the Skeleton will match the dimensions of the child element.
+
+## Complex Example
+
+Skeleton can be composed to create complex loading states:
+
+```tsx
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import CardMedia from '@mui/material/CardMedia';
+import Skeleton from '@mui/material/Skeleton';
+import Typography from '@mui/material/Typography';
+
+function MediaSkeleton() {
+  const [loading, setLoading] = React.useState(true);
+
+  return (
+    <Card sx={{ maxWidth: 345, m: 2 }}>
+      {loading ? (
+        <Skeleton variant="rectangular" height={140} />
+      ) : (
+        <CardMedia
+          component="img"
+          height="140"
+          image="/path/to/image.jpg"
+          alt="Card image"
+        />
+      )}
+      <CardContent>
+        {loading ? (
+          <React.Fragment>
+            <Skeleton animation="wave" height={10} style={{ marginBottom: 6 }} />
+            <Skeleton animation="wave" height={10} width="80%" />
+          </React.Fragment>
+        ) : (
+          <Typography variant="body2" color="text.secondary">
+            Card content
+          </Typography>
+        )}
+      </CardContent>
+    </Card>
+  );
+}
+```
+
+## YouTube Example
+
+A common pattern is to show a skeleton while loading media:
+
+```tsx
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Skeleton from '@mui/material/Skeleton';
+
+function YouTube() {
+  return (
+    <Box sx={{ width: 210 }}>
+      <Skeleton variant="rectangular" width={210} height={118} />
+      <Box sx={{ pt: 0.5 }}>
+        <Skeleton />
+        <Skeleton width="60%" />
+      </Box>
+    </Box>
+  );
+}
+```
+
+## Props
+
+### Main Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `variant` | `'text' \| 'rectangular' \| 'rounded' \| 'circular'` | `'text'` | The type of content that will be rendered. |
+| `animation` | `'pulse' \| 'wave' \| false` | `'pulse'` | The animation. If `false`, the animation effect is disabled. |
+| `width` | `number \| string` | - | Width of the skeleton. Useful when the skeleton is inside an inline element with no width of its own. |
+| `height` | `number \| string` | - | Height of the skeleton. Useful when you don't want to adapt the skeleton to a text element but for instance a card. |
+| `sx` | `SxProps<Theme>` | - | System prop for defining CSS overrides. |
+| `children` | `ReactNode` | - | Optional children to infer width and height from. |
+
+## Customization
+
+### Color
+
+You can customize the color using the `sx` prop:
+
+```tsx
+<Skeleton 
+  sx={{ bgcolor: 'grey.900' }} 
+  variant="rectangular" 
+  width={210} 
+  height={118} 
+/>
+```
+
+### Custom Shapes
+
+For custom shapes, you can override the border radius:
+
+```tsx
+<Skeleton 
+  variant="rectangular" 
+  width={40} 
+  height={40}
+  sx={{ borderRadius: '50%' }}
+/>
+```
+
+## Accessibility
+
+Skeleton components should be used thoughtfully for accessibility:
+
+- They indicate loading state visually but may need additional ARIA attributes
+- Consider adding `aria-busy="true"` to the container
+- Ensure screen readers are informed when content loads
+
+```tsx
+<div aria-busy={loading} aria-live="polite">
+  {loading ? <Skeleton /> : <ActualContent />}
+</div>
+```
+
+## CSS Classes
+
+The component has the following CSS classes available:
+
+- `.MuiSkeleton-root` - Root element
+- `.MuiSkeleton-text` - Text variant
+- `.MuiSkeleton-rectangular` - Rectangular variant
+- `.MuiSkeleton-rounded` - Rounded variant
+- `.MuiSkeleton-circular` - Circular variant
+- `.MuiSkeleton-pulse` - Pulse animation
+- `.MuiSkeleton-wave` - Wave animation
+- `.MuiSkeleton-withChildren` - Applied when children are provided
+- `.MuiSkeleton-fitContent` - Applied when fitting to content
+
+## Best Practices
+
+1. **Match the layout**: Skeleton should closely match the final content's layout
+2. **Use appropriate variants**: Choose the variant that best represents the content
+3. **Combine with real layout**: Use the same spacing and structure as the final content
+4. **Progressive loading**: Show skeletons for individual sections as they load
+5. **Avoid over-use**: Don't skeleton every single element; focus on major content areas
+
+## API Reference
+
+For complete API documentation, see:
+- [Skeleton API](https://mui.com/material-ui/api/skeleton/)
+- [Skeleton Demos](https://mui.com/material-ui/react-skeleton/)
+
+## Source Location
+
+`~/workspace/source/packages/mui-material/src/Skeleton/Skeleton.d.ts:69`

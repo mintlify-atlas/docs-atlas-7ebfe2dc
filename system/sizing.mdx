@@ -1,0 +1,451 @@
+---
+title: Sizing
+description: Width and height utilities in MUI System
+---
+
+# Sizing
+
+Utilities for controlling element dimensions.
+
+## Import
+
+```javascript
+import { sizing } from '@mui/system';
+```
+
+## API
+
+From `sizing/sizing.js:78-80`:
+
+```javascript
+const sizing = compose(width, maxWidth, minWidth, height, maxHeight, minHeight, boxSizing);
+```
+
+## Transform Function
+
+From `sizing.js:5-7`:
+
+```javascript
+export function sizingTransform(value) {
+  return value <= 1 && value !== 0 ? `${value * 100}%` : value;
+}
+```
+
+This converts fractional values (0-1) to percentages.
+
+## Width
+
+Set element width:
+
+```jsx
+<Box width={100}>100px wide</Box>
+<Box width="50%">50% wide</Box>
+<Box width={1}>100% wide (1 = 100%)</Box>
+<Box width={0.5}>50% wide (0.5 = 50%)</Box>
+<Box width={1/2}>50% wide (1/2 = 50%)</Box>
+<Box width="auto">Auto width</Box>
+```
+
+From `sizing.js:9-12`:
+
+```javascript
+export const width = style({
+  prop: 'width',
+  transform: sizingTransform,
+});
+```
+
+## Max Width
+
+Set maximum width with breakpoint support:
+
+```jsx
+<Box maxWidth={500}>Max 500px</Box>
+<Box maxWidth="sm">Max small breakpoint (600px)</Box>
+<Box maxWidth="md">Max medium breakpoint (900px)</Box>
+<Box maxWidth="lg">Max large breakpoint (1200px)</Box>
+<Box maxWidth="xl">Max extra-large breakpoint (1536px)</Box>
+<Box maxWidth={1}>Max 100%</Box>
+```
+
+From `sizing.js:14-39`:
+
+```javascript
+export const maxWidth = (props) => {
+  if (props.maxWidth !== undefined && props.maxWidth !== null) {
+    const styleFromPropValue = (propValue) => {
+      const breakpoint =
+        props.theme?.breakpoints?.values?.[propValue] || breakpointsValues[propValue];
+
+      if (!breakpoint) {
+        return {
+          maxWidth: sizingTransform(propValue),
+        };
+      }
+
+      if (props.theme?.breakpoints?.unit !== 'px') {
+        return {
+          maxWidth: `${breakpoint}${props.theme.breakpoints.unit}`,
+        };
+      }
+
+      return {
+        maxWidth: breakpoint,
+      };
+    };
+    return handleBreakpoints(props, props.maxWidth, styleFromPropValue);
+  }
+  return null;
+};
+```
+
+## Min Width
+
+Set minimum width:
+
+```jsx
+<Box minWidth={300}>Min 300px</Box>
+<Box minWidth="50%">Min 50%</Box>
+<Box minWidth={0.5}>Min 50%</Box>
+```
+
+From `sizing.js:42-45`:
+
+```javascript
+export const minWidth = style({
+  prop: 'minWidth',
+  transform: sizingTransform,
+});
+```
+
+## Height
+
+Set element height:
+
+```jsx
+<Box height={200}>200px tall</Box>
+<Box height="100vh">Full viewport height</Box>
+<Box height={1}>100% height</Box>
+<Box height={0.5}>50% height</Box>
+```
+
+From `sizing.js:47-50`:
+
+```javascript
+export const height = style({
+  prop: 'height',
+  transform: sizingTransform,
+});
+```
+
+## Max Height
+
+Set maximum height:
+
+```jsx
+<Box maxHeight={400}>Max 400px</Box>
+<Box maxHeight="80vh">Max 80% viewport height</Box>
+<Box maxHeight={0.8}>Max 80%</Box>
+```
+
+From `sizing.js:52-55`:
+
+```javascript
+export const maxHeight = style({
+  prop: 'maxHeight',
+  transform: sizingTransform,
+});
+```
+
+## Min Height
+
+Set minimum height:
+
+```jsx
+<Box minHeight={200}>Min 200px</Box>
+<Box minHeight="100vh">Min full viewport height</Box>
+<Box minHeight={0.5}>Min 50%</Box>
+```
+
+From `sizing.js:57-60`:
+
+```javascript
+export const minHeight = style({
+  prop: 'minHeight',
+  transform: sizingTransform,
+});
+```
+
+## Box Sizing
+
+Control the box model:
+
+```jsx
+<Box boxSizing="border-box">Border box (default)</Box>
+<Box boxSizing="content-box">Content box</Box>
+```
+
+From `sizing.js:74-76`:
+
+```javascript
+export const boxSizing = style({
+  prop: 'boxSizing',
+});
+```
+
+## Common Patterns
+
+### Full Width Container
+
+```jsx
+<Box width={1} maxWidth="lg" mx="auto" p={2}>
+  Centered container with max width
+</Box>
+```
+
+### Responsive Width
+
+```jsx
+<Box
+  width={{
+    xs: 1,          // 100% on mobile
+    sm: 0.75,       // 75% on small screens
+    md: 0.5,        // 50% on medium screens
+  }}
+>
+  Responsive width
+</Box>
+```
+
+### Square Box
+
+```jsx
+<Box width={200} height={200}>
+  200x200 square
+</Box>
+
+{/* Responsive square */}
+<Box
+  width={{ xs: 100, sm: 150, md: 200 }}
+  height={{ xs: 100, sm: 150, md: 200 }}
+>
+  Responsive square
+</Box>
+```
+
+### Full Height Page
+
+```jsx
+<Box minHeight="100vh" display="flex" flexDirection="column">
+  <Box>Header</Box>
+  <Box flexGrow={1}>Main content fills remaining space</Box>
+  <Box>Footer</Box>
+</Box>
+```
+
+### Scrollable Container
+
+```jsx
+<Box maxHeight={400} overflow="auto">
+  <Box p={2}>
+    Scrollable content...
+  </Box>
+</Box>
+```
+
+### Aspect Ratio Box (16:9)
+
+```jsx
+<Box
+  width={1}
+  sx={{
+    aspectRatio: '16/9',
+    // Or for older browsers:
+    // position: 'relative',
+    // paddingTop: '56.25%', // 9/16 = 0.5625
+  }}
+>
+  16:9 aspect ratio
+</Box>
+```
+
+### Card with Fixed Dimensions
+
+```jsx
+<Box
+  width={300}
+  height={400}
+  border={1}
+  borderColor="divider"
+  borderRadius={2}
+  overflow="hidden"
+>
+  <Box height={200} bgcolor="grey.200">
+    Image area
+  </Box>
+  <Box height={200} p={2}>
+    Content area
+  </Box>
+</Box>
+```
+
+### Sidebar Layout
+
+```jsx
+<Box display="flex" minHeight="100vh">
+  <Box
+    width={{ xs: 1, md: 250 }}
+    minHeight={{ xs: 'auto', md: '100vh' }}
+    bgcolor="background.paper"
+  >
+    Sidebar
+  </Box>
+  <Box flexGrow={1} p={3}>
+    Main content
+  </Box>
+</Box>
+```
+
+### Centered Modal
+
+```jsx
+<Box
+  width={1}
+  maxWidth={500}
+  mx="auto"
+  my={4}
+  p={3}
+  bgcolor="background.paper"
+  borderRadius={2}
+>
+  Modal content
+</Box>
+```
+
+### Grid Item Sizing
+
+```jsx
+<Box display="grid" gridTemplateColumns="repeat(12, 1fr)" gap={2}>
+  <Box gridColumn="span 12" md="span 4">
+    1/3 width on desktop
+  </Box>
+  <Box gridColumn="span 12" md="span 8">
+    2/3 width on desktop
+  </Box>
+</Box>
+```
+
+## Fractional Widths
+
+```jsx
+{/* Using decimals */}
+<Box width={0.25}>25%</Box>
+<Box width={0.5}>50%</Box>
+<Box width={0.75}>75%</Box>
+<Box width={1}>100%</Box>
+
+{/* Using fractions */}
+<Box width={1/4}>25%</Box>
+<Box width={1/3}>33.33%</Box>
+<Box width={1/2}>50%</Box>
+<Box width={2/3}>66.66%</Box>
+<Box width={3/4}>75%</Box>
+```
+
+## Viewport Units
+
+```jsx
+<Box width="100vw">Full viewport width</Box>
+<Box height="100vh">Full viewport height</Box>
+<Box minHeight="50vh">Minimum 50% viewport height</Box>
+```
+
+## Constrained Content
+
+```jsx
+<Box
+  width={1}
+  maxWidth="md"
+  minHeight="100vh"
+  mx="auto"
+  p={3}
+>
+  Centered content with constraints
+</Box>
+```
+
+## Responsive Sizing
+
+```jsx
+<Box
+  width={{ xs: 1, sm: 0.75, md: 0.5, lg: 0.33 }}
+  height={{ xs: 200, md: 300 }}
+  maxWidth={{ xs: '100%', sm: 600 }}
+>
+  Fully responsive sizing
+</Box>
+```
+
+## TypeScript
+
+```tsx
+import { Box } from '@mui/system';
+
+interface SizedBoxProps {
+  width?: number | string;
+  height?: number | string;
+  children: React.ReactNode;
+}
+
+function SizedBox({ width = 1, height = 'auto', children }: SizedBoxProps) {
+  return (
+    <Box width={width} height={height}>
+      {children}
+    </Box>
+  );
+}
+
+// With responsive values
+interface ResponsiveBoxProps {
+  width?: {
+    xs?: number | string;
+    sm?: number | string;
+    md?: number | string;
+  };
+  children: React.ReactNode;
+}
+
+function ResponsiveBox({ width, children }: ResponsiveBoxProps) {
+  return <Box width={width}>{children}</Box>;
+}
+```
+
+## Available Properties
+
+| Prop | CSS Property | Transform | Example Values |
+|------|--------------|-----------|----------------|
+| `width` | `width` | `sizingTransform` | `100`, `'50%'`, `0.5`, `1/2`, `'auto'` |
+| `maxWidth` | `max-width` | Breakpoint aware | `500`, `'sm'`, `'md'`, `1`, `'100%'` |
+| `minWidth` | `min-width` | `sizingTransform` | `300`, `0.5`, `'50%'` |
+| `height` | `height` | `sizingTransform` | `200`, `'100vh'`, `0.5`, `'auto'` |
+| `maxHeight` | `max-height` | `sizingTransform` | `400`, `'80vh'`, `0.8` |
+| `minHeight` | `min-height` | `sizingTransform` | `200`, `'100vh'`, `0.5` |
+| `boxSizing` | `box-sizing` | - | `'border-box'`, `'content-box'` |
+
+## Sizing Transform Examples
+
+```javascript
+sizingTransform(0)      // 0
+sizingTransform(0.5)    // '50%'
+sizingTransform(0.75)   // '75%'
+sizingTransform(1)      // '100%'
+sizingTransform(2)      // 2 (no transform, stays as number)
+sizingTransform(100)    // 100 (no transform)
+sizingTransform('50%')  // '50%' (strings pass through)
+```
+
+## Related
+
+- [Display](/system/display) - Display utilities
+- [Spacing](/system/spacing) - Margin and padding
+- [Box Component](/system/box) - Using sizing with Box

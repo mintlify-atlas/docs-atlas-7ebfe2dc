@@ -1,0 +1,611 @@
+---
+title: The sx Prop - Detailed Guide
+description: Complete guide to using the sx prop in MUI System
+---
+
+# The `sx` Prop - Detailed Guide
+
+The `sx` prop is a powerful shortcut for defining custom styles with access to the theme. It provides a superset of CSS with additional features for responsive design and theme integration.
+
+## Implementation
+
+The `sx` prop is powered by the `styleFunctionSx` from `styleFunctionSx.js:78-141`:
+
+```javascript
+function styleFunctionSx(props) {
+  const { sx, theme = {}, nested } = props || {};
+
+  if (!sx) {
+    return null; // Emotion & styled-components will neglect null
+  }
+
+  const config = theme.unstable_sxConfig ?? defaultSxConfig;
+
+  function traverse(sxInput) {
+    let sxObject = sxInput;
+    if (typeof sxInput === 'function') {
+      sxObject = sxInput(theme);
+    } else if (typeof sxInput !== 'object') {
+      return sxInput;
+    }
+    if (!sxObject) {
+      return null;
+    }
+    // ... traversal logic
+  }
+
+  return Array.isArray(sx) ? sx.map(traverse) : traverse(sx);
+}
+```
+
+## Basic Usage
+
+### Object Syntax
+
+```jsx
+import { Box } from '@mui/system';
+
+<Box
+  sx={{
+    width: 300,
+    height: 300,
+    backgroundColor: 'primary.main',
+    borderRadius: 1,
+  }}
+/>
+```
+
+### Function Syntax
+
+Access the theme directly:
+
+```jsx
+<Box
+  sx={(theme) => ({
+    width: 300,
+    backgroundColor: theme.palette.primary.main,
+    padding: theme.spacing(2),
+  })}
+/>
+```
+
+### Array Syntax
+
+Combine multiple style objects:
+
+```jsx
+<Box
+  sx={[
+    {
+      width: 300,
+      height: 300,
+    },
+    (theme) => ({
+      backgroundColor: theme.palette.primary.main,
+    }),
+  ]}
+/>
+```
+
+## Theme Access
+
+### Palette
+
+Access palette colors using dot notation:
+
+```jsx
+<Box
+  sx={{
+    color: 'primary.main',
+    bgcolor: 'background.paper',
+    borderColor: 'divider',
+  }}
+/>
+```
+
+From `defaultSxConfig.js:69-81`:
+
+```javascript
+color: {
+  themeKey: 'palette',
+  transform: paletteTransform,
+},
+bgcolor: {
+  themeKey: 'palette',
+  cssProperty: 'backgroundColor',
+  transform: paletteTransform,
+},
+```
+
+### Spacing
+
+Use spacing scale with shorthand properties:
+
+```jsx
+<Box
+  sx={{
+    m: 1,        // margin: theme.spacing(1)
+    mt: 2,       // marginTop: theme.spacing(2)
+    mx: 'auto',  // marginLeft & marginRight: 'auto'
+    p: 2,        // padding: theme.spacing(2)
+    py: 3,       // paddingTop & paddingBottom: theme.spacing(3)
+  }}
+/>
+```
+
+### Typography
+
+Access typography settings:
+
+```jsx
+<Box
+  sx={{
+    fontFamily: 'h1.fontFamily',
+    fontSize: 'h4.fontSize',
+    fontWeight: 'bold',
+    typography: 'body1', // Apply entire typography variant
+  }}
+/>
+```
+
+### Breakpoints
+
+Reference breakpoint values:
+
+```jsx
+<Box
+  sx={{
+    maxWidth: 'sm', // theme.breakpoints.values.sm
+  }}
+/>
+```
+
+### Shadows
+
+Use theme shadows:
+
+```jsx
+<Box
+  sx={{
+    boxShadow: 1, // theme.shadows[1]
+  }}
+/>
+```
+
+### Border Radius
+
+Apply theme border radius:
+
+```jsx
+<Box
+  sx={{
+    borderRadius: 1, // theme.shape.borderRadius
+    borderRadius: 2, // theme.shape.borderRadius * 2
+  }}
+/>
+```
+
+## Responsive Styles
+
+### Object Syntax
+
+Define styles for specific breakpoints:
+
+```jsx
+<Box
+  sx={{
+    width: {
+      xs: '100%',   // 0-600px
+      sm: '50%',    // 600-900px
+      md: '33.33%', // 900-1200px
+      lg: '25%',    // 1200-1536px
+      xl: '20%',    // 1536px+
+    },
+  }}
+/>
+```
+
+### Array Syntax (Mobile-First)
+
+Provide values in ascending breakpoint order:
+
+```jsx
+<Box
+  sx={{
+    fontSize: ['12px', '14px', '16px', '18px'],
+    // xs: 12px, sm: 14px, md: 16px, lg: 18px
+  }}
+/>
+```
+
+### Mixed Responsive Values
+
+```jsx
+<Box
+  sx={{
+    display: { xs: 'block', md: 'flex' },
+    flexDirection: { md: 'row', lg: 'column' },
+    width: ['100%', '80%', '60%', '50%'],
+  }}
+/>
+```
+
+## CSS Properties
+
+### All Standard CSS
+
+All CSS properties are supported:
+
+```jsx
+<Box
+  sx={{
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 1,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  }}
+/>
+```
+
+### Shorthand Properties
+
+From `spacing.js:7-26`:
+
+```javascript
+const properties = {
+  m: 'margin',
+  p: 'padding',
+};
+
+const directions = {
+  t: 'Top',
+  r: 'Right',
+  b: 'Bottom',
+  l: 'Left',
+  x: ['Left', 'Right'],
+  y: ['Top', 'Bottom'],
+};
+
+const aliases = {
+  marginX: 'mx',
+  marginY: 'my',
+  paddingX: 'px',
+  paddingY: 'py',
+};
+```
+
+Available shorthands:
+- `m, mt, mr, mb, ml, mx, my` - Margin
+- `p, pt, pr, pb, pl, px, py` - Padding
+- `bgcolor` - Background color
+
+## Pseudo-Selectors
+
+### Hover and Focus
+
+```jsx
+<Box
+  sx={{
+    color: 'primary.main',
+    '&:hover': {
+      color: 'primary.dark',
+      backgroundColor: 'action.hover',
+    },
+    '&:focus': {
+      outline: '2px solid',
+      outlineColor: 'primary.main',
+    },
+  }}
+/>
+```
+
+### Active and Disabled
+
+```jsx
+<Box
+  sx={{
+    '&:active': {
+      transform: 'scale(0.98)',
+    },
+    '&:disabled': {
+      opacity: 0.5,
+      cursor: 'not-allowed',
+    },
+  }}
+/>
+```
+
+### Other Pseudo-Selectors
+
+```jsx
+<Box
+  sx={{
+    '&::before': {
+      content: '""',
+      display: 'block',
+    },
+    '&::after': {
+      content: '"→"',
+      marginLeft: 1,
+    },
+    '&:first-of-type': {
+      marginTop: 0,
+    },
+    '&:last-of-type': {
+      marginBottom: 0,
+    },
+  }}
+/>
+```
+
+## Nested Selectors
+
+### Child Selectors
+
+```jsx
+<Box
+  sx={{
+    '& > button': {
+      margin: 1,
+    },
+    '& .MuiButton-root': {
+      textTransform: 'none',
+    },
+  }}
+/>
+```
+
+### Descendant Selectors
+
+```jsx
+<Box
+  sx={{
+    '& p': {
+      marginBottom: 2,
+    },
+    '& a': {
+      color: 'primary.main',
+      textDecoration: 'none',
+      '&:hover': {
+        textDecoration: 'underline',
+      },
+    },
+  }}
+/>
+```
+
+## Media Queries
+
+### Custom Media Queries
+
+```jsx
+<Box
+  sx={{
+    '@media (min-width: 600px)': {
+      fontSize: '1.2rem',
+    },
+    '@media (max-width: 900px)': {
+      display: 'none',
+    },
+  }}
+/>
+```
+
+### Print Styles
+
+```jsx
+<Box
+  sx={{
+    '@media print': {
+      display: 'none',
+    },
+  }}
+/>
+```
+
+Or use the `displayPrint` shorthand from `defaultSxConfig.js:207-214`:
+
+```jsx
+<Box
+  sx={{
+    displayPrint: 'none',
+  }}
+/>
+```
+
+## Advanced Patterns
+
+### Conditional Styles
+
+```jsx
+function Card({ featured }) {
+  return (
+    <Box
+      sx={{
+        padding: 2,
+        ...(featured && {
+          border: '2px solid',
+          borderColor: 'primary.main',
+          backgroundColor: 'primary.light',
+        }),
+      }}
+    />
+  );
+}
+```
+
+### Combining with Props
+
+```jsx
+function CustomBox({ error, ...props }) {
+  return (
+    <Box
+      {...props}
+      sx={[
+        {
+          padding: 2,
+          border: '1px solid',
+          borderColor: 'divider',
+        },
+        error && {
+          borderColor: 'error.main',
+          backgroundColor: 'error.light',
+        },
+        ...(Array.isArray(props.sx) ? props.sx : [props.sx]),
+      ]}
+    />
+  );
+}
+```
+
+### Dynamic Theme Values
+
+```jsx
+<Box
+  sx={(theme) => ({
+    backgroundColor:
+      theme.palette.mode === 'dark'
+        ? theme.palette.grey[900]
+        : theme.palette.grey[100],
+    color:
+      theme.palette.mode === 'dark'
+        ? theme.palette.grey[100]
+        : theme.palette.grey[900],
+  })}
+/>
+```
+
+## TypeScript
+
+### SxProps Type
+
+```tsx
+import { SxProps, Theme } from '@mui/system';
+
+const styles: SxProps<Theme> = {
+  width: 300,
+  height: 300,
+  backgroundColor: 'primary.main',
+};
+
+function MyComponent() {
+  return <Box sx={styles} />;
+}
+```
+
+### Type-safe Theme Access
+
+```tsx
+import { SxProps, Theme } from '@mui/system';
+
+const getStyles = (theme: Theme): SxProps<Theme> => ({
+  color: theme.palette.primary.main,
+  padding: theme.spacing(2),
+});
+
+function MyComponent() {
+  return <Box sx={(theme) => getStyles(theme)} />;
+}
+```
+
+### Component Props with sx
+
+```tsx
+import { SxProps, Theme } from '@mui/system';
+
+interface CardProps {
+  title: string;
+  sx?: SxProps<Theme>;
+}
+
+function Card({ title, sx }: CardProps) {
+  return (
+    <Box
+      sx={[
+        {
+          padding: 2,
+          borderRadius: 1,
+        },
+        ...(Array.isArray(sx) ? sx : [sx]),
+      ]}
+    >
+      {title}
+    </Box>
+  );
+}
+```
+
+## Performance Considerations
+
+### Memoization
+
+Styles are automatically memoized, but you can optimize further:
+
+```jsx
+import { useMemo } from 'react';
+
+function MyComponent({ color }) {
+  const styles = useMemo(
+    () => ({
+      backgroundColor: color,
+      padding: 2,
+    }),
+    [color]
+  );
+
+  return <Box sx={styles} />;
+}
+```
+
+### Static Styles
+
+Define static styles outside components:
+
+```jsx
+const cardStyles = {
+  padding: 2,
+  borderRadius: 1,
+  boxShadow: 1,
+};
+
+function Card() {
+  return <Box sx={cardStyles} />;
+}
+```
+
+## Configuration
+
+The `sx` prop behavior is configured via `defaultSxConfig` from `defaultSxConfig.js`. You can customize it:
+
+```jsx
+import { createTheme } from '@mui/system';
+
+const theme = createTheme({
+  unstable_sxConfig: {
+    // Custom configuration
+    customProp: {
+      themeKey: 'customTheme',
+      transform: (value) => value * 2,
+    },
+  },
+});
+```
+
+## Best Practices
+
+1. **Use theme values** - Always reference theme for consistency
+2. **Prefer object syntax** - More readable than function syntax
+3. **Extract common styles** - Define reusable style objects
+4. **Use responsive objects** - Clearer than arrays for responsive design
+5. **Leverage TypeScript** - Type safety prevents errors
+6. **Memoize dynamic styles** - Optimize re-renders
+7. **Keep it simple** - Complex styles may be better in `styled()`
+
+## Related
+
+- [Box Component](/system/box) - Primary component using sx
+- [styled() API](/system/styled) - For complex reusable components
+- [Breakpoints](/system/getting-started#responsive-design) - Responsive design guide

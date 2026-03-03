@@ -1,0 +1,648 @@
+---
+title: Usage
+description: Essential patterns and best practices for using Material UI components effectively in your React applications.
+---
+
+# Usage Guide
+
+Learn essential patterns and best practices for using Material UI effectively in your React applications.
+
+## Component Imports
+
+Material UI supports multiple import styles. Use one-level deep imports for optimal bundle size:
+
+```tsx
+// Recommended: One-level deep imports
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import Card from '@mui/material/Card';
+
+// Also works: Named imports from root
+import { Button, TextField, Card } from '@mui/material';
+
+// Icon imports
+import DeleteIcon from '@mui/icons-material/Delete';
+import SaveIcon from '@mui/icons-material/Save';
+```
+
+<Info>
+  One-level deep imports (`@mui/material/Button`) provide better tree-shaking in package development, but both styles work well in applications.
+</Info>
+
+## The sx Prop
+
+The `sx` prop is the most powerful styling solution in Material UI. It provides a shortcut for defining custom styles with direct access to the theme:
+
+### Basic Usage
+
+```tsx
+import Box from '@mui/material/Box';
+
+<Box
+  sx={{
+    width: 300,
+    height: 200,
+    backgroundColor: 'primary.main',
+    '&:hover': {
+      backgroundColor: 'primary.dark',
+    },
+  }}
+/>
+```
+
+### Theme-Aware Styling
+
+Access theme values directly in the `sx` prop:
+
+```tsx
+import Button from '@mui/material/Button';
+
+<Button
+  sx={{
+    // Theme colors
+    bgcolor: 'primary.main',
+    color: 'primary.contrastText',
+    
+    // Theme spacing (multiplied by 8px by default)
+    p: 2,              // padding: 16px
+    m: 1,              // margin: 8px
+    mb: 3,             // marginBottom: 24px
+    
+    // Responsive values
+    width: { xs: '100%', sm: '50%', md: '33%' },
+    
+    // Theme breakpoints
+    display: { xs: 'block', md: 'flex' },
+  }}
+/>
+```
+
+### Responsive Design
+
+```tsx
+import Typography from '@mui/material/Typography';
+
+<Typography
+  sx={{
+    fontSize: {
+      xs: '1rem',    // 0px and up
+      sm: '1.25rem', // 600px and up
+      md: '1.5rem',  // 900px and up
+      lg: '2rem',    // 1200px and up
+      xl: '2.5rem',  // 1536px and up
+    },
+    textAlign: { xs: 'center', md: 'left' },
+  }}
+>
+  Responsive Typography
+</Typography>
+```
+
+### System Properties
+
+The `sx` prop supports all CSS properties plus system shortcuts:
+
+```tsx
+import Box from '@mui/material/Box';
+
+<Box
+  sx={{
+    // Padding & Margin shortcuts
+    p: 2,      // padding: 16px
+    pt: 1,     // paddingTop: 8px
+    px: 3,     // paddingLeft & paddingRight: 24px
+    py: 2,     // paddingTop & paddingBottom: 16px
+    m: 2,      // margin: 16px
+    mt: 3,     // marginTop: 24px
+    mx: 'auto', // marginLeft & marginRight: auto
+    
+    // Display
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    
+    // Sizing
+    width: 1,        // 100%
+    minWidth: 300,
+    maxWidth: 'sm',  // theme.breakpoints.values.sm
+    height: '100vh',
+    
+    // Borders
+    border: 1,
+    borderColor: 'divider',
+    borderRadius: 2,  // 8px
+    
+    // Shadows
+    boxShadow: 3,
+  }}
+/>
+```
+
+## TypeScript Support
+
+Material UI provides comprehensive TypeScript definitions for all components.
+
+### Component Props
+
+Import and use prop types for type-safe component development:
+
+```tsx
+import Button from '@mui/material/Button';
+import type { ButtonProps } from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+import type { TextFieldProps } from '@mui/material/TextField';
+
+interface CustomButtonProps extends ButtonProps {
+  label: string;
+  loading?: boolean;
+}
+
+function CustomButton({ label, loading, ...props }: CustomButtonProps) {
+  return (
+    <Button disabled={loading} {...props}>
+      {loading ? 'Loading...' : label}
+    </Button>
+  );
+}
+
+// TextField variants are fully typed
+function CustomTextField(props: TextFieldProps<'outlined'>) {
+  return <TextField variant="outlined" {...props} />;
+}
+```
+
+### Event Handlers
+
+Event handlers are fully typed:
+
+```tsx
+import * as React from 'react';
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+
+function FormExample() {
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    console.log('Button clicked:', event.currentTarget);
+  };
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    console.log('Input value:', event.target.value);
+  };
+
+  return (
+    <>
+      <TextField onChange={handleChange} />
+      <Button onClick={handleClick}>Submit</Button>
+    </>
+  );
+}
+```
+
+### Theme Typing
+
+Extend the theme with custom properties:
+
+```tsx
+import { createTheme } from '@mui/material/styles';
+
+declare module '@mui/material/styles' {
+  interface Theme {
+    customColors: {
+      brand: string;
+      accent: string;
+    };
+  }
+  interface ThemeOptions {
+    customColors?: {
+      brand?: string;
+      accent?: string;
+    };
+  }
+}
+
+const theme = createTheme({
+  customColors: {
+    brand: '#0066cc',
+    accent: '#ff6b35',
+  },
+});
+
+// Use custom theme properties
+<Box sx={{ bgcolor: (theme) => theme.customColors.brand }} />
+```
+
+## Theming
+
+### Creating a Theme
+
+Customize Material UI's default theme to match your brand:
+
+```tsx
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#1976d2',
+      light: '#42a5f5',
+      dark: '#1565c0',
+      contrastText: '#fff',
+    },
+    secondary: {
+      main: '#dc004e',
+      light: '#f73378',
+      dark: '#9a0036',
+      contrastText: '#fff',
+    },
+    error: {
+      main: '#f44336',
+    },
+    warning: {
+      main: '#ff9800',
+    },
+    info: {
+      main: '#2196f3',
+    },
+    success: {
+      main: '#4caf50',
+    },
+  },
+  typography: {
+    fontFamily: 'Roboto, Arial, sans-serif',
+    h1: {
+      fontSize: '2.5rem',
+      fontWeight: 500,
+    },
+    button: {
+      textTransform: 'none',
+    },
+  },
+  spacing: 8, // Base spacing unit (default: 8px)
+  shape: {
+    borderRadius: 4, // Default border radius
+  },
+});
+
+function App() {
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      {/* Your app */}
+    </ThemeProvider>
+  );
+}
+```
+
+### Dark Mode
+
+Implement dark mode with theme mode toggling:
+
+```tsx
+import * as React from 'react';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import Button from '@mui/material/Button';
+
+function App() {
+  const [mode, setMode] = React.useState<'light' | 'dark'>('light');
+
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: {
+          mode,
+          ...(mode === 'light'
+            ? {
+                // Light mode colors
+                primary: { main: '#1976d2' },
+                background: {
+                  default: '#fafafa',
+                  paper: '#fff',
+                },
+              }
+            : {
+                // Dark mode colors
+                primary: { main: '#90caf9' },
+                background: {
+                  default: '#121212',
+                  paper: '#1e1e1e',
+                },
+              }),
+        },
+      }),
+    [mode]
+  );
+
+  const toggleMode = () => {
+    setMode((prevMode) => (prevMode === 'light' ? 'dark' : 'light'));
+  };
+
+  return (
+    <ThemeProvider theme={theme}>
+      <CssBaseline />
+      <Button onClick={toggleMode}>
+        Toggle {mode === 'light' ? 'Dark' : 'Light'} Mode
+      </Button>
+      {/* Your app */}
+    </ThemeProvider>
+  );
+}
+```
+
+## Layout Patterns
+
+### Container and Spacing
+
+```tsx
+import Container from '@mui/material/Container';
+import Box from '@mui/material/Box';
+import Typography from '@mui/material/Typography';
+
+function PageLayout() {
+  return (
+    <Container maxWidth="lg">
+      <Box sx={{ my: 4 }}>
+        <Typography variant="h4" component="h1" gutterBottom>
+          Page Title
+        </Typography>
+        <Typography variant="body1">
+          Page content goes here
+        </Typography>
+      </Box>
+    </Container>
+  );
+}
+```
+
+### Grid Layout
+
+```tsx
+import Grid from '@mui/material/Grid2';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+
+function GridLayout() {
+  return (
+    <Grid container spacing={3}>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <Card>
+          <CardContent>Item 1</CardContent>
+        </Card>
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <Card>
+          <CardContent>Item 2</CardContent>
+        </Card>
+      </Grid>
+      <Grid size={{ xs: 12, sm: 6, md: 4 }}>
+        <Card>
+          <CardContent>Item 3</CardContent>
+        </Card>
+      </Grid>
+    </Grid>
+  );
+}
+```
+
+### Stack Layout
+
+```tsx
+import Stack from '@mui/material/Stack';
+import Button from '@mui/material/Button';
+
+function ActionButtons() {
+  return (
+    <Stack direction="row" spacing={2}>
+      <Button variant="contained">Save</Button>
+      <Button variant="outlined">Cancel</Button>
+      <Button>Reset</Button>
+    </Stack>
+  );
+}
+```
+
+## Form Handling
+
+### Controlled Inputs
+
+```tsx
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
+}
+
+function ContactForm() {
+  const [formData, setFormData] = React.useState<FormData>({
+    name: '',
+    email: '',
+    message: '',
+  });
+
+  const handleChange = (field: keyof FormData) => (
+    event: React.ChangeEvent<HTMLInputElement>
+  ) => {
+    setFormData({ ...formData, [field]: event.target.value });
+  };
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    console.log('Form submitted:', formData);
+  };
+
+  return (
+    <Box component="form" onSubmit={handleSubmit}>
+      <Stack spacing={2}>
+        <TextField
+          label="Name"
+          value={formData.name}
+          onChange={handleChange('name')}
+          required
+          fullWidth
+        />
+        <TextField
+          label="Email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange('email')}
+          required
+          fullWidth
+        />
+        <TextField
+          label="Message"
+          value={formData.message}
+          onChange={handleChange('message')}
+          multiline
+          rows={4}
+          required
+          fullWidth
+        />
+        <Button type="submit" variant="contained" fullWidth>
+          Submit
+        </Button>
+      </Stack>
+    </Box>
+  );
+}
+```
+
+### Form Validation
+
+```tsx
+import * as React from 'react';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Stack from '@mui/material/Stack';
+
+function ValidatedForm() {
+  const [email, setEmail] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const [errors, setErrors] = React.useState({
+    email: '',
+    password: '',
+  });
+
+  const validateEmail = (value: string) => {
+    if (!value) return 'Email is required';
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+      return 'Invalid email address';
+    }
+    return '';
+  };
+
+  const validatePassword = (value: string) => {
+    if (!value) return 'Password is required';
+    if (value.length < 8) return 'Password must be at least 8 characters';
+    return '';
+  };
+
+  const handleSubmit = (event: React.FormEvent) => {
+    event.preventDefault();
+    
+    const emailError = validateEmail(email);
+    const passwordError = validatePassword(password);
+    
+    setErrors({
+      email: emailError,
+      password: passwordError,
+    });
+
+    if (!emailError && !passwordError) {
+      console.log('Form is valid');
+    }
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <Stack spacing={2}>
+        <TextField
+          label="Email"
+          type="email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          error={!!errors.email}
+          helperText={errors.email}
+          fullWidth
+        />
+        <TextField
+          label="Password"
+          type="password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          error={!!errors.password}
+          helperText={errors.password}
+          fullWidth
+        />
+        <Button type="submit" variant="contained" fullWidth>
+          Sign In
+        </Button>
+      </Stack>
+    </form>
+  );
+}
+```
+
+## Performance Optimization
+
+### One-Level Imports
+
+Use specific imports to reduce bundle size:
+
+```tsx
+// Good: Specific imports
+import Button from '@mui/material/Button';
+import TextField from '@mui/material/TextField';
+
+// Acceptable: Named imports
+import { Button, TextField } from '@mui/material';
+```
+
+### Lazy Loading
+
+Lazy load heavy components:
+
+```tsx
+import * as React from 'react';
+
+const HeavyComponent = React.lazy(() => import('./HeavyComponent'));
+
+function App() {
+  return (
+    <React.Suspense fallback={<div>Loading...</div>}>
+      <HeavyComponent />
+    </React.Suspense>
+  );
+}
+```
+
+### Memoization
+
+Memoize theme creation:
+
+```tsx
+import * as React from 'react';
+import { createTheme } from '@mui/material/styles';
+
+function App() {
+  const [mode, setMode] = React.useState<'light' | 'dark'>('light');
+  
+  // Theme is only recreated when mode changes
+  const theme = React.useMemo(
+    () =>
+      createTheme({
+        palette: { mode },
+      }),
+    [mode]
+  );
+
+  return <ThemeProvider theme={theme}>{/* ... */}</ThemeProvider>;
+}
+```
+
+## Next Steps
+
+<CardGroup cols={2}>
+  <Card title="Component API Reference" icon="book" href="https://mui.com/material-ui/api/button/">
+    Explore detailed API documentation for all components
+  </Card>
+  
+  <Card title="Customization Guide" icon="palette" href="https://mui.com/material-ui/customization/theming/">
+    Learn advanced theming and customization techniques
+  </Card>
+  
+  <Card title="Example Templates" icon="layout" href="/templates">
+    Browse production-ready templates and examples
+  </Card>
+  
+  <Card title="Migration Guides" icon="arrow-right" href="https://mui.com/material-ui/migration/migration-v5/">
+    Upgrade from previous versions of Material UI
+  </Card>
+</CardGroup>

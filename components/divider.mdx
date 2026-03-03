@@ -1,0 +1,230 @@
+---
+title: Divider
+description: A divider is a thin line that groups content in lists and layouts.
+---
+
+## Introduction
+
+Dividers separate content into clear groups. They can be used in lists, layouts, and other components to create visual hierarchy.
+
+## Basic Usage
+
+```tsx
+import Divider from '@mui/material/Divider';
+
+function Demo() {
+  return <Divider />;
+}
+```
+
+## List Dividers
+
+The divider renders as an `<hr>` by default. You can save rendering this DOM element by using the `divider` prop on the `ListItem` component.
+
+```tsx
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemText from '@mui/material/ListItemText';
+import Divider from '@mui/material/Divider';
+
+function ListDividers() {
+  return (
+    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+      <ListItem>
+        <ListItemText primary="Inbox" />
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText primary="Drafts" />
+      </ListItem>
+      <Divider />
+      <ListItem>
+        <ListItemText primary="Trash" />
+      </ListItem>
+    </List>
+  );
+}
+```
+
+## Inset Dividers
+
+Use the `variant="inset"` prop to create an inset divider.
+
+```tsx
+import List from '@mui/material/List';
+import ListItem from '@mui/material/ListItem';
+import ListItemAvatar from '@mui/material/ListItemAvatar';
+import ListItemText from '@mui/material/ListItemText';
+import Avatar from '@mui/material/Avatar';
+import Divider from '@mui/material/Divider';
+
+function InsetDividers() {
+  return (
+    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar>A</Avatar>
+        </ListItemAvatar>
+        <ListItemText primary="Avatar" secondary="With inset divider" />
+      </ListItem>
+      <Divider variant="inset" />
+      <ListItem>
+        <ListItemAvatar>
+          <Avatar>B</Avatar>
+        </ListItemAvatar>
+        <ListItemText primary="Avatar" secondary="With inset divider" />
+      </ListItem>
+    </List>
+  );
+}
+```
+
+## Middle Divider
+
+Use the `variant="middle"` prop to create a divider with left and right margins.
+
+```tsx
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+
+function MiddleDividers() {
+  return (
+    <Box sx={{ width: '100%', maxWidth: 360 }}>
+      <Box sx={{ p: 2 }}>Item 1</Box>
+      <Divider variant="middle" />
+      <Box sx={{ p: 2 }}>Item 2</Box>
+      <Divider variant="middle" />
+      <Box sx={{ p: 2 }}>Item 3</Box>
+    </Box>
+  );
+}
+```
+
+## Dividers with Text
+
+You can render a divider with content by passing children to the Divider component.
+
+```tsx
+import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
+
+function DividerText() {
+  return (
+    <Box sx={{ width: '100%', maxWidth: 360 }}>
+      <Box sx={{ p: 2 }}>Above the divider</Box>
+      <Divider>CENTER</Divider>
+      <Box sx={{ p: 2 }}>Below the divider</Box>
+    </Box>
+  );
+}
+```
+
+## Text Alignment
+
+Use the `textAlign` prop to control the alignment of the divider content.
+
+```tsx
+import Divider from '@mui/material/Divider';
+import Box from '@mui/material/Box';
+
+function DividerTextAlign() {
+  return (
+    <Box sx={{ width: '100%', maxWidth: 360 }}>
+      <Divider textAlign="left">LEFT</Divider>
+      <Divider textAlign="center">CENTER</Divider>
+      <Divider textAlign="right">RIGHT</Divider>
+      <Divider>DEFAULT (CENTER)</Divider>
+    </Box>
+  );
+}
+```
+
+## Vertical Dividers
+
+You can render a vertical divider using the `orientation="vertical"` prop. Note that vertical dividers have a calculated height of `0px` by default. Use the `flexItem` prop to display correctly in flex containers.
+
+```tsx
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+
+function VerticalDividers() {
+  return (
+    <Box
+      sx={{
+        display: 'flex',
+        alignItems: 'center',
+        width: 'fit-content',
+        border: (theme) => `1px solid ${theme.palette.divider}`,
+        borderRadius: 1,
+        bgcolor: 'background.paper',
+        color: 'text.secondary',
+      }}
+    >
+      <Box sx={{ p: 2 }}>Item 1</Box>
+      <Divider orientation="vertical" flexItem />
+      <Box sx={{ p: 2 }}>Item 2</Box>
+      <Divider orientation="vertical" flexItem />
+      <Box sx={{ p: 2 }}>Item 3</Box>
+    </Box>
+  );
+}
+```
+
+## Vertical Divider with Text
+
+You can also render a vertical divider with content.
+
+```tsx
+import Box from '@mui/material/Box';
+import Divider from '@mui/material/Divider';
+
+function VerticalDividerText() {
+  return (
+    <Box sx={{ display: 'flex', alignItems: 'center', height: 100 }}>
+      <Box sx={{ p: 2 }}>Left</Box>
+      <Divider orientation="vertical" flexItem>
+        OR
+      </Divider>
+      <Box sx={{ p: 2 }}>Right</Box>
+    </Box>
+  );
+}
+```
+
+## Props
+
+### Divider Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `absolute` | `boolean` | `false` | Absolutely position the element. |
+| `children` | `node` | - | The content of the component. |
+| `classes` | `object` | - | Override or extend the styles applied to the component. |
+| `flexItem` | `boolean` | `false` | If true, a vertical divider will have the correct height when used in flex container. |
+| `light` | `boolean` | `false` | **Deprecated.** If true, the divider will have a lighter color. Use `sx={{ opacity: 0.6 }}` instead. |
+| `orientation` | `'horizontal'` \| `'vertical'` | `'horizontal'` | The component orientation. |
+| `sx` | `SxProps<Theme>` | - | The system prop for defining CSS overrides and additional styles. |
+| `textAlign` | `'center'` \| `'left'` \| `'right'` | `'center'` | The text alignment. |
+| `variant` | `'fullWidth'` \| `'inset'` \| `'middle'` | `'fullWidth'` | The variant to use. |
+
+## CSS Classes
+
+The following CSS classes are available for customization:
+
+- `.MuiDivider-root` - Styles applied to the root element.
+- `.MuiDivider-absolute` - Styles applied to the root element if `absolute={true}`.
+- `.MuiDivider-inset` - Styles applied to the root element if `variant="inset"`.
+- `.MuiDivider-fullWidth` - Styles applied to the root element if `variant="fullWidth"`.
+- `.MuiDivider-middle` - Styles applied to the root element if `variant="middle"`.
+- `.MuiDivider-flexItem` - Styles applied to the root element if `flexItem={true}`.
+- `.MuiDivider-vertical` - Styles applied to the root element if `orientation="vertical"`.
+- `.MuiDivider-withChildren` - Styles applied to the root element if `children` is provided.
+- `.MuiDivider-withChildrenVertical` - Styles applied to the root element if `children` and `orientation="vertical"`.
+- `.MuiDivider-textAlignRight` - Styles applied to the root element if `textAlign="right"`.
+- `.MuiDivider-textAlignLeft` - Styles applied to the root element if `textAlign="left"`.
+- `.MuiDivider-wrapper` - Styles applied to the wrapper element if `children` is provided.
+- `.MuiDivider-wrapperVertical` - Styles applied to the wrapper element if `children` and `orientation="vertical"`.
+
+## Accessibility
+
+Dividers are purely presentational and don't require specific accessibility considerations. The component renders as an `<hr>` element by default, which has the implicit ARIA role of `separator`.

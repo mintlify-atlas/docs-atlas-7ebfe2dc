@@ -1,0 +1,203 @@
+---
+title: Container
+description: The Container centers your content horizontally and applies responsive max-width constraints.
+---
+
+# Container
+
+The Container component centers your content horizontally and manages maximum width based on the current breakpoint.
+
+## Basic usage
+
+```tsx
+import Container from '@mui/material/Container';
+
+function Demo() {
+  return (
+    <Container>
+      <Typography>This content is centered and constrained.</Typography>
+    </Container>
+  );
+}
+```
+
+## Fluid
+
+By default, the Container is fluid and will grow with the viewport up to a maximum width determined by the `maxWidth` prop.
+
+```tsx
+<Container maxWidth="sm">
+  <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }} />
+</Container>
+```
+
+## Fixed width
+
+Set `fixed` to true to match the min-width of the current breakpoint instead of being fluid.
+
+```tsx
+<Container fixed>
+  <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }} />
+</Container>
+```
+
+## Max width
+
+Use the `maxWidth` prop to set different maximum widths:
+
+```tsx
+// Extra small - max 600px
+<Container maxWidth="xs">
+  <Box sx={{ bgcolor: 'primary.main', height: '20vh' }} />
+</Container>
+
+// Small - max 900px
+<Container maxWidth="sm">
+  <Box sx={{ bgcolor: 'secondary.main', height: '20vh' }} />
+</Container>
+
+// Medium - max 1200px
+<Container maxWidth="md">
+  <Box sx={{ bgcolor: 'success.main', height: '20vh' }} />
+</Container>
+
+// Large - max 1536px (default)
+<Container maxWidth="lg">
+  <Box sx={{ bgcolor: 'warning.main', height: '20vh' }} />
+</Container>
+
+// Extra large - max 1920px
+<Container maxWidth="xl">
+  <Box sx={{ bgcolor: 'error.main', height: '20vh' }} />
+</Container>
+
+// No max width
+<Container maxWidth={false}>
+  <Box sx={{ bgcolor: 'info.main', height: '20vh' }} />
+</Container>
+```
+
+## Disable gutters
+
+Remove the default left and right padding:
+
+```tsx
+<Container disableGutters>
+  <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }} />
+</Container>
+```
+
+## Props
+
+### ContainerProps
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `children` | `React.ReactNode` | - | The content of the component |
+| `classes` | `Partial<ContainerClasses>` | - | Override or extend the styles applied to the component |
+| `component` | `React.ElementType` | `'div'` | The component used for the root node |
+| `disableGutters` | `boolean` | `false` | If true, left and right padding is removed |
+| `fixed` | `boolean` | `false` | Set the max-width to match the min-width of the current breakpoint |
+| `maxWidth` | `'xs' \| 'sm' \| 'md' \| 'lg' \| 'xl' \| false` | `'lg'` | Determine the max-width of the container |
+| `sx` | `SxProps<Theme>` | - | System prop for defining custom styles |
+
+## Breakpoint values
+
+The default breakpoint values for `maxWidth`:
+
+| Breakpoint | Max-width |
+|------------|----------|
+| `xs` | 600px |
+| `sm` | 900px |
+| `md` | 1200px |
+| `lg` | 1536px |
+| `xl` | 1920px |
+
+## Common patterns
+
+### Page layout
+
+```tsx
+<Container maxWidth="lg">
+  <Box sx={{ my: 4 }}>
+    <Typography variant="h4" component="h1" gutterBottom>
+      Page Title
+    </Typography>
+    <Typography variant="body1">
+      Page content goes here...
+    </Typography>
+  </Box>
+</Container>
+```
+
+### Multiple sections
+
+```tsx
+<>
+  <Container maxWidth="sm">
+    <Box sx={{ bgcolor: 'primary.light', py: 8 }}>
+      <Typography variant="h3" align="center">
+        Hero Section
+      </Typography>
+    </Box>
+  </Container>
+  
+  <Container maxWidth="md">
+    <Box sx={{ py: 4 }}>
+      <Typography variant="h5" gutterBottom>
+        Main Content
+      </Typography>
+      <Typography variant="body1">
+        This section has a different max-width.
+      </Typography>
+    </Box>
+  </Container>
+</>
+```
+
+### Full-width header with contained content
+
+```tsx
+<Box sx={{ bgcolor: 'primary.main', py: 2 }}>
+  <Container maxWidth="lg">
+    <Toolbar>
+      <Typography variant="h6" color="inherit">
+        My App
+      </Typography>
+    </Toolbar>
+  </Container>
+</Box>
+
+<Container maxWidth="lg">
+  <Box sx={{ my: 4 }}>
+    <Typography>Main content</Typography>
+  </Box>
+</Container>
+```
+
+## Customization
+
+### Custom max-width
+
+```tsx
+<Container
+  maxWidth="lg"
+  sx={{
+    maxWidth: '1400px !important',
+  }}
+>
+  <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }} />
+</Container>
+```
+
+### Custom padding
+
+```tsx
+<Container
+  sx={{
+    px: { xs: 2, sm: 3, md: 4 },
+  }}
+>
+  <Box sx={{ bgcolor: '#cfe8fc', height: '100vh' }} />
+</Container>
+```

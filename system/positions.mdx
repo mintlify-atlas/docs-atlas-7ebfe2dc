@@ -1,0 +1,458 @@
+---
+title: Positions
+description: Position and z-index utilities in MUI System
+---
+
+# Positions
+
+Utilities for controlling element positioning.
+
+## Import
+
+```javascript
+import { positions } from '@mui/system';
+```
+
+## API
+
+From `positions/positions.js:29`:
+
+```javascript
+export default compose(position, zIndex, top, right, bottom, left);
+```
+
+## Position Property
+
+Set the position type:
+
+```jsx
+<Box position="static">Static (default)</Box>
+<Box position="relative">Relative</Box>
+<Box position="absolute">Absolute</Box>
+<Box position="fixed">Fixed</Box>
+<Box position="sticky">Sticky</Box>
+```
+
+From `positions.js:4-6`:
+
+```javascript
+export const position = style({
+  prop: 'position',
+});
+```
+
+## Z-Index
+
+Control stacking order with theme integration:
+
+```jsx
+<Box position="relative" zIndex={1}>Layer 1</Box>
+<Box position="relative" zIndex={10}>Layer 10</Box>
+<Box position="relative" zIndex="modal">Modal layer</Box>
+<Box position="relative" zIndex="tooltip">Tooltip layer</Box>
+```
+
+From `positions.js:8-11`:
+
+```javascript
+export const zIndex = style({
+  prop: 'zIndex',
+  themeKey: 'zIndex',
+});
+```
+
+### Theme zIndex Values
+
+```javascript
+import { createTheme } from '@mui/system';
+
+const theme = createTheme({
+  zIndex: {
+    mobileStepper: 1000,
+    speedDial: 1050,
+    appBar: 1100,
+    drawer: 1200,
+    modal: 1300,
+    snackbar: 1400,
+    tooltip: 1500,
+  },
+});
+```
+
+## Offset Properties
+
+### top
+
+Set distance from top edge:
+
+```jsx
+<Box position="absolute" top={0}>Top edge</Box>
+<Box position="absolute" top={16}>16px from top</Box>
+<Box position="absolute" top="50%">50% from top</Box>
+```
+
+From `positions.js:13-15`:
+
+```javascript
+export const top = style({
+  prop: 'top',
+});
+```
+
+### right
+
+Set distance from right edge:
+
+```jsx
+<Box position="absolute" right={0}>Right edge</Box>
+<Box position="absolute" right={16}>16px from right</Box>
+```
+
+From `positions.js:17-19`:
+
+```javascript
+export const right = style({
+  prop: 'right',
+});
+```
+
+### bottom
+
+Set distance from bottom edge:
+
+```jsx
+<Box position="absolute" bottom={0}>Bottom edge</Box>
+<Box position="absolute" bottom={16}>16px from bottom</Box>
+```
+
+From `positions.js:21-23`:
+
+```javascript
+export const bottom = style({
+  prop: 'bottom',
+});
+```
+
+### left
+
+Set distance from left edge:
+
+```jsx
+<Box position="absolute" left={0}>Left edge</Box>
+<Box position="absolute" left={16}>16px from left</Box>
+```
+
+From `positions.js:25-27`:
+
+```javascript
+export const left = style({
+  prop: 'left',
+});
+```
+
+## Common Patterns
+
+### Centered Absolute Element
+
+```jsx
+<Box position="relative" height={400}>
+  <Box
+    position="absolute"
+    top="50%"
+    left="50%"
+    sx={{
+      transform: 'translate(-50%, -50%)',
+    }}
+  >
+    Perfectly centered
+  </Box>
+</Box>
+```
+
+### Corner Positioning
+
+```jsx
+{/* Top-right corner */}
+<Box position="absolute" top={0} right={0} m={2}>
+  Top Right
+</Box>
+
+{/* Bottom-left corner */}
+<Box position="absolute" bottom={0} left={0} m={2}>
+  Bottom Left
+</Box>
+
+{/* All corners */}
+<Box position="absolute" top={0} right={0} bottom={0} left={0}>
+  Fills entire parent
+</Box>
+```
+
+### Fixed Header
+
+```jsx
+<Box
+  position="fixed"
+  top={0}
+  left={0}
+  right={0}
+  zIndex="appBar"
+  bgcolor="background.paper"
+  boxShadow={2}
+  p={2}
+>
+  Fixed header
+</Box>
+```
+
+### Sticky Sidebar
+
+```jsx
+<Box
+  position="sticky"
+  top={16}
+  height="fit-content"
+>
+  Sticky sidebar
+</Box>
+```
+
+### Floating Action Button
+
+```jsx
+<Box
+  position="fixed"
+  bottom={16}
+  right={16}
+  zIndex="speedDial"
+>
+  <Box
+    component="button"
+    width={56}
+    height={56}
+    borderRadius="50%"
+    bgcolor="primary.main"
+    color="primary.contrastText"
+    border="none"
+    boxShadow={6}
+    sx={{ cursor: 'pointer' }}
+  >
+    +
+  </Box>
+</Box>
+```
+
+### Modal Overlay
+
+```jsx
+<Box
+  position="fixed"
+  top={0}
+  left={0}
+  right={0}
+  bottom={0}
+  zIndex="modal"
+  bgcolor="rgba(0, 0, 0, 0.5)"
+  display="flex"
+  justifyContent="center"
+  alignItems="center"
+>
+  <Box
+    bgcolor="background.paper"
+    borderRadius={2}
+    p={3}
+    maxWidth={500}
+  >
+    Modal content
+  </Box>
+</Box>
+```
+
+### Notification Badge
+
+```jsx
+<Box position="relative" display="inline-block">
+  <Box component="button" p={1}>
+    Notifications
+  </Box>
+  <Box
+    position="absolute"
+    top={-8}
+    right={-8}
+    bgcolor="error.main"
+    color="error.contrastText"
+    borderRadius="50%"
+    width={24}
+    height={24}
+    display="flex"
+    justifyContent="center"
+    alignItems="center"
+    fontSize={12}
+  >
+    5
+  </Box>
+</Box>
+```
+
+### Tooltip Positioning
+
+```jsx
+<Box position="relative">
+  <Box component="button">Hover me</Box>
+  <Box
+    position="absolute"
+    bottom="100%"
+    left="50%"
+    zIndex="tooltip"
+    bgcolor="grey.800"
+    color="white"
+    p={1}
+    borderRadius={1}
+    sx={{
+      transform: 'translateX(-50%)',
+      mb: 1,
+      whiteSpace: 'nowrap',
+    }}
+  >
+    Tooltip text
+  </Box>
+</Box>
+```
+
+### Sidebar Layout
+
+```jsx
+<Box position="relative" minHeight="100vh">
+  {/* Fixed sidebar */}
+  <Box
+    position="fixed"
+    top={0}
+    left={0}
+    bottom={0}
+    width={250}
+    bgcolor="background.paper"
+    borderRight={1}
+    borderColor="divider"
+    zIndex="drawer"
+  >
+    Sidebar
+  </Box>
+  
+  {/* Main content with left margin */}
+  <Box ml="250px">
+    Main content
+  </Box>
+</Box>
+```
+
+### Responsive Positioning
+
+```jsx
+<Box
+  position={{ xs: 'static', md: 'fixed' }}
+  top={{ md: 0 }}
+  left={{ md: 0 }}
+  width={{ md: 250 }}
+>
+  Responsive sidebar
+</Box>
+```
+
+## Layering with zIndex
+
+```jsx
+<Box position="relative">
+  <Box
+    position="absolute"
+    top={0}
+    left={0}
+    right={0}
+    bottom={0}
+    bgcolor="primary.light"
+    zIndex={1}
+  >
+    Background layer
+  </Box>
+  
+  <Box
+    position="absolute"
+    top="50%"
+    left="50%"
+    bgcolor="secondary.main"
+    p={2}
+    zIndex={2}
+    sx={{ transform: 'translate(-50%, -50%)' }}
+  >
+    Foreground layer
+  </Box>
+</Box>
+```
+
+## With sx Prop
+
+```jsx
+<Box
+  sx={{
+    position: 'sticky',
+    top: 0,
+    zIndex: 'appBar',
+    bgcolor: 'background.paper',
+    '&::after': {
+      content: '""',
+      position: 'absolute',
+      bottom: 0,
+      left: 0,
+      right: 0,
+      height: 1,
+      bgcolor: 'divider',
+    },
+  }}
+>
+  Sticky header with bottom border
+</Box>
+```
+
+## TypeScript
+
+```tsx
+import { Box } from '@mui/system';
+
+interface PositionedBoxProps {
+  position?: 'static' | 'relative' | 'absolute' | 'fixed' | 'sticky';
+  zIndex?: number | string;
+  children: React.ReactNode;
+}
+
+function PositionedBox({ position = 'relative', zIndex, children }: PositionedBoxProps) {
+  return (
+    <Box position={position} zIndex={zIndex}>
+      {children}
+    </Box>
+  );
+}
+```
+
+## Available Properties
+
+| Prop | CSS Property | Theme Key | Values |
+|------|--------------|-----------|--------|
+| `position` | `position` | - | `static`, `relative`, `absolute`, `fixed`, `sticky` |
+| `zIndex` | `z-index` | `zIndex` | Number or theme key |
+| `top` | `top` | - | Length value |
+| `right` | `right` | - | Length value |
+| `bottom` | `bottom` | - | Length value |
+| `left` | `left` | - | Length value |
+
+## Best Practices
+
+1. **Use relative positioning for containers** - Create positioning contexts
+2. **Theme zIndex values** - Use theme values for consistent layering
+3. **Avoid fixed positioning on mobile** - Can interfere with scrolling
+4. **Use sticky for headers** - Better UX than fixed in most cases
+5. **Center with transform** - Use `transform: translate(-50%, -50%)` for perfect centering
+
+## Related
+
+- [Box Component](/system/box) - Using positions with Box
+- [Display](/system/display) - Display utilities
+- [sx Prop](/system/the-sx-prop) - Advanced positioning with sx

@@ -1,0 +1,74 @@
+---
+title: Switch
+description: Material UI Switch component allows users to toggle between two states.
+---
+
+Switches toggle the state of a single setting on or off.
+
+## Import
+
+```tsx
+import Switch from '@mui/material/Switch';
+```
+
+## Basic Usage
+
+```tsx
+import Switch from '@mui/material/Switch';
+
+const label = { inputProps: { 'aria-label': 'Switch demo' } };
+
+export default function BasicSwitches() {
+  return (
+    <div>
+      <Switch {...label} defaultChecked />
+      <Switch {...label} />
+      <Switch {...label} disabled defaultChecked />
+      <Switch {...label} disabled />
+    </div>
+  );
+}
+```
+
+## Props
+
+<ParamField path="checked" type="boolean">
+  If `true`, the component is checked.
+</ParamField>
+
+<ParamField path="defaultChecked" type="boolean">
+  The default checked state. Use when the component is not controlled.
+</ParamField>
+
+<ParamField path="color" type="'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning' | 'default'" default="'primary'">
+  The color of the component. Supports both default and custom theme colors.
+</ParamField>
+
+<ParamField path="size" type="'small' | 'medium'" default="'medium'">
+  The size of the component. `small` is equivalent to the dense switch styling.
+</ParamField>
+
+<ParamField path="disabled" type="boolean">
+  If `true`, the component is disabled.
+</ParamField>
+
+<ParamField path="checkedIcon" type="ReactNode">
+  The icon to display when the component is checked.
+</ParamField>
+
+<ParamField path="icon" type="ReactNode">
+  The icon to display when the component is unchecked.
+</ParamField>
+
+<ParamField path="value" type="unknown">
+  The value of the component. The DOM API casts this to a string. The browser uses "on" as the default value.
+</ParamField>
+
+<ParamField path="sx" type="SxProps<Theme>">
+  The system prop that allows defining system overrides as well as additional CSS styles.
+</ParamField>
+
+## API Reference
+
+- [Switch API](https://next.mui.com/material-ui/api/switch/)
+- Inherits [IconButton API](https://next.mui.com/material-ui/api/icon-button/)

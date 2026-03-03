@@ -1,0 +1,265 @@
+---
+title: Installation
+description: Install Material UI with npm, yarn, or pnpm and set up your React project with the required peer dependencies.
+---
+
+# Installation
+
+Install Material UI, the world's most popular React UI framework.
+
+## Requirements
+
+Material UI supports the latest, stable releases of all major browsers and platforms. It requires the following minimum versions:
+
+- React 17.0.0 or later
+- React DOM 17.0.0 or later  
+- TypeScript 4.1 or later (optional, but recommended)
+- Node.js 14.0.0 or later
+
+## Default Installation
+
+Install Material UI with your preferred package manager. Material UI uses [Emotion](https://emotion.sh/) as its default styling engine:
+
+<CodeGroup>
+```bash npm
+npm install @mui/material @emotion/react @emotion/styled
+```
+
+```bash yarn
+yarn add @mui/material @emotion/react @emotion/styled
+```
+
+```bash pnpm
+pnpm add @mui/material @emotion/react @emotion/styled
+```
+</CodeGroup>
+
+### Peer Dependencies
+
+The installation includes these packages:
+
+- **@mui/material**: The core component library (v9.0.0-alpha.1)
+- **@emotion/react**: CSS-in-JS library for styling (^11.5.0)
+- **@emotion/styled**: Styled components API for Emotion (^11.3.0)
+
+React and ReactDOM are peer dependencies and must be installed separately if not already in your project.
+
+## Installing Icons
+
+Material UI includes over 2,000 Material Design icons. Install the icons package separately:
+
+<CodeGroup>
+```bash npm
+npm install @mui/icons-material
+```
+
+```bash yarn
+yarn add @mui/icons-material
+```
+
+```bash pnpm  
+pnpm add @mui/icons-material
+```
+</CodeGroup>
+
+### Using Icons
+
+Import and use icons as React components:
+
+```tsx
+import DeleteIcon from '@mui/icons-material/Delete';
+import SendIcon from '@mui/icons-material/Send';
+import SaveIcon from '@mui/icons-material/Save';
+
+function MyComponent() {
+  return (
+    <>
+      <DeleteIcon />
+      <SendIcon color="primary" />
+      <SaveIcon fontSize="large" />
+    </>
+  );
+}
+```
+
+## TypeScript Setup
+
+Material UI has comprehensive TypeScript support. Install type definitions for React:
+
+<CodeGroup>
+```bash npm
+npm install --save-dev @types/react @types/react-dom
+```
+
+```bash yarn
+yarn add --dev @types/react @types/react-dom
+```
+
+```bash pnpm
+pnpm add -D @types/react @types/react-dom
+```
+</CodeGroup>
+
+Material UI components are fully typed. TypeScript will provide autocomplete and type checking for all props:
+
+```tsx
+import Button from '@mui/material/Button';
+import type { ButtonProps } from '@mui/material/Button';
+
+// Full IntelliSense support
+const MyButton = (props: ButtonProps) => {
+  return (
+    <Button 
+      variant="contained"  // 'text' | 'outlined' | 'contained'
+      color="primary"      // 'inherit' | 'primary' | 'secondary' | ...
+      size="medium"        // 'small' | 'medium' | 'large'
+      {...props}
+    />
+  );
+};
+```
+
+## Framework Integration
+
+Material UI works seamlessly with popular React frameworks.
+
+### Next.js
+
+For Next.js App Router (13+), install the Next.js integration package:
+
+<CodeGroup>
+```bash npm
+npm install @mui/material-nextjs @emotion/cache
+```
+
+```bash yarn
+yarn add @mui/material-nextjs @emotion/cache
+```
+
+```bash pnpm
+pnpm add @mui/material-nextjs @emotion/cache
+```
+</CodeGroup>
+
+### Vite
+
+Material UI works out of the box with Vite. Install the Vite React plugin:
+
+<CodeGroup>
+```bash npm  
+npm install --save-dev @vitejs/plugin-react
+```
+
+```bash yarn
+yarn add --dev @vitejs/plugin-react
+```
+
+```bash pnpm
+pnpm add -D @vitejs/plugin-react
+```
+</CodeGroup>
+
+### Create React App
+
+Material UI is fully compatible with Create React App. No additional configuration needed after installing the core packages.
+
+## Alternative Styling Solutions
+
+### Styled-Components
+
+To use styled-components instead of Emotion:
+
+<CodeGroup>
+```bash npm
+npm install @mui/material @mui/styled-engine-sc styled-components
+```
+
+```bash yarn  
+yarn add @mui/material @mui/styled-engine-sc styled-components
+```
+
+```bash pnpm
+pnpm add @mui/material @mui/styled-engine-sc styled-components
+```
+</CodeGroup>
+
+### Zero-Runtime CSS (Experimental)
+
+For static CSS extraction with Pigment CSS:
+
+<CodeGroup>
+```bash npm
+npm install @mui/material @mui/material-pigment-css
+```
+
+```bash yarn
+yarn add @mui/material @mui/material-pigment-css  
+```
+
+```bash pnpm
+pnpm add @mui/material @mui/material-pigment-css
+```
+</CodeGroup>
+
+## CDN Installation
+
+For quick prototyping, you can load Material UI via CDN:
+
+```html
+<!-- Material UI and dependencies -->
+<script crossorigin src="https://unpkg.com/react@19/umd/react.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/react-dom@19/umd/react-dom.production.min.js"></script>
+<script crossorigin src="https://unpkg.com/@mui/material@latest/umd/material-ui.production.min.js"></script>
+
+<!-- Roboto Font -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap" />
+
+<!-- Material Icons -->
+<link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons" />
+```
+
+<Warning>
+  CDN installation is not recommended for production. Use a package manager for better performance and tree-shaking.
+</Warning>
+
+## Roboto Font
+
+Material UI uses the Roboto font by default. Add it to your project:
+
+```html
+<link
+  rel="stylesheet"
+  href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap"
+/>
+```
+
+Or install via npm:
+
+<CodeGroup>
+```bash npm
+npm install @fontsource/roboto
+```
+
+```bash yarn
+yarn add @fontsource/roboto
+```
+
+```bash pnpm
+pnpm add @fontsource/roboto
+```
+</CodeGroup>
+
+Then import in your entry file:
+
+```tsx
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+```
+
+## Next Steps
+
+<Card title="Quick Start Tutorial" icon="rocket" href="/quickstart">
+  Build your first Material UI component in under 5 minutes
+</Card>

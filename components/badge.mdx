@@ -1,0 +1,274 @@
+---
+title: Badge
+description: Badge generates a small badge to the top-right of its child(ren).
+---
+
+## Introduction
+
+The Badge component displays a badge on its children. Badges are typically used to show notification counts, status indicators, or other small pieces of information.
+
+## Basic Usage
+
+```tsx
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
+
+function Demo() {
+  return (
+    <Badge badgeContent={4} color="primary">
+      <MailIcon />
+    </Badge>
+  );
+}
+```
+
+## Badge Visibility
+
+The visibility of badges can be controlled using the `invisible` prop. The badge auto-hides when `badgeContent` is zero. You can override this with the `showZero` prop.
+
+```tsx
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
+import Stack from '@mui/material/Stack';
+
+function BadgeVisibility() {
+  return (
+    <Stack spacing={2} direction="row">
+      <Badge badgeContent={0} color="secondary">
+        <MailIcon />
+      </Badge>
+      <Badge badgeContent={0} color="secondary" showZero>
+        <MailIcon />
+      </Badge>
+      <Badge badgeContent={4} color="secondary" invisible>
+        <MailIcon />
+      </Badge>
+    </Stack>
+  );
+}
+```
+
+## Maximum Value
+
+You can use the `max` prop to cap the badge content at a maximum value.
+
+```tsx
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
+import Stack from '@mui/material/Stack';
+
+function BadgeMax() {
+  return (
+    <Stack spacing={2} direction="row">
+      <Badge badgeContent={99} color="primary">
+        <MailIcon />
+      </Badge>
+      <Badge badgeContent={100} color="primary">
+        <MailIcon />
+      </Badge>
+      <Badge badgeContent={1000} color="primary" max={999}>
+        <MailIcon />
+      </Badge>
+    </Stack>
+  );
+}
+```
+
+## Dot Badge
+
+The `dot` variant renders a badge as a small dot. This is useful for indicating status or the presence of new notifications without showing a specific count.
+
+```tsx
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
+import Stack from '@mui/material/Stack';
+
+function DotBadge() {
+  return (
+    <Stack spacing={2} direction="row">
+      <Badge color="primary" variant="dot">
+        <MailIcon />
+      </Badge>
+      <Badge color="secondary" variant="dot">
+        <MailIcon />
+      </Badge>
+      <Badge color="error" variant="dot">
+        <MailIcon />
+      </Badge>
+    </Stack>
+  );
+}
+```
+
+## Color
+
+The `color` prop supports all theme palette colors.
+
+```tsx
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
+import Stack from '@mui/material/Stack';
+
+function BadgeColor() {
+  return (
+    <Stack spacing={2} direction="row">
+      <Badge badgeContent={4} color="default">
+        <MailIcon />
+      </Badge>
+      <Badge badgeContent={4} color="primary">
+        <MailIcon />
+      </Badge>
+      <Badge badgeContent={4} color="secondary">
+        <MailIcon />
+      </Badge>
+      <Badge badgeContent={4} color="error">
+        <MailIcon />
+      </Badge>
+      <Badge badgeContent={4} color="info">
+        <MailIcon />
+      </Badge>
+      <Badge badgeContent={4} color="success">
+        <MailIcon />
+      </Badge>
+      <Badge badgeContent={4} color="warning">
+        <MailIcon />
+      </Badge>
+    </Stack>
+  );
+}
+```
+
+## Badge Position
+
+You can use the `anchorOrigin` prop to move the badge to any corner of the wrapped element.
+
+```tsx
+import Badge from '@mui/material/Badge';
+import MailIcon from '@mui/icons-material/Mail';
+import Stack from '@mui/material/Stack';
+
+function BadgeAlignment() {
+  return (
+    <Stack spacing={2} direction="row">
+      <Badge 
+        badgeContent={4} 
+        color="primary"
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'right',
+        }}
+      >
+        <MailIcon />
+      </Badge>
+      <Badge 
+        badgeContent={4} 
+        color="primary"
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'right',
+        }}
+      >
+        <MailIcon />
+      </Badge>
+      <Badge 
+        badgeContent={4} 
+        color="primary"
+        anchorOrigin={{
+          vertical: 'top',
+          horizontal: 'left',
+        }}
+      >
+        <MailIcon />
+      </Badge>
+      <Badge 
+        badgeContent={4} 
+        color="primary"
+        anchorOrigin={{
+          vertical: 'bottom',
+          horizontal: 'left',
+        }}
+      >
+        <MailIcon />
+      </Badge>
+    </Stack>
+  );
+}
+```
+
+## Badge Overlap
+
+You can use the `overlap` prop to place the badge relative to the corner of the wrapped element.
+
+```tsx
+import Badge from '@mui/material/Badge';
+import Avatar from '@mui/material/Avatar';
+import Stack from '@mui/material/Stack';
+
+function BadgeOverlap() {
+  return (
+    <Stack spacing={2} direction="row">
+      <Badge badgeContent={4} color="primary" overlap="circular">
+        <Avatar alt="User" src="/static/images/avatar/1.jpg" />
+      </Badge>
+      <Badge badgeContent={4} color="primary" overlap="rectangular">
+        <Avatar alt="User" src="/static/images/avatar/1.jpg" variant="square" />
+      </Badge>
+    </Stack>
+  );
+}
+```
+
+## Props
+
+### Badge Props
+
+| Prop | Type | Default | Description |
+|------|------|---------|-------------|
+| `anchorOrigin` | `{ vertical: 'top' \| 'bottom', horizontal: 'left' \| 'right' }` | `{ vertical: 'top', horizontal: 'right' }` | The anchor of the badge. |
+| `badgeContent` | `node` | - | The content rendered within the badge. |
+| `children` | `node` | - | The badge will be added relative to this node. |
+| `classes` | `object` | - | Override or extend the styles applied to the component. |
+| `color` | `'default'` \| `'primary'` \| `'secondary'` \| `'error'` \| `'info'` \| `'success'` \| `'warning'` | `'default'` | The color of the component. Supports theme palette colors. |
+| `invisible` | `boolean` | `false` | If true, the badge is invisible. |
+| `max` | `number` | `99` | Max count to show. |
+| `overlap` | `'rectangular'` \| `'circular'` | `'rectangular'` | Wrapped shape the badge should overlap. |
+| `showZero` | `boolean` | `false` | Controls whether the badge is hidden when badgeContent is zero. |
+| `sx` | `SxProps<Theme>` | - | The system prop for defining CSS overrides and additional styles. |
+| `variant` | `'standard'` \| `'dot'` | `'standard'` | The variant to use. |
+
+### Slots
+
+| Slot | Type | Default | Description |
+|------|------|---------|-------------|
+| `root` | `ElementType` | `'span'` | The component that renders the root. |
+| `badge` | `ElementType` | `'span'` | The component that renders the badge. |
+
+## CSS Classes
+
+The following CSS classes are available for customization:
+
+- `.MuiBadge-root` - Styles applied to the root element.
+- `.MuiBadge-badge` - Styles applied to the badge span element.
+- `.MuiBadge-dot` - Styles applied to the badge if `variant="dot"`.
+- `.MuiBadge-standard` - Styles applied to the badge if `variant="standard"`.
+- `.MuiBadge-anchorOriginTopRight` - Styles applied to the badge if `anchorOrigin={{ vertical: 'top', horizontal: 'right' }}`.
+- `.MuiBadge-anchorOriginBottomRight` - Styles applied to the badge if `anchorOrigin={{ vertical: 'bottom', horizontal: 'right' }}`.
+- `.MuiBadge-anchorOriginTopLeft` - Styles applied to the badge if `anchorOrigin={{ vertical: 'top', horizontal: 'left' }}`.
+- `.MuiBadge-anchorOriginBottomLeft` - Styles applied to the badge if `anchorOrigin={{ vertical: 'bottom', horizontal: 'left' }}`.
+- `.MuiBadge-invisible` - Styles applied to the badge if `invisible={true}`.
+- `.MuiBadge-colorPrimary` - Styles applied to the badge if `color="primary"`.
+- `.MuiBadge-colorSecondary` - Styles applied to the badge if `color="secondary"`.
+- `.MuiBadge-colorError` - Styles applied to the badge if `color="error"`.
+- `.MuiBadge-colorInfo` - Styles applied to the badge if `color="info"`.
+- `.MuiBadge-colorSuccess` - Styles applied to the badge if `color="success"`.
+- `.MuiBadge-colorWarning` - Styles applied to the badge if `color="warning"`.
+
+## Accessibility
+
+You can't rely on the badge content to be announced correctly by screen readers. You should provide a full description using `aria-label`:
+
+```tsx
+<Badge badgeContent={4} color="primary" aria-label="4 unread messages">
+  <MailIcon />
+</Badge>
+```

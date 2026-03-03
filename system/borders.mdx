@@ -1,0 +1,354 @@
+---
+title: Borders
+description: Border style utilities in MUI System
+---
+
+# Borders
+
+Utilities for controlling borders, outlines, and border radius.
+
+## Import
+
+```javascript
+import { borders } from '@mui/system';
+```
+
+## API
+
+The borders module exports individual style functions that can be used directly or composed together.
+
+### Source Implementation
+
+From `borders/borders.js:66-82`:
+
+```javascript
+const borders = compose(
+  border,
+  borderTop,
+  borderRight,
+  borderBottom,
+  borderLeft,
+  borderColor,
+  borderTopColor,
+  borderRightColor,
+  borderBottomColor,
+  borderLeftColor,
+  borderRadius,
+  outline,
+  outlineColor,
+);
+```
+
+## Border Width and Style
+
+### border
+
+Set border on all sides:
+
+```jsx
+<Box border={1}>1px solid border</Box>
+<Box border={2}>2px solid border</Box>
+<Box border={0}>No border</Box>
+```
+
+From `borders.js:7-13,23`:
+
+```javascript
+export function borderTransform(value) {
+  if (typeof value !== 'number') {
+    return value;
+  }
+  return `${value}px solid`;
+}
+
+export const border = createBorderStyle('border', borderTransform);
+```
+
+### borderTop, borderRight, borderBottom, borderLeft
+
+Set individual borders:
+
+```jsx
+<Box borderTop={1}>Top border</Box>
+<Box borderRight={2}>Right border</Box>
+<Box borderBottom={1}>Bottom border</Box>
+<Box borderLeft={1}>Left border</Box>
+```
+
+From `borders.js:25-31`:
+
+```javascript
+export const borderTop = createBorderStyle('borderTop', borderTransform);
+export const borderRight = createBorderStyle('borderRight', borderTransform);
+export const borderBottom = createBorderStyle('borderBottom', borderTransform);
+export const borderLeft = createBorderStyle('borderLeft', borderTransform);
+```
+
+## Border Color
+
+### borderColor
+
+Set border color on all sides:
+
+```jsx
+<Box border={1} borderColor="primary.main">
+  Primary border
+</Box>
+
+<Box border={1} borderColor="error.main">
+  Error border
+</Box>
+
+<Box border={1} borderColor="divider">
+  Divider border
+</Box>
+```
+
+### Individual Border Colors
+
+```jsx
+<Box
+  border={1}
+  borderTopColor="primary.main"
+  borderRightColor="secondary.main"
+  borderBottomColor="error.main"
+  borderLeftColor="warning.main"
+>
+  Multi-color borders
+</Box>
+```
+
+From `borders.js:33-41`:
+
+```javascript
+export const borderColor = createBorderStyle('borderColor');
+export const borderTopColor = createBorderStyle('borderTopColor');
+export const borderRightColor = createBorderStyle('borderRightColor');
+export const borderBottomColor = createBorderStyle('borderBottomColor');
+export const borderLeftColor = createBorderStyle('borderLeftColor');
+```
+
+## Border Radius
+
+Apply border radius with theme integration:
+
+```jsx
+<Box border={1} borderRadius={1}>
+  Default radius (theme.shape.borderRadius)
+</Box>
+
+<Box border={1} borderRadius={2}>
+  2x theme radius
+</Box>
+
+<Box border={1} borderRadius="50%">
+  Circle
+</Box>
+
+<Box border={1} borderRadius="4px">
+  Custom radius
+</Box>
+```
+
+From `borders.js:49-59`:
+
+```javascript
+export const borderRadius = (props) => {
+  if (props.borderRadius !== undefined && props.borderRadius !== null) {
+    const transformer = createUnaryUnit(props.theme, 'shape.borderRadius', 4, 'borderRadius');
+    const styleFromPropValue = (propValue) => ({
+      borderRadius: getValue(transformer, propValue),
+    });
+    return handleBreakpoints(props, props.borderRadius, styleFromPropValue);
+  }
+  return null;
+};
+```
+
+## Outline
+
+### outline
+
+Set outline width and style:
+
+```jsx
+<Box outline={1}>1px solid outline</Box>
+<Box outline={2}>2px solid outline</Box>
+```
+
+From `borders.js:43`:
+
+```javascript
+export const outline = createBorderStyle('outline', borderTransform);
+```
+
+### outlineColor
+
+Set outline color:
+
+```jsx
+<Box outline={2} outlineColor="primary.main">
+  Primary outline
+</Box>
+```
+
+From `borders.js:45`:
+
+```javascript
+export const outlineColor = createBorderStyle('outlineColor');
+```
+
+## Responsive Borders
+
+Use responsive values with breakpoints:
+
+```jsx
+<Box
+  border={{ xs: 0, sm: 1, md: 2 }}
+  borderColor={{ xs: 'divider', md: 'primary.main' }}
+  borderRadius={{ xs: 1, md: 2 }}
+>
+  Responsive borders
+</Box>
+```
+
+## Combined Border Styles
+
+### Card Border
+
+```jsx
+<Box
+  border={1}
+  borderColor="divider"
+  borderRadius={2}
+  p={2}
+>
+  Card with border
+</Box>
+```
+
+### Focus Outline
+
+```jsx
+<Box
+  sx={{
+    border: 1,
+    borderColor: 'divider',
+    '&:focus': {
+      outline: 2,
+      outlineColor: 'primary.main',
+    },
+  }}
+>
+  Focus me
+</Box>
+```
+
+### Dashed Border
+
+```jsx
+<Box
+  sx={{
+    border: '2px dashed',
+    borderColor: 'text.secondary',
+    borderRadius: 1,
+  }}
+>
+  Dashed border
+</Box>
+```
+
+### Gradient Border (Workaround)
+
+```jsx
+<Box
+  sx={{
+    border: '2px solid transparent',
+    borderRadius: 2,
+    backgroundImage: (theme) =>
+      `linear-gradient(${theme.palette.background.paper}, ${theme.palette.background.paper}), ` +
+      `linear-gradient(to right, ${theme.palette.primary.main}, ${theme.palette.secondary.main})`,
+    backgroundOrigin: 'border-box',
+    backgroundClip: 'padding-box, border-box',
+  }}
+>
+  Gradient border
+</Box>
+```
+
+## With sx Prop
+
+```jsx
+<Box
+  sx={{
+    border: 1,
+    borderColor: 'divider',
+    borderRadius: 1,
+    '&:hover': {
+      borderColor: 'primary.main',
+    },
+  }}
+>
+  Hover for border color change
+</Box>
+```
+
+## Theme Configuration
+
+Borders reference the theme configuration:
+
+```javascript
+import { createTheme } from '@mui/system';
+
+const theme = createTheme({
+  shape: {
+    borderRadius: 4, // Default border radius in px
+  },
+  palette: {
+    divider: 'rgba(0, 0, 0, 0.12)',
+  },
+});
+```
+
+## TypeScript
+
+```tsx
+import { Box } from '@mui/system';
+
+function BorderedCard() {
+  return (
+    <Box
+      border={1}
+      borderColor="divider"
+      borderRadius={2}
+      p={2}
+    >
+      Type-safe borders
+    </Box>
+  );
+}
+```
+
+## Available Properties
+
+| Prop | CSS Property | Theme Key | Transform |
+|------|--------------|-----------|----------|
+| `border` | `border` | `borders` | `borderTransform` |
+| `borderTop` | `border-top` | `borders` | `borderTransform` |
+| `borderRight` | `border-right` | `borders` | `borderTransform` |
+| `borderBottom` | `border-bottom` | `borders` | `borderTransform` |
+| `borderLeft` | `border-left` | `borders` | `borderTransform` |
+| `borderColor` | `border-color` | `palette` | - |
+| `borderTopColor` | `border-top-color` | `palette` | - |
+| `borderRightColor` | `border-right-color` | `palette` | - |
+| `borderBottomColor` | `border-bottom-color` | `palette` | - |
+| `borderLeftColor` | `border-left-color` | `palette` | - |
+| `borderRadius` | `border-radius` | `shape.borderRadius` | `createUnaryUnit` |
+| `outline` | `outline` | `borders` | `borderTransform` |
+| `outlineColor` | `outline-color` | `palette` | - |
+
+## Related
+
+- [Box Component](/system/box) - Using borders with Box
+- [Palette](/system/palette) - Color utilities for borders
+- [sx Prop](/system/the-sx-prop) - Advanced border styling

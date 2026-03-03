@@ -1,0 +1,591 @@
+---
+title: Spacing
+description: Margin and padding utilities in MUI System
+---
+
+# Spacing
+
+Utilities for controlling margin and padding with theme spacing scale.
+
+## Import
+
+```javascript
+import { spacing } from '@mui/system';
+```
+
+## API
+
+The spacing module exports margin and padding functions that use the theme's spacing scale.
+
+From `spacing/spacing.js:255-268`:
+
+```javascript
+function spacing(props) {
+  return style(props, spacingKeys);
+}
+
+spacing.propTypes =
+  process.env.NODE_ENV !== 'production'
+    ? spacingKeys.reduce((obj, key) => {
+        obj[key] = responsivePropType;
+        return obj;
+      }, {})
+    : {};
+
+spacing.filterProps = spacingKeys;
+```
+
+## Theme Spacing
+
+By default, the spacing scale uses an 8px unit:
+
+```javascript
+import { createTheme } from '@mui/system';
+
+const theme = createTheme({
+  spacing: 8, // 1 spacing unit = 8px
+});
+
+// Or as a function
+const theme = createTheme({
+  spacing: (factor) => `${factor * 0.5}rem`, // 1 unit = 0.5rem
+});
+
+// Or as an array
+const theme = createTheme({
+  spacing: [0, 4, 8, 16, 32, 64],
+});
+```
+
+## Spacing Transform
+
+From `spacing.js:95-183`, the `createUnaryUnit` function handles spacing values:
+
+```javascript
+export function createUnaryUnit(theme, themeKey, defaultValue, propName) {
+  const themeSpacing = getPath(theme, themeKey, true) ?? defaultValue;
+
+  if (typeof themeSpacing === 'number' || typeof themeSpacing === 'string') {
+    return (val) => {
+      if (typeof val === 'string') {
+        return val;
+      }
+      if (typeof themeSpacing === 'string') {
+        if (themeSpacing.startsWith('var(') && val === 0) {
+          return 0;
+        }
+        if (themeSpacing.startsWith('var(') && val === 1) {
+          return themeSpacing;
+        }
+        return `calc(${val} * ${themeSpacing})`;
+      }
+      return themeSpacing * val;
+    };
+  }
+  // ... array and function handling
+}
+```
+
+## Margin Properties
+
+From `spacing.js:47-68`:
+
+```javascript
+export const marginKeys = [
+  'm',           // margin (all sides)
+  'mt',          // margin-top
+  'mr',          // margin-right
+  'mb',          // margin-bottom
+  'ml',          // margin-left
+  'mx',          // margin-left & margin-right
+  'my',          // margin-top & margin-bottom
+  'margin',
+  'marginTop',
+  'marginRight',
+  'marginBottom',
+  'marginLeft',
+  'marginX',
+  'marginY',
+  'marginInline',
+  'marginInlineStart',
+  'marginInlineEnd',
+  'marginBlock',
+  'marginBlockStart',
+  'marginBlockEnd',
+];
+```
+
+### All Sides
+
+```jsx
+<Box m={0}>No margin</Box>
+<Box m={1}>8px margin (1 * 8px)</Box>
+<Box m={2}>16px margin (2 * 8px)</Box>
+<Box m={3}>24px margin (3 * 8px)</Box>
+<Box m={-1}>-8px margin (negative)</Box>
+<Box m="auto">Auto margin</Box>
+```
+
+### Individual Sides
+
+```jsx
+<Box mt={2}>Margin top 16px</Box>
+<Box mr={2}>Margin right 16px</Box>
+<Box mb={2}>Margin bottom 16px</Box>
+<Box ml={2}>Margin left 16px</Box>
+```
+
+### Horizontal and Vertical
+
+```jsx
+<Box mx={2}>Margin left & right 16px</Box>
+<Box my={2}>Margin top & bottom 16px</Box>
+<Box mx="auto">Horizontally centered</Box>
+```
+
+### Full Property Names
+
+```jsx
+<Box margin={2}>16px margin</Box>
+<Box marginTop={2}>16px margin top</Box>
+<Box marginX={2}>16px horizontal margin</Box>
+<Box marginY={2}>16px vertical margin</Box>
+```
+
+### Logical Properties
+
+```jsx
+<Box marginInline={2}>Inline margin (horizontal in LTR)</Box>
+<Box marginInlineStart={2}>Start margin</Box>
+<Box marginInlineEnd={2}>End margin</Box>
+<Box marginBlock={2}>Block margin (vertical)</Box>
+<Box marginBlockStart={2}>Block start margin</Box>
+<Box marginBlockEnd={2}>Block end margin</Box>
+```
+
+## Padding Properties
+
+From `spacing.js:70-91`:
+
+```javascript
+export const paddingKeys = [
+  'p',           // padding (all sides)
+  'pt',          // padding-top
+  'pr',          // padding-right
+  'pb',          // padding-bottom
+  'pl',          // padding-left
+  'px',          // padding-left & padding-right
+  'py',          // padding-top & padding-bottom
+  'padding',
+  'paddingTop',
+  'paddingRight',
+  'paddingBottom',
+  'paddingLeft',
+  'paddingX',
+  'paddingY',
+  'paddingInline',
+  'paddingInlineStart',
+  'paddingInlineEnd',
+  'paddingBlock',
+  'paddingBlockStart',
+  'paddingBlockEnd',
+];
+```
+
+### All Sides
+
+```jsx
+<Box p={0}>No padding</Box>
+<Box p={1}>8px padding</Box>
+<Box p={2}>16px padding</Box>
+<Box p={3}>24px padding</Box>
+<Box p={4}>32px padding</Box>
+```
+
+### Individual Sides
+
+```jsx
+<Box pt={2}>Padding top 16px</Box>
+<Box pr={2}>Padding right 16px</Box>
+<Box pb={2}>Padding bottom 16px</Box>
+<Box pl={2}>Padding left 16px</Box>
+```
+
+### Horizontal and Vertical
+
+```jsx
+<Box px={2}>Padding left & right 16px</Box>
+<Box py={2}>Padding top & bottom 16px</Box>
+<Box px={3} py={2}>24px horizontal, 16px vertical</Box>
+```
+
+### Full Property Names
+
+```jsx
+<Box padding={2}>16px padding</Box>
+<Box paddingTop={2}>16px padding top</Box>
+<Box paddingX={2}>16px horizontal padding</Box>
+<Box paddingY={2}>16px vertical padding</Box>
+```
+
+### Logical Properties
+
+```jsx
+<Box paddingInline={2}>Inline padding</Box>
+<Box paddingInlineStart={2}>Start padding</Box>
+<Box paddingInlineEnd={2}>End padding</Box>
+<Box paddingBlock={2}>Block padding</Box>
+<Box paddingBlockStart={2}>Block start padding</Box>
+<Box paddingBlockEnd={2}>Block end padding</Box>
+```
+
+## Shorthand Mapping
+
+From `spacing.js:7-26`:
+
+```javascript
+const properties = {
+  m: 'margin',
+  p: 'padding',
+};
+
+const directions = {
+  t: 'Top',
+  r: 'Right',
+  b: 'Bottom',
+  l: 'Left',
+  x: ['Left', 'Right'],
+  y: ['Top', 'Bottom'],
+};
+
+const aliases = {
+  marginX: 'mx',
+  marginY: 'my',
+  paddingX: 'px',
+  paddingY: 'py',
+};
+```
+
+## Responsive Spacing
+
+```jsx
+<Box
+  p={{ xs: 1, sm: 2, md: 3 }}
+  m={{ xs: 1, sm: 2, md: 3 }}
+>
+  Responsive spacing
+</Box>
+
+{/* Array syntax */}
+<Box p={[1, 2, 3, 4]}>
+  1 on xs, 2 on sm, 3 on md, 4 on lg+
+</Box>
+```
+
+## Negative Spacing
+
+```jsx
+<Box mt={-1}>Negative margin top -8px</Box>
+<Box ml={-2}>Negative margin left -16px</Box>
+<Box m={-1}>Negative margin all sides</Box>
+```
+
+## String Values
+
+Pass custom values as strings:
+
+```jsx
+<Box m="1rem">1rem margin</Box>
+<Box p="20px">20px padding</Box>
+<Box mx="auto">Auto horizontal margin</Box>
+```
+
+## Common Patterns
+
+### Card Spacing
+
+```jsx
+<Box
+  border={1}
+  borderColor="divider"
+  borderRadius={2}
+  p={3}
+  m={2}
+>
+  Card with padding and margin
+</Box>
+```
+
+### Section Spacing
+
+```jsx
+<Box py={8} px={2}>
+  <Box maxWidth="lg" mx="auto">
+    Section content
+  </Box>
+</Box>
+```
+
+### Stack of Elements
+
+```jsx
+<Box>
+  <Box mb={2}>Element 1</Box>
+  <Box mb={2}>Element 2</Box>
+  <Box mb={2}>Element 3</Box>
+  <Box>Element 4 (no margin)</Box>
+</Box>
+```
+
+### Inline Spacing
+
+```jsx
+<Box display="flex" gap={2}>
+  <Box>Item 1</Box>
+  <Box>Item 2</Box>
+  <Box>Item 3</Box>
+</Box>
+```
+
+### Centered Container
+
+```jsx
+<Box
+  maxWidth="md"
+  mx="auto"
+  my={4}
+  px={2}
+>
+  Centered content with horizontal margin auto
+</Box>
+```
+
+### Button Spacing
+
+```jsx
+<Box display="flex" gap={1}>
+  <Box component="button" px={2} py={1}>Button 1</Box>
+  <Box component="button" px={2} py={1}>Button 2</Box>
+</Box>
+```
+
+### Form Field Spacing
+
+```jsx
+<Box>
+  <Box mb={2}>
+    <label>Field 1</label>
+    <input />
+  </Box>
+  <Box mb={2}>
+    <label>Field 2</label>
+    <input />
+  </Box>
+  <Box>
+    <button>Submit</button>
+  </Box>
+</Box>
+```
+
+### Grid with Gaps
+
+```jsx
+<Box m={-1}>
+  <Box display="grid" gridTemplateColumns="repeat(3, 1fr)">
+    <Box p={1}>Cell 1</Box>
+    <Box p={1}>Cell 2</Box>
+    <Box p={1}>Cell 3</Box>
+  </Box>
+</Box>
+```
+
+### Header with Spacing
+
+```jsx
+<Box
+  component="header"
+  py={2}
+  px={3}
+  borderBottom={1}
+  borderColor="divider"
+>
+  Header content
+</Box>
+```
+
+### Footer Spacing
+
+```jsx
+<Box
+  component="footer"
+  mt="auto"
+  py={4}
+  px={2}
+  bgcolor="grey.100"
+>
+  Footer content
+</Box>
+```
+
+## Spacing Scale
+
+With default 8px spacing:
+
+| Value | Output |
+|-------|--------|
+| `0` | `0px` |
+| `0.5` | `4px` |
+| `1` | `8px` |
+| `2` | `16px` |
+| `3` | `24px` |
+| `4` | `32px` |
+| `5` | `40px` |
+| `6` | `48px` |
+| `8` | `64px` |
+| `10` | `80px` |
+| `12` | `96px` |
+| `16` | `128px` |
+
+## Custom Spacing Function
+
+```javascript
+import { createTheme } from '@mui/system';
+
+const theme = createTheme({
+  spacing: (factor) => `${0.25 * factor}rem`,
+});
+
+// spacing(1) = 0.25rem
+// spacing(2) = 0.5rem
+// spacing(4) = 1rem
+```
+
+## Array-based Spacing
+
+```javascript
+import { createTheme } from '@mui/system';
+
+const theme = createTheme({
+  spacing: [0, 4, 8, 16, 32, 64, 128],
+});
+
+// spacing(0) = 0
+// spacing(1) = 4px
+// spacing(2) = 8px
+// spacing(3) = 16px
+```
+
+## CSS Variables Spacing
+
+```javascript
+import { createTheme } from '@mui/system';
+
+const theme = createTheme({
+  spacing: 'var(--spacing-unit)',
+});
+
+// In CSS:
+// :root {
+//   --spacing-unit: 8px;
+// }
+```
+
+## With sx Prop
+
+```jsx
+<Box
+  sx={{
+    p: 2,
+    m: 1,
+    '& > *': {
+      mb: 2,
+    },
+    '& > *:last-child': {
+      mb: 0,
+    },
+  }}
+>
+  Parent with spacing
+</Box>
+```
+
+## TypeScript
+
+```tsx
+import { Box } from '@mui/system';
+
+interface SpacedBoxProps {
+  spacing?: number;
+  children: React.ReactNode;
+}
+
+function SpacedBox({ spacing = 2, children }: SpacedBoxProps) {
+  return <Box p={spacing}>{children}</Box>;
+}
+
+// With responsive spacing
+interface ResponsiveSpacedBoxProps {
+  spacing?: {
+    xs?: number;
+    sm?: number;
+    md?: number;
+  };
+  children: React.ReactNode;
+}
+
+function ResponsiveSpacedBox({ spacing, children }: ResponsiveSpacedBoxProps) {
+  return <Box p={spacing}>{children}</Box>;
+}
+```
+
+## Available Properties
+
+### Margin
+
+| Shorthand | Full Name | CSS Properties |
+|-----------|-----------|----------------|
+| `m` | `margin` | `margin` |
+| `mt` | `marginTop` | `margin-top` |
+| `mr` | `marginRight` | `margin-right` |
+| `mb` | `marginBottom` | `margin-bottom` |
+| `ml` | `marginLeft` | `margin-left` |
+| `mx` | `marginX` | `margin-left`, `margin-right` |
+| `my` | `marginY` | `margin-top`, `margin-bottom` |
+| - | `marginInline` | `margin-inline` |
+| - | `marginInlineStart` | `margin-inline-start` |
+| - | `marginInlineEnd` | `margin-inline-end` |
+| - | `marginBlock` | `margin-block` |
+| - | `marginBlockStart` | `margin-block-start` |
+| - | `marginBlockEnd` | `margin-block-end` |
+
+### Padding
+
+| Shorthand | Full Name | CSS Properties |
+|-----------|-----------|----------------|
+| `p` | `padding` | `padding` |
+| `pt` | `paddingTop` | `padding-top` |
+| `pr` | `paddingRight` | `padding-right` |
+| `pb` | `paddingBottom` | `padding-bottom` |
+| `pl` | `paddingLeft` | `padding-left` |
+| `px` | `paddingX` | `padding-left`, `padding-right` |
+| `py` | `paddingY` | `padding-top`, `padding-bottom` |
+| - | `paddingInline` | `padding-inline` |
+| - | `paddingInlineStart` | `padding-inline-start` |
+| - | `paddingInlineEnd` | `padding-inline-end` |
+| - | `paddingBlock` | `padding-block` |
+| - | `paddingBlockStart` | `padding-block-start` |
+| - | `paddingBlockEnd` | `padding-block-end` |
+
+## Best Practices
+
+1. **Use the spacing scale** - Stick to theme spacing values for consistency
+2. **Prefer shorthand** - Use `p`, `m`, `px`, `py` for brevity
+3. **Responsive spacing** - Adjust spacing for different breakpoints
+4. **Negative margins** - Use sparingly for overlapping elements
+5. **Auto margins** - Use `mx="auto"` for centering
+
+## Related
+
+- [Box Component](/system/box) - Using spacing with Box
+- [Grid](/system/grid) - Grid gap utilities
+- [sx Prop](/system/the-sx-prop) - Advanced spacing with sx

@@ -1,0 +1,410 @@
+---
+title: Responsive Breakpoints
+description: Use Material UI breakpoints for responsive design with xs, sm, md, lg, xl
+---
+
+# Responsive Breakpoints
+
+Material UI uses a mobile-first responsive design system with five default breakpoints.
+
+## Default Breakpoints
+
+Material UI provides five breakpoints:
+
+```tsx
+const breakpoints = {
+  xs: 0,    // Extra-small: 0px and up (phones)
+  sm: 600,  // Small: 600px and up (tablets)
+  md: 900,  // Medium: 900px and up (small laptops)
+  lg: 1200, // Large: 1200px and up (desktops)
+  xl: 1536, // Extra-large: 1536px and up (large screens)
+};
+```
+
+## Breakpoint Helpers
+
+The theme provides helper functions to generate media queries:
+
+### up()
+
+Matches screen widths **greater than or equal to** the breakpoint:
+
+```tsx
+const theme = createTheme();
+
+theme.breakpoints.up('sm');
+// '@media (min-width:600px)'
+
+theme.breakpoints.up('md');
+// '@media (min-width:900px)'
+
+// Use with number
+theme.breakpoints.up(1000);
+// '@media (min-width:1000px)'
+```
+
+### down()
+
+Matches screen widths **less than** the breakpoint:
+
+```tsx
+theme.breakpoints.down('md');
+// '@media (max-width:899.95px)'
+
+theme.breakpoints.down('lg');
+// '@media (max-width:1199.95px)'
+
+theme.breakpoints.down(1000);
+// '@media (max-width:999.95px)'
+```
+
+### between()
+
+Matches screen widths **between** two breakpoints:
+
+```tsx
+theme.breakpoints.between('sm', 'md');
+// '@media (min-width:600px) and (max-width:899.95px)'
+
+theme.breakpoints.between('md', 'xl');
+// '@media (min-width:900px) and (max-width:1535.95px)'
+```
+
+### only()
+
+Matches screen widths for a **single** breakpoint:
+
+```tsx
+theme.breakpoints.only('md');
+// '@media (min-width:900px) and (max-width:1199.95px)'
+
+theme.breakpoints.only('xl');
+// '@media (min-width:1536px)'
+```
+
+### not()
+
+Matches screen widths **outside** the breakpoint range:
+
+```tsx
+theme.breakpoints.not('md');
+// '@media not all and (min-width:900px) and (max-width:1199.95px)'
+
+theme.breakpoints.not('xs');
+// '@media (min-width:600px)'
+
+theme.breakpoints.not('xl');
+// '@media (max-width:1535.95px)'
+```
+
+## Customizing Breakpoints
+
+### Change Breakpoint Values
+
+```tsx
+import { createTheme } from '@mui/material/styles';
+
+const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 960,   // Changed from 900
+      lg: 1280,  // Changed from 1200
+      xl: 1920,  // Changed from 1536
+    },
+  },
+});
+```
+
+### Add Custom Breakpoints
+
+```tsx
+declare module '@mui/material/styles' {
+  interface BreakpointOverrides {
+    xs: true;
+    sm: true;
+    md: true;
+    lg: true;
+    xl: true;
+    xxl: true; // Add custom breakpoint
+  }
+}
+
+const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+      xxl: 1920,
+    },
+  },
+});
+
+// Usage
+theme.breakpoints.up('xxl');
+// '@media (min-width:1920px)'
+```
+
+### Remove Default Breakpoints
+
+```tsx
+declare module '@mui/material/styles' {
+  interface BreakpointOverrides {
+    xs: false; // Remove xs
+    sm: false; // Remove sm
+    md: true;
+    lg: true;
+    xl: true;
+    mobile: true;  // Add custom
+    tablet: true;  // Add custom
+    desktop: true; // Add custom
+  }
+}
+
+const theme = createTheme({
+  breakpoints: {
+    values: {
+      mobile: 0,
+      tablet: 640,
+      desktop: 1024,
+    },
+  },
+});
+```
+
+## Using Breakpoints in Components
+
+### sx Prop
+
+```tsx
+import Box from '@mui/material/Box';
+
+<Box
+  sx={{
+    width: {
+      xs: '100%',    // 0px and up
+      sm: '50%',     // 600px and up
+      md: '33.33%',  // 900px and up
+    },
+    fontSize: {
+      xs: '0.875rem',
+      md: '1rem',
+    },
+  }}
+>
+  Responsive content
+</Box>
+```
+
+### styled API
+
+```tsx
+import { styled } from '@mui/material/styles';
+
+const ResponsiveDiv = styled('div')(({ theme }) => ({
+  padding: theme.spacing(1),
+  [theme.breakpoints.up('sm')]: {
+    padding: theme.spacing(2),
+  },
+  [theme.breakpoints.up('md')]: {
+    padding: theme.spacing(3),
+  },
+  [theme.breakpoints.up('lg')]: {
+    padding: theme.spacing(4),
+  },
+}));
+```
+
+### useMediaQuery Hook
+
+```tsx
+import { useTheme } from '@mui/material/styles';
+import useMediaQuery from '@mui/material/useMediaQuery';
+
+function MyComponent() {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+  const isDesktop = useMediaQuery(theme.breakpoints.up('lg'));
+  
+  return (
+    <div>
+      {isMobile && <MobileView />}
+      {isTablet && <TabletView />}
+      {isDesktop && <DesktopView />}
+    </div>
+  );
+}
+```
+
+## Grid Breakpoints
+
+```tsx
+import Grid from '@mui/material/Grid';
+
+<Grid container spacing={2}>
+  <Grid item xs={12} sm={6} md={4} lg={3}>
+    {/* Full width on mobile, half on tablet, third on small laptop, quarter on desktop */}
+    Content
+  </Grid>
+</Grid>
+```
+
+## Hidden Component (Deprecated)
+
+Use `sx` prop instead:
+
+```tsx
+// Old way (deprecated)
+<Hidden smDown>
+  <div>Hidden on small screens</div>
+</Hidden>
+
+// New way
+<Box sx={{ display: { xs: 'none', md: 'block' } }}>
+  <div>Hidden on small screens</div>
+</Box>
+```
+
+## Breakpoint Step
+
+The `step` option controls the precision of `down()` and `between()`:
+
+```tsx
+const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 600,
+      md: 900,
+      lg: 1200,
+      xl: 1536,
+    },
+    step: 5, // Default
+  },
+});
+
+// With step: 5
+theme.breakpoints.down('md');
+// '@media (max-width:899.95px)' (900 - 5/100)
+
+// With step: 0
+theme.breakpoints.down('md');
+// '@media (max-width:900px)'
+```
+
+## Breakpoint Unit
+
+Change the unit used for breakpoints:
+
+```tsx
+const theme = createTheme({
+  breakpoints: {
+    values: {
+      xs: 0,
+      sm: 30,
+      md: 50,
+      lg: 75,
+      xl: 100,
+    },
+    unit: 'em', // Default: 'px'
+  },
+});
+
+theme.breakpoints.up('sm');
+// '@media (min-width:30em)'
+```
+
+## Server-Side Rendering
+
+Specify initial width for SSR:
+
+```tsx
+import useMediaQuery from '@mui/material/useMediaQuery';
+
+function MyComponent() {
+  const matches = useMediaQuery('(min-width:600px)', {
+    noSsr: true, // Disable SSR
+  });
+  
+  // Or set default for SSR
+  const matchesSSR = useMediaQuery(
+    theme => theme.breakpoints.up('sm'),
+    { defaultMatches: true }
+  );
+}
+```
+
+## Accessing Breakpoints
+
+```tsx
+const theme = createTheme();
+
+// Get breakpoint keys
+theme.breakpoints.keys; // ['xs', 'sm', 'md', 'lg', 'xl']
+
+// Get breakpoint values
+theme.breakpoints.values;
+// { xs: 0, sm: 600, md: 900, lg: 1200, xl: 1536 }
+
+// Get breakpoint unit
+theme.breakpoints.unit; // 'px'
+```
+
+## Common Patterns
+
+### Responsive Typography
+
+```tsx
+<Typography
+  sx={{
+    fontSize: {
+      xs: '1rem',
+      sm: '1.25rem',
+      md: '1.5rem',
+      lg: '2rem',
+    },
+  }}
+>
+  Responsive text
+</Typography>
+```
+
+### Responsive Padding
+
+```tsx
+<Box
+  sx={{
+    p: { xs: 2, sm: 3, md: 4 },
+  }}
+>
+  Responsive padding
+</Box>
+```
+
+### Responsive Layout
+
+```tsx
+<Box
+  sx={{
+    display: 'flex',
+    flexDirection: { xs: 'column', md: 'row' },
+    gap: { xs: 2, md: 4 },
+  }}
+>
+  <Box sx={{ flex: { md: 1 } }}>Content 1</Box>
+  <Box sx={{ flex: { md: 1 } }}>Content 2</Box>
+</Box>
+```
+
+## Source Reference
+
+The breakpoints implementation can be found at:
+- `packages/mui-system/src/createBreakpoints/createBreakpoints.js:15`
+- Default values: `packages/mui-system/src/createBreakpoints/createBreakpoints.js:19`
+- Type definitions: `packages/mui-system/src/createBreakpoints/createBreakpoints.d.ts:13`
+- Helper functions: `packages/mui-system/src/createBreakpoints/createBreakpoints.js:34`

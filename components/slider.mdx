@@ -1,0 +1,128 @@
+---
+title: Slider
+description: Material UI Slider component allows users to select a value from a range.
+---
+
+Sliders allow users to make selections from a range of values.
+
+## Import
+
+```tsx
+import Slider from '@mui/material/Slider';
+```
+
+## Basic Usage
+
+```tsx
+import * as React from 'react';
+import Box from '@mui/material/Box';
+import Stack from '@mui/material/Stack';
+import Slider from '@mui/material/Slider';
+import VolumeDown from '@mui/icons-material/VolumeDown';
+import VolumeUp from '@mui/icons-material/VolumeUp';
+
+export default function ContinuousSlider() {
+  const [value, setValue] = React.useState<number>(30);
+
+  const handleChange = (event: Event, newValue: number) => {
+    setValue(newValue);
+  };
+
+  return (
+    <Box sx={{ width: 200 }}>
+      <Stack spacing={2} direction="row" sx={{ alignItems: 'center', mb: 1 }}>
+        <VolumeDown />
+        <Slider aria-label="Volume" value={value} onChange={handleChange} />
+        <VolumeUp />
+      </Stack>
+      <Slider disabled defaultValue={30} aria-label="Disabled slider" />
+    </Box>
+  );
+}
+```
+
+## Props
+
+<ParamField path="value" type="number | number[]">
+  The value of the slider. For ranged sliders, provide an array with two values.
+</ParamField>
+
+<ParamField path="defaultValue" type="number | number[]">
+  The default value. Use when the component is not controlled.
+</ParamField>
+
+<ParamField path="min" type="number" default="0">
+  The minimum allowed value of the slider. Should not be equal to max.
+</ParamField>
+
+<ParamField path="max" type="number" default="100">
+  The maximum allowed value of the slider. Should not be equal to min.
+</ParamField>
+
+<ParamField path="step" type="number | null" default="1">
+  The granularity with which the slider can step through values. When step is `null`, the thumb can only be slid onto marks provided with the `marks` prop.
+</ParamField>
+
+<ParamField path="marks" type="boolean | Mark[]" default="false">
+  Marks indicate predetermined values to which the user can move the slider. If `true` the marks are spaced according the value of the `step` prop. If an array, it should contain objects with `value` and an optional `label` keys.
+</ParamField>
+
+<ParamField path="color" type="'primary' | 'secondary' | 'error' | 'info' | 'success' | 'warning'" default="'primary'">
+  The color of the component. Supports both default and custom theme colors.
+</ParamField>
+
+<ParamField path="size" type="'small' | 'medium'" default="'medium'">
+  The size of the slider.
+</ParamField>
+
+<ParamField path="orientation" type="'horizontal' | 'vertical'" default="'horizontal'">
+  The component orientation.
+</ParamField>
+
+<ParamField path="disabled" type="boolean" default="false">
+  If `true`, the component is disabled.
+</ParamField>
+
+<ParamField path="disableSwap" type="boolean" default="false">
+  If `true`, the active thumb doesn't swap when moving pointer over a thumb while dragging another thumb.
+</ParamField>
+
+<ParamField path="track" type="'normal' | false | 'inverted'" default="'normal'">
+  The track presentation. `normal` renders a bar representing the slider value. `inverted` renders a bar representing the remaining slider value. `false` renders without a bar.
+</ParamField>
+
+<ParamField path="valueLabelDisplay" type="'on' | 'auto' | 'off'" default="'off'">
+  Controls when the value label is displayed. `auto` displays when the thumb is hovered or focused. `on` displays persistently. `off` never displays.
+</ParamField>
+
+<ParamField path="valueLabelFormat" type="string | ((value: number, index: number) => ReactNode)">
+  The format function the value label's value. Default is identity function.
+</ParamField>
+
+<ParamField path="onChange" type="(event: Event, value: number | number[], activeThumb: number) => void">
+  Callback function that is fired when the slider's value changed. You can pull out the new value by accessing `event.target.value` (any).
+</ParamField>
+
+<ParamField path="onChangeCommitted" type="(event: React.SyntheticEvent | Event, value: number | number[]) => void">
+  Callback function that is fired when the `mouseup` is triggered.
+</ParamField>
+
+<ParamField path="getAriaLabel" type="(index: number) => string">
+  Accepts a function which returns a string value that provides a user-friendly name for the thumb labels of the slider. This is important for screen reader users.
+</ParamField>
+
+<ParamField path="getAriaValueText" type="(value: number, index: number) => string">
+  Accepts a function which returns a string value that provides a user-friendly name for the current value of the slider. This is important for screen reader users.
+</ParamField>
+
+<ParamField path="scale" type="(value: number) => number">
+  A transformation function, to change the scale of the slider. Default is identity function.
+</ParamField>
+
+<ParamField path="sx" type="SxProps<Theme>">
+  The system prop that allows defining system overrides as well as additional CSS styles.
+</ParamField>
+
+## API Reference
+
+- [Slider API](https://next.mui.com/material-ui/api/slider/)
